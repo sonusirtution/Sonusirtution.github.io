@@ -1,2021 +1,518 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth dark">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sonu Chhetri | Maths & PCB Tuition (Classes 5-10) | Alipurduar</title>
-    <!-- Tailwind CSS -->
+    <title>Sonu Chhetri Tuition | Maths & PCB (Classes 5-10) | Alipurduar</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
-            darkMode: 'class',
             theme: {
                 extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
                     colors: {
                         brand: {
-                            navy: '#0B1120',
-                            surface: '#111827',
-                            card: '#1E293B',
-                            gold: '#F59E0B',
-                            goldLight: '#FBBF24',
-                            teal: '#14B8A6',
-                            indigo: '#6366F1'
-                        }
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        mono: ['JetBrains Mono', 'monospace']
-                    },
-                    animation: {
-                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                        'float': 'float 5s ease-in-out infinite',
-                    },
-                    keyframes: {
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0px)' },
-                            '50%': { transform: 'translateY(-10px)' },
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            900: '#312e81',
                         }
                     }
                 }
             }
         }
     </script>
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { font-family: 'Inter', sans-serif; overflow-x: hidden; }
-        .spotlight-card { position: relative; overflow: hidden; }
-        .spotlight-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(245, 158, 11, 0.12), transparent 40%);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            pointer-events: none;
-            z-index: 1;
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
         }
-        .spotlight-card:hover::before { opacity: 1; }
-        .tilt-card { transition: transform 0.18s ease-out; transform-style: preserve-3d; }
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #0f172a; }
-        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #f59e0b; }
-        .glass-panel {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-        }
-        html:not(.dark) .glass-panel {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(16px);
+        .hero-gradient {
+            background: radial-gradient(circle at top right, rgba(99, 102, 241, 0.12), transparent 50%),
+                        radial-gradient(circle at bottom left, rgba(79, 70, 229, 0.08), transparent 50%);
         }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-900 dark:bg-brand-navy dark:text-slate-100 transition-colors duration-300 selection:bg-brand-gold selection:text-brand-navy">
+<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-brand-500 selection:text-white">
 
-    <!-- Confetti Overlay Canvas -->
-    <canvas id="confettiCanvas" class="fixed inset-0 pointer-events-none z-50"></canvas>
-
-    <!-- Custom Modal Notification -->
-    <div id="customModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm hidden p-4">
-        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl transform transition-all scale-95 opacity-0" id="modalBox">
-            <div class="w-14 h-14 rounded-2xl bg-amber-500/20 text-amber-500 flex items-center justify-center mx-auto mb-4 text-2xl border border-amber-500/30">
-                <i class="fa-solid fa-sparkles" id="modalIcon"></i>
-            </div>
-            <h3 id="modalTitle" class="text-xl font-extrabold text-center mb-2">Pass Generated!</h3>
-            <p id="modalMessage" class="text-sm text-slate-600 dark:text-slate-400 text-center mb-6 leading-relaxed"></p>
-            <div id="modalExtra" class="mb-6 hidden"></div>
-            <button onclick="closeCustomModal()" class="w-full bg-brand-gold hover:bg-brand-goldLight text-slate-950 font-bold py-3 rounded-xl transition shadow-lg shadow-amber-500/20">
-                Awesome, Got It!
-            </button>
-        </div>
+    <!-- Top Announcement Bar -->
+    <div class="bg-brand-900 text-white text-xs sm:text-sm py-2 px-4 text-center font-medium">
+        <span class="bg-emerald-500 text-white text-xs px-2 py-0.5 rounded-full font-bold mr-2 uppercase tracking-wide">Admissions Open</span> 
+        Classes 5 to 10 • Maths & PCB (Physics, Chemistry, Biology) • Ethelbari Checkpost, Alipurduar
     </div>
 
-    <!-- Top Live Announcement & Countdown Bar -->
-    <div class="bg-gradient-to-r from-amber-500 via-amber-400 to-teal-400 text-slate-950 text-xs sm:text-sm font-semibold py-2 px-4 relative z-40 shadow-sm">
-        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
-            <div class="flex items-center gap-2">
-                <span class="inline-block w-2 h-2 rounded-full bg-red-600 animate-ping"></span>
-                <span class="font-bold uppercase tracking-wider">Offline Batch (Classes 5–10):</span>
-                <span class="hidden md:inline">Mon, Wed & Sat • 4:00 PM – 5:30 PM</span>
-            </div>
-            <div class="flex items-center gap-3">
-                <a href="tel:+918918929014" class="hidden sm:inline-flex items-center gap-1.5 bg-slate-950/15 hover:bg-slate-950/25 px-3 py-0.5 rounded-full text-xs font-extrabold transition">
-                    <i class="fa-solid fa-phone-volume"></i> +91 891 892 9014
-                </a>
-                <div class="flex items-center gap-2 font-mono bg-slate-950/15 px-3 py-0.5 rounded-full text-xs font-bold">
-                    <i class="fa-regular fa-clock"></i>
-                    <span id="liveCountdownText">Calculating next session...</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Sticky Navbar -->
-    <header class="sticky top-0 z-40 bg-white/80 dark:bg-brand-navy/85 backdrop-blur-xl border-b border-slate-200/80 dark:border-slate-800/80 transition-colors">
+    <!-- Sticky Navigation -->
+    <nav class="sticky top-0 z-50 glass-card shadow-sm transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            <!-- Brand -->
-            <a href="#" class="flex items-center gap-3.5 group">
-                <div class=" relative w-12 h-12 rounded-2xl bg-gradient-to-br from-brand-gold to-amber-600 flex items-center justify-center text-slate-950 font-black text-xl shadow-lg shadow-amber-500/25 group-hover:rotate-6 transition duration-300 overflow-hidden border-2 border-amber-400/60">
-                    <span class="sonu-avatar-fallback select-none">SC</span>
-                    <img src="sonusir.jpg" alt="Sonu Chhetri" class="sonu-avatar-img absolute inset-0 w-full h-full object-cover hidden" onload="handleSonuImageLoad(this)" onerror="handleSonuImageError(this)">
+            <!-- Brand Logo / Name -->
+            <a href="#" class="flex items-center space-x-3 group">
+                <div class="w-12 h-12 rounded-xl bg-brand-600 text-white flex items-center justify-center font-bold text-xl shadow-md group-hover:scale-105 transition-transform overflow-hidden">
+                    <img src="sonusir.jpg" alt="Sonu Sir" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://api.iconify.design/lucide:graduation-cap.svg?color=white';">
                 </div>
                 <div>
-                    <div class="flex items-center gap-2">
-                        <span class="font-extrabold text-lg sm:text-xl tracking-tight">Sonu Chhetri</span>
-                        <span class="hidden sm:inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-500/15 text-emerald-500 border border-emerald-500/30">Verified Educator</span>
-                    </div>
-                    <span class="block text-xs font-semibold text-amber-600 dark:text-brand-gold tracking-widest uppercase">Maths & PCB Academy</span>
+                    <span class="text-lg font-bold tracking-tight text-slate-900 block leading-tight">Sonu Chhetri Tuition</span>
+                    <span class="text-xs font-semibold text-brand-600 uppercase tracking-wider">Maths & Science Expert</span>
                 </div>
             </a>
 
-            <!-- Desktop Links -->
-            <nav class="hidden lg:flex items-center gap-1 bg-slate-100 dark:bg-slate-800/70 p-1.5 rounded-2xl border border-slate-200 dark:border-slate-700/60 text-sm font-medium">
-                <a href="#educator" class="px-3.5 py-2 rounded-xl hover:bg-white dark:hover:bg-slate-700 hover:text-amber-500 transition">Meet Educator</a>
-                <a href="#explorer" class="px-3.5 py-2 rounded-xl hover:bg-white dark:hover:bg-slate-700 hover:text-amber-500 transition">Curriculum</a>
-                <a href="#simulator" class="px-3.5 py-2 rounded-xl hover:bg-white dark:hover:bg-slate-700 hover:text-amber-500 transition">Concept Lab</a>
-                <a href="#quiz" class="px-3.5 py-2 rounded-xl hover:bg-white dark:hover:bg-slate-700 hover:text-amber-500 transition">Brain Quiz</a>
-                <a href="#schedule" class="px-3.5 py-2 rounded-xl hover:bg-white dark:hover:bg-slate-700 hover:text-amber-500 transition">Timings</a>
-                <a href="#location" class="px-3.5 py-2 rounded-xl hover:bg-white dark:hover:bg-slate-700 hover:text-amber-500 transition">Map</a>
-            </nav>
+            <!-- Desktop Navigation Links -->
+            <div class="hidden md:flex items-center space-x-8 font-medium text-slate-600">
+                <a href="#about" class="hover:text-brand-600 transition-colors">About</a>
+                <a href="#subjects" class="hover:text-brand-600 transition-colors">Subjects</a>
+                <a href="#schedule" class="hover:text-brand-600 transition-colors">Schedule</a>
+                <a href="#location" class="hover:text-brand-600 transition-colors">Location</a>
+                <a href="#trial" class="hover:text-brand-600 transition-colors">Trial Pass</a>
+            </div>
 
-            <!-- Action Buttons -->
-            <div class="flex items-center gap-2.5">
-                <!-- Direct Call Button -->
-                <a href="tel:+918918929014" class="hidden xl:inline-flex items-center gap-2 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 font-mono font-bold text-xs px-3.5 py-2.5 rounded-xl transition">
-                    <i class="fa-solid fa-phone"></i>
+            <!-- Call to Action -->
+            <div class="hidden sm:flex items-center space-x-3">
+                <a href="tel:+918918929014" class="inline-flex items-center space-x-2 bg-brand-600 hover:bg-brand-700 text-white px-4 py-2.5 rounded-xl font-semibold shadow-md shadow-brand-500/20 hover:shadow-lg transition-all transform hover:-translate-y-0.5">
+                    <i class="fa-solid fa-phone text-xs"></i>
                     <span>+91 891 892 9014</span>
                 </a>
-                <!-- Theme Toggle -->
-                <button onclick="toggleTheme()" aria-label="Toggle Dark Mode" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-amber-400 flex items-center justify-center hover:scale-105 transition border border-slate-200 dark:border-slate-700">
-                    <i class="fa-solid fa-sun hidden dark:inline" id="themeIconSun"></i>
-                    <i class="fa-solid fa-moon inline dark:hidden" id="themeIconMoon"></i>
-                </button>
-                <a href="#enroll" class="hidden sm:inline-flex items-center gap-2 bg-brand-gold hover:bg-brand-goldLight text-slate-950 font-bold text-sm px-5 py-2.5 rounded-xl shadow-lg shadow-amber-500/20 hover:-translate-y-0.5 transition">
-                    <i class="fa-solid fa-ticket"></i>
-                    <span>Book Trial Pass</span>
-                </a>
-                <!-- Mobile Hamburger -->
-                <button onclick="toggleMobileNav()" class="lg:hidden w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-lg border border-slate-200 dark:border-slate-700">
-                    <i class="fa-solid fa-bars" id="mobileMenuBtnIcon"></i>
-                </button>
             </div>
+
+            <!-- Mobile Menu Button -->
+            <button id="menu-btn" class="md:hidden text-slate-700 focus:outline-none p-2 rounded-lg hover:bg-slate-100">
+                <i class="fa-solid fa-bars text-xl"></i>
+            </button>
         </div>
 
-        <!-- Mobile Menu Drawer -->
-        <div id="mobileNavDrawer" class="hidden lg:hidden bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 pt-3 pb-6 space-y-2">
-            <a href="#educator" onclick="toggleMobileNav()" class="block px-4 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 font-medium">Meet Educator (Sonu Chhetri)</a>
-            <a href="#explorer" onclick="toggleMobileNav()" class="block px-4 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 font-medium">Curriculum & Grade Explorer</a>
-            <a href="#simulator" onclick="toggleMobileNav()" class="block px-4 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 font-medium">Interactive Concept Lab</a>
-            <a href="#quiz" onclick="toggleMobileNav()" class="block px-4 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 font-medium">3-Question Diagnostic Quiz</a>
-            <a href="#schedule" onclick="toggleMobileNav()" class="block px-4 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 font-medium">Mon-Wed-Sat Schedule</a>
-            <a href="#location" onclick="toggleMobileNav()" class="block px-4 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 font-medium">Ethelbari Map Preview</a>
-            <div class="grid grid-cols-2 gap-2 pt-2">
-                <a href="tel:+918918929014" class="flex items-center justify-center gap-2 bg-slate-100 dark:bg-slate-800 text-emerald-500 font-bold py-3 rounded-xl border border-slate-200 dark:border-slate-700 text-xs">
-                    <i class="fa-solid fa-phone"></i> Call Sir
-                </a>
-                <a href="https://wa.me/918918929014?text=Hello%20Sonu%20Sir%2C%20I%20would%20like%20to%20inquire%20about%20Maths%20%26%20PCB%20Tuition%20classes." target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-2 bg-emerald-500 text-slate-950 font-bold py-3 rounded-xl text-xs">
-                    <i class="fa-brands fa-whatsapp text-sm"></i> WhatsApp
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-slate-100 px-6 py-4 space-y-3 shadow-xl">
+            <a href="#about" class="block font-medium text-slate-700 hover:text-brand-600 py-1">About</a>
+            <a href="#subjects" class="block font-medium text-slate-700 hover:text-brand-600 py-1">Subjects</a>
+            <a href="#schedule" class="block font-medium text-slate-700 hover:text-brand-600 py-1">Schedule</a>
+            <a href="#location" class="block font-medium text-slate-700 hover:text-brand-600 py-1">Location</a>
+            <a href="#trial" class="block font-medium text-slate-700 hover:text-brand-600 py-1">Trial Pass</a>
+            <div class="pt-2 border-t border-slate-100 flex flex-col space-y-2">
+                <a href="tel:+918918929014" class="flex items-center justify-center space-x-2 bg-brand-600 text-white py-2.5 rounded-xl font-semibold">
+                    <i class="fa-solid fa-phone"></i>
+                    <span>Call +91 891 892 9014</span>
                 </a>
             </div>
-            <a href="#enroll" onclick="toggleMobileNav()" class="block text-center bg-brand-gold text-slate-950 font-bold py-3 rounded-xl mt-2 shadow-md">Generate Trial Class Pass</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative hero-gradient pt-12 pb-20 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <!-- Left Content -->
+                <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                    <div class="inline-flex items-center space-x-2 bg-indigo-50 border border-indigo-100 text-brand-700 px-3.5 py-1.5 rounded-full text-sm font-semibold">
+                        <i class="fa-solid fa-award"></i>
+                        <span>Excellence in Offline School Coaching</span>
+                    </div>
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight">
+                        Build Strong Concepts in <span class="text-brand-600">Maths & PCB</span> for Grades 5–10
+                    </h1>
+                    <p class="text-lg text-slate-600 max-w-2xl mx-auto lg:mx-0">
+                        Personalized offline guidance by <strong class="text-slate-900">Sonu Chhetri</strong>. Dedicated focus on fundamental clarity, problem-solving skills, and academic success right here at Ethelbari Checkpost, Alipurduar.
+                    </p>
+
+                    <!-- Quick Badge Highlights -->
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2">
+                        <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
+                                <i class="fa-solid fa-graduation-cap"></i>
+                            </div>
+                            <div class="text-left">
+                                <p class="text-xs text-slate-500 font-medium">Grades</p>
+                                <p class="text-sm font-bold text-slate-800">Class 5 to 10</p>
+                            </div>
+                        </div>
+                        <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
+                                <i class="fa-solid fa-book-open"></i>
+                            </div>
+                            <div class="text-left">
+                                <p class="text-xs text-slate-500 font-medium">Subjects</p>
+                                <p class="text-sm font-bold text-slate-800">Maths & PCB</p>
+                            </div>
+                        </div>
+                        <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm col-span-2 sm:col-span-1 flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center font-bold">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </div>
+                            <div class="text-left">
+                                <p class="text-xs text-slate-500 font-medium">Location</p>
+                                <p class="text-sm font-bold text-slate-800">Ethelbari, Alipurduar</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CTA Buttons -->
+                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start space-y-3 sm:space-y-0 sm:space-x-4 pt-4">
+                        <a href="#trial" class="w-full sm:w-auto bg-brand-600 hover:bg-brand-700 text-white font-semibold px-8 py-4 rounded-xl shadow-lg shadow-brand-500/25 transition-all text-center flex items-center justify-center space-x-2">
+                            <span>Book Free Trial Class</span>
+                            <i class="fa-solid fa-arrow-right text-sm"></i>
+                        </a>
+                        <a href="https://wa.me/918918929014" target="_blank" class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-8 py-4 rounded-xl shadow-lg shadow-emerald-500/25 transition-all text-center flex items-center justify-center space-x-2">
+                            <i class="fa-brands fa-whatsapp text-lg"></i>
+                            <span>Chat on WhatsApp</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right Educator Spotlight Card -->
+                <div class="lg:col-span-5 flex justify-center">
+                    <div class="relative w-full max-w-sm">
+                        <div class="absolute -inset-1.5 bg-gradient-to-r from-brand-600 to-indigo-600 rounded-3xl blur-lg opacity-30"></div>
+                        <div class="relative bg-white border border-slate-200 rounded-3xl p-6 shadow-xl text-center space-y-4">
+                            <!-- Avatar Container -->
+                            <div class="relative w-36 h-36 mx-auto rounded-2xl overflow-hidden shadow-inner border-4 border-brand-50">
+                                <img src="sonusir.jpg" alt="Sonu Chhetri" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=400&q=80';">
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-bold text-slate-900">Sonu Chhetri</h3>
+                                <p class="text-brand-600 font-medium text-sm">Lead Educator & Founder</p>
+                            </div>
+                            <p class="text-slate-600 text-sm leading-relaxed px-2">
+                                "Focusing on clear fundamentals, structured practice, and individual attention for every student in Classes 5 to 10."
+                            </p>
+                            <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500 px-2 font-medium">
+                                <span class="flex items-center space-x-1"><i class="fa-solid fa-chalkboard-user text-brand-600"></i><span>Offline Classes</span></span>
+                                <span class="flex items-center space-x-1"><i class="fa-solid fa-check-circle text-emerald-600"></i><span>Proven Results</span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </header>
 
-    <!-- HERO SECTION WITH INTERACTIVE PARTICLE NETWORK & 3D TILT -->
-    <section class="relative min-h-[88vh] flex items-center py-16 lg:py-24 overflow-hidden">
-        <!-- Interactive Scientific Particle Canvas -->
-        <canvas id="heroCanvas" class="absolute inset-0 w-full h-full pointer-events-auto opacity-60 dark:opacity-80"></canvas>
+    <!-- Meet Sonu Sir Section -->
+    <section id="about" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="max-w-3xl mx-auto text-center space-y-4 mb-16">
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">Meet Your Educator</h2>
+                <p class="text-slate-600 text-lg">Dedicated mentoring tailored to each student's pace and school curriculum.</p>
+            </div>
 
-        <!-- Ambient Glow Blobs -->
-        <div class="absolute top-12 left-10 w-80 h-80 bg-amber-500/15 rounded-full blur-3xl pointer-events-none"></div>
-        <div class="absolute bottom-10 right-10 w-96 h-96 bg-teal-500/15 rounded-full blur-3xl pointer-events-none"></div>
-
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-                <!-- Left Column -->
-                <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
-                    <div class="inline-flex flex-wrap items-center justify-center lg:justify-start gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-600 dark:text-amber-400 text-xs font-bold uppercase tracking-wider">
-                        <i class="fa-solid fa-location-dot"></i>
-                        <span>Blossom English School • Ethelbari Checkpost, Alipurduar</span>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-8 hover:shadow-lg transition-all duration-300">
+                    <div class="w-14 h-14 bg-brand-100 text-brand-600 rounded-xl flex items-center justify-center text-2xl font-bold mb-6">
+                        <i class="fa-solid fa-bullseye"></i>
                     </div>
-
-                    <h1 class="text-4xl sm:text-6xl font-black tracking-tight leading-[1.1]">
-                        Master <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 via-amber-400 to-teal-400">Maths & PCB</span> With Crystal Clarity.
-                    </h1>
-
-                    <p class="text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-                        Offline, high-engagement classroom mentoring by <strong class="text-slate-900 dark:text-white font-bold underline decoration-brand-gold decoration-2 underline-offset-4">Sonu Chhetri</strong> for <strong class="text-slate-900 dark:text-white">Classes 5 to 10</strong>. Building unshakeable foundations in Mathematics, Physics, Chemistry, and Biology.
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">Concept Clarity</h3>
+                    <p class="text-slate-600 leading-relaxed">
+                        Complex mathematical formulas and scientific principles broken down into simple, easy-to-understand concepts for lasting memory.
                     </p>
-
-                    <!-- Interactive Hero Pill Switcher -->
-                    <div class="pt-2 flex flex-wrap items-center justify-center lg:justify-start gap-3">
-                        <a href="#enroll" class="bg-brand-gold hover:bg-brand-goldLight text-slate-950 font-extrabold px-7 py-4 rounded-2xl shadow-xl shadow-amber-500/20 flex items-center gap-3 hover:scale-[1.02] active:scale-95 transition">
-                            <span>Reserve Your Seat</span>
-                            <i class="fa-solid fa-arrow-right"></i>
-                        </a>
-                        <a href="tel:+918918929014" class="bg-white/90 dark:bg-slate-800/90 hover:border-emerald-500/60 text-slate-800 dark:text-white font-bold px-5 py-4 rounded-2xl border border-slate-200 dark:border-slate-700 flex items-center gap-2.5 transition shadow-sm">
-                            <i class="fa-solid fa-phone-volume text-emerald-500 animate-bounce"></i>
-                            <span class="font-mono text-sm">+91 891 892 9014</span>
-                        </a>
-                        <a href="https://wa.me/918918929014?text=Hello%20Sonu%20Sir%2C%20I%20want%20to%20join%20your%20Maths%20%26%20PCB%20offline%20tuition%20batch." target="_blank" rel="noopener noreferrer" class="bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-600 dark:text-emerald-400 font-bold px-5 py-4 rounded-2xl border border-emerald-500/30 flex items-center gap-2 transition">
-                            <i class="fa-brands fa-whatsapp text-lg"></i>
-                            <span>WhatsApp</span>
-                        </a>
-                    </div>
-
-                    <!-- Live Metric Counters -->
-                    <div class="pt-6 grid grid-cols-2 sm:grid-cols-4 gap-4 border-t border-slate-200/80 dark:border-slate-800/80">
-                        <div class="bg-white/60 dark:bg-slate-900/50 p-3.5 rounded-2xl border border-slate-200/60 dark:border-slate-800">
-                            <div class="text-2xl font-black text-amber-500 font-mono">5th–10th</div>
-                            <div class="text-xs text-slate-500 dark:text-slate-400 font-medium">Target Classes</div>
-                        </div>
-                        <div class="bg-white/60 dark:bg-slate-900/50 p-3.5 rounded-2xl border border-slate-200/60 dark:border-slate-800">
-                            <div class="text-2xl font-black text-teal-400 font-mono">4 Core</div>
-                            <div class="text-xs text-slate-500 dark:text-slate-400 font-medium">Maths, Phy, Chem, Bio</div>
-                        </div>
-                        <div class="bg-white/60 dark:bg-slate-900/50 p-3.5 rounded-2xl border border-slate-200/60 dark:border-slate-800">
-                            <div class="text-2xl font-black text-indigo-400 font-mono">90 Min</div>
-                            <div class="text-xs text-slate-500 dark:text-slate-400 font-medium">Deep Offline Sessions</div>
-                        </div>
-                        <div class="bg-white/60 dark:bg-slate-900/50 p-3.5 rounded-2xl border border-slate-200/60 dark:border-slate-800">
-                            <div class="text-2xl font-black text-emerald-400 font-mono">100%</div>
-                            <div class="text-xs text-slate-500 dark:text-slate-400 font-medium">Personal Attention</div>
-                        </div>
-                    </div>
                 </div>
-
-                <!-- Right Column: 3D Interactive Tilt Educator & Live Class Hub Card -->
-                <div class="lg:col-span-5">
-                    <div id="heroTiltCard" class="tilt-card spotlight-card glass-panel rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-700/80 shadow-2xl relative">
-                        <div class="flex items-center justify-between mb-6">
-                            <div class="flex items-center gap-4">
-                                <div class="relative group cursor-pointer" onclick="triggerSonuPhotoUpload()" title="Click to preview sonusir.jpg">
-                                    <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-brand-gold to-amber-300 flex items-center justify-center text-slate-950 font-black text-2xl shadow-lg overflow-hidden border-2 border-amber-400">
-                                        <span class="sonu-avatar-fallback select-none">SC</span>
-                                        <img src="sonusir.jpg" alt="Sonu Chhetri - Maths & PCB Educator" class="sonu-avatar-img absolute inset-0 w-full h-full object-cover rounded-2xl hidden" onload="handleSonuImageLoad(this)" onerror="handleSonuImageError(this)">
-                                    </div>
-                                    <span class="absolute -bottom-1 -right-1 w-5 h-5 bg-emerald-500 border-2 border-slate-900 rounded-full flex items-center justify-center text-[9px] text-white" title="Offline Admissions Open">
-                                        <i class="fa-solid fa-check"></i>
-                                    </span>
-                                </div>
-                                <div>
-                                    <span class="text-xs font-bold uppercase tracking-widest text-amber-500">Lead Mentor</span>
-                                    <h2 class="text-2xl font-extrabold">Sonu Chhetri</h2>
-                                    <p class="text-xs text-slate-500 dark:text-slate-400">Mathematics & PCB Specialist</p>
-                                </div>
-                            </div>
-                            <a href="#educator" class="px-3 py-1 rounded-full text-xs font-bold bg-amber-500/15 text-amber-400 border border-amber-500/30 hover:bg-amber-500/25 transition">
-                                View Profile
-                            </a>
-                        </div>
-
-                        <!-- Interactive Subject Quick-Pills inside Card -->
-                        <div class="mb-6">
-                            <div class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2.5">Click a Subject to Preview Focus:</div>
-                            <div class="grid grid-cols-2 gap-2.5" id="heroSubjectButtons">
-                                <button onclick="updateHeroSubjectPreview('maths')" id="heroBtn-maths" class="hero-sub-btn flex items-center gap-2.5 p-3 rounded-xl border border-amber-500 bg-amber-500/15 text-left transition">
-                                    <i class="fa-solid fa-square-root-variable text-amber-500 text-lg"></i>
-                                    <div>
-                                        <div class="text-xs font-bold">Mathematics</div>
-                                        <div class="text-[10px] text-slate-400">Logic & Speed</div>
-                                    </div>
-                                </button>
-                                <button onclick="updateHeroSubjectPreview('physics')" id="heroBtn-physics" class="hero-sub-btn flex items-center gap-2.5 p-3 rounded-xl border border-slate-200 dark:border-slate-700/80 hover:border-amber-500/50 text-left transition">
-                                    <i class="fa-solid fa-atom text-teal-400 text-lg"></i>
-                                    <div>
-                                        <div class="text-xs font-bold">Physics</div>
-                                        <div class="text-[10px] text-slate-400">Laws & Numericals</div>
-                                    </div>
-                                </button>
-                                <button onclick="updateHeroSubjectPreview('chemistry')" id="heroBtn-chemistry" class="hero-sub-btn flex items-center gap-2.5 p-3 rounded-xl border border-slate-200 dark:border-slate-700/80 hover:border-amber-500/50 text-left transition">
-                                    <i class="fa-solid fa-flask-vial text-indigo-400 text-lg"></i>
-                                    <div>
-                                        <div class="text-xs font-bold">Chemistry</div>
-                                        <div class="text-[10px] text-slate-400">Reactions & Atoms</div>
-                                    </div>
-                                </button>
-                                <button onclick="updateHeroSubjectPreview('biology')" id="heroBtn-biology" class="hero-sub-btn flex items-center gap-2.5 p-3 rounded-xl border border-slate-200 dark:border-slate-700/80 hover:border-amber-500/50 text-left transition">
-                                    <i class="fa-solid fa-dna text-emerald-400 text-lg"></i>
-                                    <div>
-                                        <div class="text-xs font-bold">Biology</div>
-                                        <div class="text-[10px] text-slate-400">Diagrams & Life</div>
-                                    </div>
-                                </button>
-                            </div>
-                            <!-- Dynamic Output Box -->
-                            <div id="heroSubjectPreviewBox" class="mt-3 p-3.5 rounded-xl bg-slate-100 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                                <strong class="text-amber-500">Mathematics Focus:</strong> Step-by-step theorem proofs, mental calculation shortcuts, algebra, geometry, and board-level problem sets.
-                            </div>
-                        </div>
-
-                        <!-- Schedule & Location Footer inside Card -->
-                        <div class="space-y-2.5 pt-4 border-t border-slate-200 dark:border-slate-700/80 text-xs">
-                            <div class="flex items-center justify-between">
-                                <span class="text-slate-400 flex items-center gap-2"><i class="fa-regular fa-calendar-check text-amber-500"></i> Class Days:</span>
-                                <span class="font-bold">Monday, Wednesday, Saturday</span>
-                            </div>
-                            <div class="flex items-center justify-between">
-                                <span class="text-slate-400 flex items-center gap-2"><i class="fa-regular fa-clock text-teal-400"></i> Batch Timing:</span>
-                                <span class="font-bold font-mono text-amber-500">4:00 PM – 5:30 PM</span>
-                            </div>
-                            <div class="flex items-center justify-between">
-                                <span class="text-slate-400 flex items-center gap-2"><i class="fa-solid fa-school text-indigo-400"></i> Venue:</span>
-                                <span class="font-bold text-right">Blossom English School, Ethelbari</span>
-                            </div>
-                            <div class="flex items-center justify-between pt-1">
-                                <span class="text-slate-400 flex items-center gap-2"><i class="fa-solid fa-phone text-emerald-400"></i> Direct Contact:</span>
-                                <a href="tel:+918918929014" class="font-bold font-mono text-emerald-500 hover:underline">+91 891 892 9014</a>
-                            </div>
-                        </div>
+                <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-8 hover:shadow-lg transition-all duration-300">
+                    <div class="w-14 h-14 bg-indigo-100 text-indigo-600 rounded-xl flex items-center justify-center text-2xl font-bold mb-6">
+                        <i class="fa-solid fa-users-rectangle"></i>
                     </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- DEDICATED EDUCATOR SPOTLIGHT SECTION (FEATURING sonusir.jpg & LIVE PREVIEWER) -->
-    <section id="educator" class="py-20 relative overflow-hidden border-t border-slate-200 dark:border-slate-800/80 bg-slate-100/60 dark:bg-slate-900/40">
-        <!-- Hidden File Input for Live Previewing sonusir.jpg -->
-        <input type="file" id="sonuPhotoFileInput" accept="image/*" class="hidden" onchange="previewUploadedSonuPhoto(event)">
-
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
-                <!-- Portrait Frame Column (sonusir.jpg) -->
-                <div class="lg:col-span-5">
-                    <div class="relative mx-auto max-w-sm lg:max-w-none">
-                        <!-- Decorative Glow Ring -->
-                        <div class="absolute -inset-2 bg-gradient-to-tr from-amber-500 via-teal-500 to-indigo-500 rounded-3xl blur-xl opacity-30 animate-pulse-slow pointer-events-none"></div>
-
-                        <div class="spotlight-card relative bg-white dark:bg-slate-900 rounded-3xl p-4 sm:p-5 border-2 border-amber-500/40 shadow-2xl">
-                            <!-- Portrait Image Wrapper -->
-                            <div id="sonuPortraitDropzone"
-                                 onclick="triggerSonuPhotoUpload()"
-                                 ondragover="handleDragOver(event)"
-                                 ondragleave="handleDragLeave(event)"
-                                 ondrop="handleDropPhoto(event)"
-                                 class="relative aspect-[4/5] w-full rounded-2xl overflow-hidden bg-gradient-to-b from-slate-800 via-slate-900 to-slate-950 flex flex-col items-center justify-center cursor-pointer group border border-slate-700/80">
-
-                                <!-- Actual Image Tag for sonusir.jpg -->
-                                <img id="mainSonuPortrait"
-                                     src="sonusir.jpg"
-                                     alt="Sonu Chhetri - Maths & PCB Educator"
-                                     class="sonu-avatar-img w-full h-full object-cover object-top transition duration-500 group-hover:scale-105 hidden"
-                                     onload="handleSonuImageLoad(this)"
-                                     onerror="handleSonuImageError(this)">
-
-                                <!-- Interactive Fallback & Live Preview Uploader when sonusir.jpg isn't in folder yet -->
-                                <div id="sonuPortraitFallbackUI" class="sonu-avatar-fallback inset-0 p-6 flex flex-col items-center justify-center text-center z-10 select-none">
-                                    <div class="w-24 h-24 rounded-3xl bg-gradient-to-tr from-brand-gold to-amber-300 text-slate-950 font-black text-4xl flex items-center justify-center shadow-2xl shadow-amber-500/30 mb-4 group-hover:scale-110 transition">
-                                        SC
-                                    </div>
-                                    <span class="px-3 py-1 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 font-mono text-[11px] font-bold mb-2">
-                                        <i class="fa-regular fa-image mr-1"></i> sonusir.jpg Ready
-                                    </span>
-                                    <h3 class="text-white font-extrabold text-xl">Sonu Chhetri</h3>
-                                    <p class="text-slate-400 text-xs mt-1 max-w-xs leading-relaxed">
-                                        Place <code class="text-amber-400 font-mono font-bold">sonusir.jpg</code> in the website folder to auto-display, or click below to test & preview your photo right now!
-                                    </p>
-                                    <button type="button" class="mt-5 inline-flex items-center gap-2 bg-brand-gold hover:bg-brand-goldLight text-slate-950 font-extrabold text-xs px-4 py-2.5 rounded-xl shadow-lg transition">
-                                        <i class="fa-solid fa-upload"></i>
-                                        <span>Preview Your Photo (sonusir.jpg)</span>
-                                    </button>
-                                    <span class="text-[10px] text-slate-500 mt-2">Supports Click or Drag & Drop</span>
-                                </div>
-
-                                <!-- Floating Hover Overlay when photo IS loaded -->
-                                <div class="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-slate-950 via-slate-950/80 to-transparent flex items-end justify-between">
-                                    <div>
-                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[10px] font-bold">
-                                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span> Offline Mentor
-                                        </span>
-                                        <div class="text-white font-black text-lg mt-0.5">Sonu Chhetri</div>
-                                        <div class="text-amber-400 text-xs font-semibold">Maths, Physics, Chemistry & Biology</div>
-                                    </div>
-                                    <button type="button" onclick="event.stopPropagation(); triggerSonuPhotoUpload();" class="bg-slate-900/90 hover:bg-amber-500 hover:text-slate-950 text-slate-200 border border-slate-700 text-[11px] font-bold px-3 py-1.5 rounded-xl transition flex items-center gap-1.5" title="Change or Preview sonusir.jpg">
-                                        <i class="fa-solid fa-camera"></i>
-                                        <span>sonusir.jpg</span>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <!-- Bottom Portrait Caption Bar -->
-                            <div class="mt-4 flex items-center justify-between px-2 text-xs">
-                                <div class="flex items-center gap-2 font-semibold text-slate-600 dark:text-slate-300">
-                                    <i class="fa-solid fa-certificate text-amber-500"></i>
-                                    <span>Classes 5 to 10 Specialist</span>
-                                </div>
-                                <span id="photoStatusBadge" class="font-mono text-[11px] text-teal-500 font-bold">src="sonusir.jpg"</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Educator Bio & Teaching Philosophy Column -->
-                <div class="lg:col-span-7 space-y-6">
-                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-500 text-xs font-bold uppercase tracking-widest">
-                        <i class="fa-solid fa-chalkboard-user"></i> Meet Your Educator
-                    </div>
-
-                    <h2 class="text-3xl sm:text-5xl font-black tracking-tight leading-tight">
-                        Guided by <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-teal-400">Sonu Chhetri</span> — Dedicated to Every Student's Breakthrough.
-                    </h2>
-
-                    <p class="text-slate-600 dark:text-slate-300 text-sm sm:text-base leading-relaxed">
-                        Students in <strong class="text-slate-900 dark:text-white">Grades 5 through 10</strong> often struggle when Mathematics and Science (Physics, Chemistry, Biology) are taught through rote memorization. At our offline center near <strong class="text-slate-900 dark:text-white">Blossom English School, Ethelbari Checkpost</strong>, Sonu Chhetri transforms complex theorems, numericals, and life-science mechanisms into crystal-clear visual concepts.
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">Small Batch Attention</h3>
+                    <p class="text-slate-600 leading-relaxed">
+                        Controlled batch sizes ensuring personalized doubt clearing, direct interaction, and complete focus on every single student.
                     </p>
+                </div>
+                <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-8 hover:shadow-lg transition-all duration-300">
+                    <div class="w-14 h-14 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center text-2xl font-bold mb-6">
+                        <i class="fa-solid fa-clipboard-check"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">Regular Assessments</h3>
+                    <p class="text-slate-600 leading-relaxed">
+                        Weekly chapter tests and board-pattern practice sessions to build student confidence and eliminate exam fear.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-                    <!-- 4 Pillar Highlights -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-                        <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-start gap-3.5 shadow-sm">
-                            <div class="w-10 h-10 rounded-xl bg-amber-500/15 text-amber-500 flex items-center justify-center shrink-0 text-lg font-bold">
-                                <i class="fa-solid fa-square-root-variable"></i>
+    <!-- Subjects Offered -->
+    <section id="subjects" class="py-20 bg-slate-50 border-t border-slate-200/60">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="max-w-3xl mx-auto text-center space-y-4 mb-16">
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">Subjects & Curriculum</h2>
+                <p class="text-slate-600 text-lg">Specialized offline coaching for middle and high school students.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Mathematics -->
+                <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all group">
+                    <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-xl font-bold mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-calculator"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-2">Mathematics</h3>
+                    <p class="text-slate-600 text-sm mb-4">Algebra, Geometry, Trigonometry, Arithmetic & Problem Solving.</p>
+                    <span class="inline-block text-xs font-semibold text-brand-600 bg-brand-50 px-2.5 py-1 rounded-full">Classes 5 – 10</span>
+                </div>
+                <!-- Physics -->
+                <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all group">
+                    <div class="w-12 h-12 bg-purple-50 text-purple-600 rounded-xl flex items-center justify-center text-xl font-bold mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-atom"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-2">Physics</h3>
+                    <p class="text-slate-600 text-sm mb-4">Motion, Force, Light, Electricity, Magnetism & Numericals.</p>
+                    <span class="inline-block text-xs font-semibold text-brand-600 bg-brand-50 px-2.5 py-1 rounded-full">Classes 5 – 10</span>
+                </div>
+                <!-- Chemistry -->
+                <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all group">
+                    <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center text-xl font-bold mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-flask"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-2">Chemistry</h3>
+                    <p class="text-slate-600 text-sm mb-4">Matter, Atoms, Molecules, Chemical Reactions & Equations.</p>
+                    <span class="inline-block text-xs font-semibold text-brand-600 bg-brand-50 px-2.5 py-1 rounded-full">Classes 5 – 10</span>
+                </div>
+                <!-- Biology -->
+                <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all group">
+                    <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center text-xl font-bold mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-dna"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-2">Biology</h3>
+                    <p class="text-slate-600 text-sm mb-4">Cell Structure, Plant & Human Physiology, Life Processes.</p>
+                    <span class="inline-block text-xs font-semibold text-brand-600 bg-brand-50 px-2.5 py-1 rounded-full">Classes 5 – 10</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Schedule Section -->
+    <section id="schedule" class="py-20 bg-white border-t border-slate-200/60">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="max-w-3xl mx-auto text-center space-y-4 mb-16">
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">Class Schedule & Timings</h2>
+                <p class="text-slate-600 text-lg">Structured weekly batches designed for consistent learning.</p>
+            </div>
+
+            <div class="max-w-xl mx-auto bg-gradient-to-br from-brand-900 to-indigo-900 text-white rounded-3xl p-8 shadow-xl relative overflow-hidden">
+                <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-white/5 rounded-full blur-2xl"></div>
+                <div class="relative z-10 space-y-6">
+                    <div class="flex items-center justify-between border-b border-white/10 pb-4">
+                        <div>
+                            <span class="text-xs uppercase tracking-wider text-indigo-300 font-semibold block">Mode</span>
+                            <span class="text-lg font-bold">Offline Classroom Coaching</span>
+                        </div>
+                        <div class="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center">
+                            <i class="fa-solid fa-school text-xl"></i>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="flex items-center space-x-4 bg-white/10 p-4 rounded-2xl backdrop-blur-sm">
+                            <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center font-bold">
+                                <i class="fa-regular fa-clock"></i>
                             </div>
                             <div>
-                                <h4 class="font-extrabold text-sm">Zero-Fear Mathematics</h4>
-                                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">From basic fractions in Class 5 to Trigonometry & Quadratic Equations in Class 10 Boards.</p>
+                                <p class="text-xs text-indigo-200 font-medium">Timing</p>
+                                <p class="text-lg font-extrabold">4:00 PM – 5:30 PM</p>
                             </div>
                         </div>
 
-                        <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-start gap-3.5 shadow-sm">
-                            <div class="w-10 h-10 rounded-xl bg-teal-500/15 text-teal-400 flex items-center justify-center shrink-0 text-lg font-bold">
-                                <i class="fa-solid fa-atom"></i>
+                        <div class="flex items-center space-x-4 bg-white/10 p-4 rounded-2xl backdrop-blur-sm">
+                            <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center font-bold">
+                                <i class="fa-regular fa-calendar-days"></i>
                             </div>
                             <div>
-                                <h4 class="font-extrabold text-sm">Complete PCB Mastery</h4>
-                                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Integrated coaching for Physics numericals, Chemistry equations, and Biology diagrams.</p>
-                            </div>
-                        </div>
-
-                        <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-start gap-3.5 shadow-sm">
-                            <div class="w-10 h-10 rounded-xl bg-indigo-500/15 text-indigo-400 flex items-center justify-center shrink-0 text-lg font-bold">
-                                <i class="fa-solid fa-user-check"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-extrabold text-sm">100% Offline Supervision</h4>
-                                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Direct notebook checking, face-to-face doubt clearing, and distraction-free classroom discipline.</p>
-                            </div>
-                        </div>
-
-                        <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-start gap-3.5 shadow-sm">
-                            <div class="w-10 h-10 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center shrink-0 text-lg font-bold">
-                                <i class="fa-solid fa-award"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-extrabold text-sm">Weekly Saturday Tests</h4>
-                                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Regular progress tracking every Saturday (4:00–5:30 PM) to build exam temperament early.</p>
+                                <p class="text-xs text-indigo-200 font-medium">Class Days</p>
+                                <p class="text-lg font-extrabold">Monday, Wednesday & Saturday</p>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Direct Contact Bar inside Educator Spotlight -->
-                    <div class="pt-4 flex flex-wrap items-center gap-4">
-                        <a href="tel:+918918929014" class="inline-flex items-center gap-2.5 bg-brand-gold hover:bg-brand-goldLight text-slate-950 font-black px-6 py-3.5 rounded-2xl shadow-lg shadow-amber-500/20 text-sm transition">
-                            <i class="fa-solid fa-phone-volume"></i>
-                            <span>Speak with Sonu Sir: +91 891 892 9014</span>
+                    <div class="pt-2">
+                        <a href="#trial" class="block w-full text-center bg-white text-brand-900 font-bold py-3.5 rounded-xl hover:bg-indigo-50 transition-colors shadow-md">
+                            Reserve Your Slot
                         </a>
-                        <button type="button" onclick="triggerSonuPhotoUpload()" class="inline-flex items-center gap-2 bg-white dark:bg-slate-800 hover:border-amber-500 text-slate-700 dark:text-slate-200 font-bold px-5 py-3.5 rounded-2xl border border-slate-200 dark:border-slate-700 text-xs sm:text-sm transition">
-                            <i class="fa-solid fa-image text-amber-500"></i>
-                            <span>Test / Preview <code class="font-mono">sonusir.jpg</code></span>
-                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 1. INTERACTIVE GRADE & SUBJECT CURRICULUM EXPLORER -->
-    <section id="explorer" class="py-20 bg-white dark:bg-brand-surface border-y border-slate-200 dark:border-slate-800/80 relative">
+    <!-- Location & Map Section -->
+    <section id="location" class="py-20 bg-slate-50 border-t border-slate-200/60">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-3xl mx-auto mb-12">
-                <span class="text-xs font-bold uppercase tracking-widest text-amber-500 bg-amber-500/10 px-3.5 py-1.5 rounded-full border border-amber-500/20">Interactive Syllabus Blueprint</span>
-                <h2 class="text-3xl sm:text-4xl font-black mt-4 tracking-tight">Select Your Class & Subject</h2>
-                <p class="text-slate-600 dark:text-slate-400 mt-2 text-sm sm:text-base">Click any Grade (5 to 10) and Subject below to inspect what your child will master under Sonu Chhetri's guidance.</p>
+            <div class="max-w-3xl mx-auto text-center space-y-4 mb-16">
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">Our Tuition Location</h2>
+                <p class="text-slate-600 text-lg">Easily accessible offline center in Alipurduar, West Bengal.</p>
             </div>
 
-            <!-- Grade Selector Bar (Classes 5 to 10) -->
-            <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-8" id="gradeSelectorContainer">
-                <!-- Populated & Controlled by JS -->
-                <button onclick="selectGrade(5)" id="gradeBtn-5" class="grade-btn px-5 py-3 rounded-2xl font-extrabold text-sm transition border">Class 5</button>
-                <button onclick="selectGrade(6)" id="gradeBtn-6" class="grade-btn px-5 py-3 rounded-2xl font-extrabold text-sm transition border">Class 6</button>
-                <button onclick="selectGrade(7)" id="gradeBtn-7" class="grade-btn px-5 py-3 rounded-2xl font-extrabold text-sm transition border">Class 7</button>
-                <button onclick="selectGrade(8)" id="gradeBtn-8" class="grade-btn px-5 py-3 rounded-2xl font-extrabold text-sm transition border">Class 8</button>
-                <button onclick="selectGrade(9)" id="gradeBtn-9" class="grade-btn px-5 py-3 rounded-2xl font-extrabold text-sm transition border">Class 9</button>
-                <button onclick="selectGrade(10)" id="gradeBtn-10" class="grade-btn px-5 py-3 rounded-2xl font-extrabold text-sm transition border">Class 10 (Boards)</button>
-            </div>
-
-            <!-- Subject Filter Tabs -->
-            <div class="flex flex-wrap items-center justify-center gap-3 mb-10">
-                <button onclick="selectSubject('Mathematics')" id="subTab-Mathematics" class="sub-tab flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm transition">
-                    <i class="fa-solid fa-calculator"></i> Mathematics
-                </button>
-                <button onclick="selectSubject('Physics')" id="subTab-Physics" class="sub-tab flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm transition">
-                    <i class="fa-solid fa-bolt"></i> Physics
-                </button>
-                <button onclick="selectSubject('Chemistry')" id="subTab-Chemistry" class="sub-tab flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm transition">
-                    <i class="fa-solid fa-vial"></i> Chemistry
-                </button>
-                <button onclick="selectSubject('Biology')" id="subTab-Biology" class="sub-tab flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm transition">
-                    <i class="fa-solid fa-microscope"></i> Biology
-                </button>
-            </div>
-
-            <!-- Dynamic Curriculum Display Card -->
-            <div class="spotlight-card bg-slate-50 dark:bg-slate-900 rounded-3xl p-6 sm:p-10 border border-slate-200 dark:border-slate-800 shadow-xl">
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-                    <div class="lg:col-span-7 space-y-6">
-                        <div class="flex flex-wrap items-center gap-3">
-                            <span id="currBadgeGrade" class="px-3.5 py-1 rounded-full bg-amber-500 text-slate-950 font-black text-xs uppercase">Class 10</span>
-                            <span id="currBadgeSubject" class="px-3.5 py-1 rounded-full bg-teal-500/20 text-teal-400 border border-teal-500/30 font-bold text-xs">Mathematics</span>
-                            <span class="px-3 py-1 rounded-full bg-indigo-500/15 text-indigo-400 font-semibold text-xs border border-indigo-500/20">Offline In-Person Coaching</span>
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                <!-- Location Details Card -->
+                <div class="lg:col-span-5 bg-white border border-slate-200 rounded-3xl p-8 shadow-sm space-y-6">
+                    <div class="flex items-start space-x-4">
+                        <div class="w-12 h-12 bg-red-50 text-red-600 rounded-2xl flex items-center justify-center text-xl flex-shrink-0 mt-1">
+                            <i class="fa-solid fa-map-pin"></i>
                         </div>
-
                         <div>
-                            <h3 id="currTitle" class="text-2xl sm:text-3xl font-extrabold tracking-tight mb-2">Board Exam Mastery & Advanced Problem Solving</h3>
-                            <p id="currDesc" class="text-slate-600 dark:text-slate-400 text-sm sm:text-base leading-relaxed">
-                                Intensive preparation tailored for Class 10 board examinations with chapter-wise question banks, trigonometry visual proofs, quadratic equations, and weekly mock tests.
-                            </p>
-                        </div>
-
-                        <!-- Key Modules List -->
-                        <div>
-                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Key Syllabus Modules Covered:</h4>
-                            <div id="currModulesGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                <!-- Injected via JS -->
-                            </div>
-                        </div>
-
-                        <div class="pt-2 flex flex-wrap items-center gap-4">
-                            <a href="#enroll" onclick="prefillPassFromExplorer()" class="inline-flex items-center gap-2 bg-brand-gold hover:bg-brand-goldLight text-slate-950 font-bold text-sm px-6 py-3 rounded-xl transition shadow-md">
-                                <i class="fa-solid fa-wand-magic-sparkles"></i>
-                                <span id="currActionText">Enroll for Class 10 Mathematics</span>
-                            </a>
-                            <a href="https://wa.me/918918929014?text=Hello%20Sonu%20Sir%2C%20I%20want%20to%20know%20more%20about%20your%20curriculum%20for%20Classes%205-10." target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-emerald-500 hover:underline">
-                                <i class="fa-brands fa-whatsapp text-base"></i> Ask Syllabus Doubts on WhatsApp
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Right Column: Skill Mastery Meters -->
-                    <div class="lg:col-span-5 bg-white dark:bg-slate-800/90 p-6 rounded-2xl border border-slate-200 dark:border-slate-700/80 space-y-5">
-                        <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-4">
-                            <div>
-                                <div class="text-xs uppercase font-bold text-amber-500">Pedagogy Breakdown</div>
-                                <div class="font-extrabold text-lg">Sonu Sir's Classroom Edge</div>
-                            </div>
-                            <div class="w-10 h-10 rounded-xl bg-amber-500/15 text-amber-500 flex items-center justify-center text-lg">
-                                <i class="fa-solid fa-chart-line"></i>
-                            </div>
-                        </div>
-
-                        <div class="space-y-4">
-                            <div>
-                                <div class="flex justify-between text-xs font-bold mb-1">
-                                    <span>Conceptual Depth & Derivations</span>
-                                    <span id="metricVal1" class="text-amber-500 font-mono">98%</span>
-                                </div>
-                                <div class="w-full h-2.5 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
-                                    <div id="metricBar1" class="h-full bg-gradient-to-r from-amber-500 to-amber-300 rounded-full transition-all duration-500" style="width: 98%"></div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="flex justify-between text-xs font-bold mb-1">
-                                    <span>Numerical Speed & Accuracy Drills</span>
-                                    <span id="metricVal2" class="text-teal-400 font-mono">95%</span>
-                                </div>
-                                <div class="w-full h-2.5 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
-                                    <div id="metricBar2" class="h-full bg-gradient-to-r from-teal-500 to-emerald-400 rounded-full transition-all duration-500" style="width: 95%"></div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="flex justify-between text-xs font-bold mb-1">
-                                    <span>Board & School Exam Answer Writing</span>
-                                    <span id="metricVal3" class="text-indigo-400 font-mono">100%</span>
-                                </div>
-                                <div class="w-full h-2.5 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
-                                    <div id="metricBar3" class="h-full bg-gradient-to-r from-indigo-500 to-purple-400 rounded-full transition-all duration-500" style="width: 100%"></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-start gap-3 text-xs">
-                            <i class="fa-solid fa-lightbulb text-amber-500 text-base mt-0.5"></i>
-                            <div id="currTipText" class="text-slate-700 dark:text-slate-300">
-                                <strong>Batch Highlight:</strong> Every Saturday includes dedicated doubt-clearing and weekly test paper analysis.
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 2. INTERACTIVE VIRTUAL MATHS & PCB CONCEPT SIMULATOR LAB -->
-    <section id="simulator" class="py-20 relative overflow-hidden">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-3xl mx-auto mb-12">
-                <span class="text-xs font-bold uppercase tracking-widest text-teal-400 bg-teal-500/10 px-3.5 py-1.5 rounded-full border border-teal-500/20">Experience Visual Learning</span>
-                <h2 class="text-3xl sm:text-4xl font-black mt-4 tracking-tight">Interactive Maths & PCB Mini-Lab</h2>
-                <p class="text-slate-600 dark:text-slate-400 mt-2 text-sm sm:text-base">
-                    Don't just memorize formulas—see how they work! Play with our live interactive simulators for Maths, Physics, Chemistry, and Biology below.
-                </p>
-            </div>
-
-            <!-- Lab Switcher Tabs -->
-            <div class="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8">
-                <button onclick="switchLab('math')" id="labTab-math" class="lab-tab px-5 py-3 rounded-2xl font-extrabold text-xs sm:text-sm flex items-center gap-2 border transition">
-                    <i class="fa-solid fa-wave-square"></i> 1. Maths: Quadratic & Wave Plotter
-                </button>
-                <button onclick="switchLab('physics')" id="labTab-physics" class="lab-tab px-5 py-3 rounded-2xl font-extrabold text-xs sm:text-sm flex items-center gap-2 border transition">
-                    <i class="fa-solid fa-stopwatch"></i> 2. Physics: Gravity Pendulum Lab
-                </button>
-                <button onclick="switchLab('chemistry')" id="labTab-chemistry" class="lab-tab px-5 py-3 rounded-2xl font-extrabold text-xs sm:text-sm flex items-center gap-2 border transition">
-                    <i class="fa-solid fa-flask"></i> 3. Chemistry: pH & Reaction Mixer
-                </button>
-                <button onclick="switchLab('biology')" id="labTab-biology" class="lab-tab px-5 py-3 rounded-2xl font-extrabold text-xs sm:text-sm flex items-center gap-2 border transition">
-                    <i class="fa-solid fa-dna"></i> 4. Biology: Interactive Cell Explorer
-                </button>
-            </div>
-
-            <!-- Lab Container Box -->
-            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl">
-                <!-- LAB 1: MATHS GRAPHING -->
-                <div id="labPanel-math" class="lab-panel grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-                    <div class="lg:col-span-5 space-y-5">
-                        <div class="inline-flex items-center gap-2 text-xs font-bold text-amber-500 uppercase">
-                            <i class="fa-solid fa-superscript"></i> Algebra & Coordinate Geometry
-                        </div>
-                        <h3 class="text-2xl font-extrabold">Live Parabola Explorer: <span class="font-mono text-amber-500">y = ax² + bx + c</span></h3>
-                        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
-                            Adjust the coefficients <code class="font-mono font-bold text-amber-500">a</code>, <code class="font-mono font-bold text-teal-400">b</code>, and <code class="font-mono font-bold text-indigo-400">c</code> to see how a quadratic graph curves and finds its roots in real time.
-                        </p>
-
-                        <div class="space-y-4 bg-slate-50 dark:bg-slate-800/70 p-4 rounded-2xl border border-slate-200 dark:border-slate-700">
-                            <div>
-                                <div class="flex justify-between text-xs font-bold mb-1">
-                                    <span>Coefficient a (Curvature):</span>
-                                    <span id="mathValA" class="font-mono text-amber-500">1.0</span>
-                                </div>
-                                <input type="range" id="mathSliderA" min="-3" max="3" step="0.2" value="1" oninput="drawMathGraph()" class="w-full accent-amber-500 cursor-pointer">
-                            </div>
-                            <div>
-                                <div class="flex justify-between text-xs font-bold mb-1">
-                                    <span>Coefficient b (Slope Shift):</span>
-                                    <span id="mathValB" class="font-mono text-teal-400">0.0</span>
-                                </div>
-                                <input type="range" id="mathSliderB" min="-6" max="6" step="0.5" value="0" oninput="drawMathGraph()" class="w-full accent-teal-400 cursor-pointer">
-                            </div>
-                            <div>
-                                <div class="flex justify-between text-xs font-bold mb-1">
-                                    <span>Constant c (Y-Intercept):</span>
-                                    <span id="mathValC" class="font-mono text-indigo-400">-2.0</span>
-                                </div>
-                                <input type="range" id="mathSliderC" min="-5" max="5" step="0.5" value="-2" oninput="drawMathGraph()" class="w-full accent-indigo-400 cursor-pointer">
-                            </div>
-                        </div>
-
-                        <div id="mathFormulaOutput" class="p-3.5 rounded-xl bg-slate-950 text-emerald-400 font-mono text-xs border border-slate-800">
-                            Discriminant (Δ = b² - 4ac): 8.00 → 2 Real Roots | Vertex: (0.00, -2.00)
-                        </div>
-                    </div>
-                    <div class="lg:col-span-7">
-                        <div class="bg-slate-950 rounded-2xl p-3 border border-slate-800 relative">
-                            <canvas id="mathCanvas" class="w-full h-72 sm:h-80 rounded-xl block"></canvas>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- LAB 2: PHYSICS PENDULUM -->
-                <div id="labPanel-physics" class="lab-panel hidden grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-                    <div class="lg:col-span-5 space-y-5">
-                        <div class="inline-flex items-center gap-2 text-xs font-bold text-teal-400 uppercase">
-                            <i class="fa-solid fa-atom"></i> Mechanics & Oscillations
-                        </div>
-                        <h3 class="text-2xl font-extrabold">Harmonic Pendulum: <span class="font-mono text-teal-400">T = 2π√(L/g)</span></h3>
-                        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
-                            Change string length and planetary gravity (Earth, Moon, or Jupiter) to observe how the time period of oscillation changes!
-                        </p>
-
-                        <div class="space-y-4 bg-slate-50 dark:bg-slate-800/70 p-4 rounded-2xl border border-slate-200 dark:border-slate-700">
-                            <div>
-                                <div class="flex justify-between text-xs font-bold mb-1">
-                                    <span>String Length (L):</span>
-                                    <span id="physValL" class="font-mono text-amber-500">140 cm</span>
-                                </div>
-                                <input type="range" id="physSliderL" min="60" max="200" step="10" value="140" oninput="updatePhysicsParams()" class="w-full accent-amber-500 cursor-pointer">
-                            </div>
-                            <div>
-                                <div class="flex justify-between text-xs font-bold mb-1">
-                                    <span>Gravity (g):</span>
-                                    <span id="physValG" class="font-mono text-teal-400">9.8 m/s² (Earth)</span>
-                                </div>
-                                <input type="range" id="physSliderG" min="1.6" max="24.8" step="0.2" value="9.8" oninput="updatePhysicsParams()" class="w-full accent-teal-400 cursor-pointer">
-                            </div>
-                        </div>
-
-                        <div id="physFormulaOutput" class="p-3.5 rounded-xl bg-slate-950 text-amber-400 font-mono text-xs border border-slate-800">
-                            Time Period (T): 2.37 seconds per swing
-                        </div>
-                    </div>
-                    <div class="lg:col-span-7">
-                        <div class="bg-slate-950 rounded-2xl p-3 border border-slate-800 relative">
-                            <canvas id="physicsCanvas" class="w-full h-72 sm:h-80 rounded-xl block"></canvas>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- LAB 3: CHEMISTRY REACTION & PH MIXER -->
-                <div id="labPanel-chemistry" class="lab-panel hidden grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-                    <div class="lg:col-span-5 space-y-5">
-                        <div class="inline-flex items-center gap-2 text-xs font-bold text-indigo-400 uppercase">
-                            <i class="fa-solid fa-flask-vial"></i> Acids, Bases & Salts (Classes 7–10)
-                        </div>
-                        <h3 class="text-2xl font-extrabold">Interactive pH Scale & Indicator Lab</h3>
-                        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
-                            Slide the pH meter from 0 (Strong Acid) to 14 (Strong Base) to see universal indicator color transitions and real-life chemical examples.
-                        </p>
-
-                        <div class="space-y-4 bg-slate-50 dark:bg-slate-800/70 p-4 rounded-2xl border border-slate-200 dark:border-slate-700">
-                            <div class="flex justify-between text-xs font-bold mb-1">
-                                <span>Select Solution pH Value:</span>
-                                <span id="chemPhBadge" class="font-mono px-2.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400">pH 7.0 (Neutral)</span>
-                            </div>
-                            <input type="range" id="chemPhSlider" min="0" max="14" step="0.5" value="7" oninput="updateChemLab()" class="w-full accent-indigo-500 cursor-pointer">
-                            <div class="flex justify-between text-[10px] font-mono text-slate-400">
-                                <span>0 (HCl Acid)</span>
-                                <span>7 (Pure H₂O)</span>
-                                <span>14 (NaOH Base)</span>
-                            </div>
-                        </div>
-
-                        <div id="chemDetailsBox" class="p-4 rounded-xl bg-slate-950 text-slate-200 text-xs space-y-1.5 border border-slate-800">
-                            <div class="font-bold text-amber-400" id="chemSubName">Example: Pure Distilled Water (H₂O)</div>
-                            <div class="text-slate-400" id="chemLitmusText">Litmus Test: No change in Red or Blue Litmus paper. Equal H⁺ and OH⁻ ions.</div>
-                        </div>
-                    </div>
-                    <div class="lg:col-span-7 flex flex-col items-center justify-center bg-slate-950 rounded-2xl p-8 border border-slate-800 min-h-[19rem]">
-                        <!-- Animated Beaker SVG -->
-                        <div class="relative w-44 h-52 border-4 border-slate-300/80 border-t-0 rounded-b-3xl overflow-hidden flex items-end shadow-2xl">
-                            <!-- Measurement lines -->
-                            <div class="absolute right-2 top-6 bottom-6 flex flex-col justify-between text-[9px] font-mono text-slate-400 z-20">
-                                <span>200ml —</span>
-                                <span>150ml —</span>
-                                <span>100ml —</span>
-                                <span>50ml —</span>
-                            </div>
-                            <!-- Liquid Fill -->
-                            <div id="chemLiquidFill" class="w-full h-3/4 transition-colors duration-500 relative flex items-center justify-center" style="background-color: #10b981;">
-                                <span id="chemBeakerLabel" class="font-mono font-black text-slate-950 bg-white/80 px-3 py-1 rounded-full text-xs shadow">pH 7.0</span>
-                            </div>
-                        </div>
-                        <p class="text-xs text-slate-400 font-mono mt-4">Universal Indicator Beaker Simulation</p>
-                    </div>
-                </div>
-
-                <!-- LAB 4: BIOLOGY CELL EXPLORER -->
-                <div id="labPanel-biology" class="lab-panel hidden grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-                    <div class="lg:col-span-5 space-y-4">
-                        <div class="inline-flex items-center gap-2 text-xs font-bold text-emerald-400 uppercase">
-                            <i class="fa-solid fa-microscope"></i> Fundamental Unit of Life (Biology)
-                        </div>
-                        <h3 class="text-2xl font-extrabold">Interactive Cell Organelle Inspector</h3>
-                        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
-                            Click any cell organelle below to highlight its structure and understand its biological role for school & board exams.
-                        </p>
-
-                        <div class="grid grid-cols-2 gap-2.5">
-                            <button onclick="inspectOrganelle('nucleus')" class="p-3 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-amber-500 text-left text-xs font-bold transition bg-slate-50 dark:bg-slate-800/70">
-                                🧠 Nucleus (Brain)
-                            </button>
-                            <button onclick="inspectOrganelle('mitochondria')" class="p-3 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-amber-500 text-left text-xs font-bold transition bg-slate-50 dark:bg-slate-800/70">
-                                ⚡ Mitochondria (ATP)
-                            </button>
-                            <button onclick="inspectOrganelle('chloroplast')" class="p-3 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-amber-500 text-left text-xs font-bold transition bg-slate-50 dark:bg-slate-800/70">
-                                🌿 Chloroplast
-                            </button>
-                            <button onclick="inspectOrganelle('ribosome')" class="p-3 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-amber-500 text-left text-xs font-bold transition bg-slate-50 dark:bg-slate-800/70">
-                                🧬 Ribosomes
-                            </button>
-                        </div>
-
-                        <div id="bioInfoBox" class="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-xs space-y-1">
-                            <div id="bioOrgTitle" class="font-extrabold text-sm text-emerald-400">Nucleus — Control Center of the Cell</div>
-                            <p id="bioOrgDesc" class="text-slate-600 dark:text-slate-300 leading-relaxed">
-                                Contains chromosomes and DNA (hereditary material). Regulates gene expression, cell division, and metabolic activities.
+                            <h3 class="text-lg font-bold text-slate-900 mb-1">Center Address</h3>
+                            <p class="text-slate-600 text-sm leading-relaxed">
+                                Near Blossom English School, Ethelbari Checkpost, Alipurduar - 735204, West Bengal, India.
                             </p>
                         </div>
                     </div>
 
-                    <div class="lg:col-span-7 flex items-center justify-center bg-slate-950 rounded-2xl p-6 border border-slate-800 min-h-[19rem]">
-                        <!-- Interactive SVG Cell Diagram -->
-                        <svg viewBox="0 0 400 260" class="w-full max-w-md h-auto">
-                            <!-- Outer Cell Wall / Membrane -->
-                            <rect x="20" y="20" width="360" height="220" rx="50" fill="#064e3b" stroke="#10b981" stroke-width="5"/>
-                            <rect x="32" y="32" width="336" height="196" rx="42" fill="#0f172a" stroke="#34d399" stroke-width="2" stroke-dasharray="6 4"/>
-                            <!-- Vacuole -->
-                            <ellipse cx="130" cy="130" rx="55" ry="65" fill="#0284c7" fill-opacity="0.35" stroke="#38bdf8" stroke-width="2"/>
-                            <text x="105" y="135" fill="#7dd3fc" font-size="11" font-family="monospace">Vacuole</text>
-                            <!-- Nucleus -->
-                            <g onclick="inspectOrganelle('nucleus')" class="cursor-pointer hover:opacity-90 transition">
-                                <circle id="svgNucleus" cx="265" cy="110" r="42" fill="#7c2d12" stroke="#f59e0b" stroke-width="4"/>
-                                <circle cx="265" cy="110" r="14" fill="#f59e0b"/>
-                                <text x="242" y="168" fill="#fbbf24" font-size="11" font-weight="bold">Nucleus</text>
-                            </g>
-                            <!-- Mitochondria -->
-                            <g onclick="inspectOrganelle('mitochondria')" class="cursor-pointer hover:opacity-90 transition">
-                                <ellipse id="svgMito" cx="240" cy="195" rx="32" ry="16" fill="#991b1b" stroke="#f87171" stroke-width="3"/>
-                                <path d="M218 195 Q228 185 235 195 T252 195 T264 195" fill="none" stroke="#fecaca" stroke-width="2"/>
-                                <text x="290" y="199" fill="#fca5a5" font-size="11" font-weight="bold">Mitochondria</text>
-                            </g>
-                            <!-- Chloroplast -->
-                            <g onclick="inspectOrganelle('chloroplast')" class="cursor-pointer hover:opacity-90 transition">
-                                <ellipse id="svgChloro" cx="145" cy="52" rx="28" ry="14" fill="#14532d" stroke="#4ade80" stroke-width="3"/>
-                                <circle cx="135" cy="52" r="5" fill="#4ade80"/>
-                                <circle cx="145" cy="52" r="5" fill="#4ade80"/>
-                                <circle cx="155" cy="52" r="5" fill="#4ade80"/>
-                                <text x="182" y="56" fill="#86efac" font-size="11" font-weight="bold">Chloroplast</text>
-                            </g>
-                            <!-- Ribosomes -->
-                            <g onclick="inspectOrganelle('ribosome')" class="cursor-pointer">
-                                <circle cx="325" cy="75" r="5" fill="#c084fc"/>
-                                <circle cx="338" cy="88" r="5" fill="#c084fc"/>
-                                <circle cx="318" cy="95" r="5" fill="#c084fc"/>
-                                <text x="305" y="62" fill="#d8b4fe" font-size="11" font-weight="bold">Ribosomes</text>
-                            </g>
-                        </svg>
+                    <div class="border-t border-slate-100 pt-6 space-y-3">
+                        <a href="https://maps.app.goo.gl/WjfkUE8oEpRzGkLS6" target="_blank" class="w-full flex items-center justify-center space-x-2 bg-slate-900 hover:bg-slate-800 text-white font-semibold py-3.5 rounded-xl transition-all shadow-sm">
+                            <i class="fa-solid fa-location-arrow"></i>
+                            <span>Open in Google Maps</span>
+                        </a>
+                        <a href="tel:+918918929014" class="w-full flex items-center justify-center space-x-2 bg-brand-50 hover:bg-brand-100 text-brand-700 font-semibold py-3.5 rounded-xl transition-all">
+                            <i class="fa-solid fa-phone"></i>
+                            <span>Call +91 891 892 9014</span>
+                        </a>
                     </div>
+                </div>
+
+                <!-- Google Maps Preview Box -->
+                <div class="lg:col-span-7 h-[400px] rounded-3xl overflow-hidden border border-slate-200 shadow-sm relative bg-slate-200">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3568.0!2d89.3!3d26.6!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zSGVhciBCbG9zc29tIEVuZ2xpc2ggU2Nob29sLCBFdGhlbGJhcmkgQ2hlY2twb3N0!5e0!3m2!1sen!2sin!4v1650000000000!5m2!1sen!2sin" 
+                        width="100%" 
+                        height="100%" 
+                        style="border:0;" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade"
+                        class="w-full h-full">
+                    </iframe>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 3. INTERACTIVE 3-QUESTION DIAGNOSTIC BRAIN QUIZ -->
-    <section id="quiz" class="py-20 bg-white dark:bg-brand-surface border-y border-slate-200 dark:border-slate-800">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-10">
-                <span class="text-xs font-bold uppercase tracking-widest text-indigo-400 bg-indigo-500/10 px-3.5 py-1.5 rounded-full border border-indigo-500/20">Test Your Foundation</span>
-                <h2 class="text-3xl sm:text-4xl font-black mt-4 tracking-tight">Quick 60-Second Maths & PCB Challenge</h2>
-                <p class="text-slate-600 dark:text-slate-400 mt-2 text-sm">Solve 3 rapid conceptual questions to unlock a special badge on your Trial Admission Pass!</p>
-            </div>
-
-            <div class="bg-slate-50 dark:bg-slate-900 rounded-3xl p-6 sm:p-10 border border-slate-200 dark:border-slate-800 shadow-xl">
-                <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-200 dark:border-slate-800">
-                    <span id="quizStepBadge" class="text-xs font-extrabold uppercase tracking-wider text-amber-500">Question 1 of 3</span>
-                    <span id="quizScoreBadge" class="text-xs font-mono font-bold px-3 py-1 rounded-full bg-slate-200 dark:bg-slate-800">Score: 0 / 3</span>
-                </div>
-
-                <div id="quizQuestionBox">
-                    <h3 id="quizQuestionText" class="text-lg sm:text-xl font-extrabold mb-6">Loading question...</h3>
-                    <div id="quizOptionsContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-3.5"></div>
-                    <div id="quizFeedbackText" class="mt-5 text-xs sm:text-sm font-semibold hidden p-3.5 rounded-xl"></div>
-                    <div class="mt-6 flex justify-end">
-                        <button id="quizNextBtn" onclick="nextQuizQuestion()" class="hidden bg-brand-gold hover:bg-brand-goldLight text-slate-950 font-bold text-sm px-6 py-2.5 rounded-xl transition">
-                            Next Question <i class="fa-solid fa-arrow-right ml-1"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Quiz Result Screen -->
-                <div id="quizResultBox" class="hidden text-center py-6 space-y-4">
-                    <div class="w-16 h-16 rounded-2xl bg-amber-500/20 text-amber-500 flex items-center justify-center text-3xl mx-auto">
-                        <i class="fa-solid fa-trophy"></i>
-                    </div>
-                    <h3 id="quizFinalTitle" class="text-2xl font-black">Brilliant Effort!</h3>
-                    <p id="quizFinalDesc" class="text-sm text-slate-600 dark:text-slate-400 max-w-md mx-auto"></p>
-                    <div class="flex flex-wrap justify-center gap-3 pt-2">
-                        <a href="#enroll" class="bg-brand-gold text-slate-950 font-extrabold px-6 py-3 rounded-xl text-sm shadow-lg">Claim Trial Pass With Score</a>
-                        <button onclick="resetQuiz()" class="bg-slate-200 dark:bg-slate-800 px-5 py-3 rounded-xl text-sm font-bold">Play Again</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 4. SCHEDULE & WEEKLY TIMINGS SECTION -->
-    <section id="schedule" class="py-20">
+    <!-- Trial Pass Generator Section -->
+    <section id="trial" class="py-20 bg-white border-t border-slate-200/60">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-3xl mx-auto mb-12">
-                <span class="text-xs font-bold uppercase tracking-widest text-amber-500 bg-amber-500/10 px-3.5 py-1.5 rounded-full border border-amber-500/20">Disciplined Routine</span>
-                <h2 class="text-3xl sm:text-4xl font-black mt-4 tracking-tight">Offline Batch Timings & Weekly Planner</h2>
-                <p class="text-slate-600 dark:text-slate-400 mt-2 text-sm sm:text-base">
-                    Consistent afternoon sessions designed to complement school hours without exhausting students.
-                </p>
+            <div class="max-w-3xl mx-auto text-center space-y-4 mb-16">
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">Request Trial Class Admit Pass</h2>
+                <p class="text-slate-600 text-lg">Fill in student details below to generate an instant trial class admit pass and send it directly to Sonu Sir via WhatsApp.</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- Monday -->
-                <div class="spotlight-card bg-white dark:bg-slate-900 p-7 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-lg relative">
-                    <div class="flex items-center justify-between mb-4">
-                        <span class="px-3.5 py-1 rounded-full bg-amber-500/15 text-amber-500 font-extrabold text-xs uppercase">Monday</span>
-                        <span class="font-mono text-xs font-bold text-slate-400">90 Mins</span>
+            <div class="max-w-xl mx-auto bg-slate-50 border border-slate-200 rounded-3xl p-8 shadow-sm">
+                <form id="pass-form" class="space-y-4" onsubmit="generatePass(event)">
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">Student Full Name</label>
+                        <input type="text" id="student-name" required placeholder="e.g. Rahul Sharma" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500 bg-white">
                     </div>
-                    <div class="text-2xl font-black font-mono text-slate-900 dark:text-white mb-2">4:00 PM – 5:30 PM</div>
-                    <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mb-4">
-                        Core Mathematics concepts, theorem derivations, and step-by-step exercise problem solving.
-                    </p>
-                    <div class="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-semibold text-teal-500">
-                        <span><i class="fa-solid fa-users-rectangle mr-1.5"></i> Offline Classroom</span>
-                        <span>Classes 5–10</span>
-                    </div>
-                </div>
-
-                <!-- Wednesday -->
-                <div class="spotlight-card bg-white dark:bg-slate-900 p-7 rounded-3xl border-2 border-amber-500/60 shadow-xl relative">
-                    <div class="flex items-center justify-between mb-4">
-                        <span class="px-3.5 py-1 rounded-full bg-teal-500/15 text-teal-400 font-extrabold text-xs uppercase">Wednesday</span>
-                        <span class="font-mono text-xs font-bold text-amber-500">Core PCB Day</span>
-                    </div>
-                    <div class="text-2xl font-black font-mono text-slate-900 dark:text-white mb-2">4:00 PM – 5:30 PM</div>
-                    <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mb-4">
-                        Physics numericals, Chemical equations & reaction mechanisms, and Biology diagram drills.
-                    </p>
-                    <div class="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-semibold text-amber-500">
-                        <span><i class="fa-solid fa-flask mr-1.5"></i> Science & Numericals</span>
-                        <span>Classes 5–10</span>
-                    </div>
-                </div>
-
-                <!-- Saturday -->
-                <div class="spotlight-card bg-white dark:bg-slate-900 p-7 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-lg relative">
-                    <div class="flex items-center justify-between mb-4">
-                        <span class="px-3.5 py-1 rounded-full bg-indigo-500/15 text-indigo-400 font-extrabold text-xs uppercase">Saturday</span>
-                        <span class="font-mono text-xs font-bold text-slate-400">Test & Revision</span>
-                    </div>
-                    <div class="text-2xl font-black font-mono text-slate-900 dark:text-white mb-2">4:00 PM – 5:30 PM</div>
-                    <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mb-4">
-                        Combined Maths & PCB revision, 1-on-1 doubt clearing, and weekly evaluation tests.
-                    </p>
-                    <div class="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-semibold text-indigo-400">
-                        <span><i class="fa-solid fa-clipboard-check mr-1.5"></i> Assessment & Doubts</span>
-                        <span>Classes 5–10</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 5. INTERACTIVE TRIAL ADMISSION PASS GENERATOR (WITH WHATSAPP & CALL) -->
-    <section id="enroll" class="py-20 bg-white dark:bg-brand-surface border-y border-slate-200 dark:border-slate-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-                <!-- Left Form -->
-                <div class="lg:col-span-6 space-y-6">
-                    <span class="text-xs font-bold uppercase tracking-widest text-amber-500 bg-amber-500/10 px-3.5 py-1.5 rounded-full border border-amber-500/20">Instant Seat Reservation</span>
-                    <h2 class="text-3xl sm:text-4xl font-black tracking-tight">Generate Your Official Trial Class Pass</h2>
-                    <p class="text-slate-600 dark:text-slate-400 text-sm sm:text-base">
-                        Enter the student's details below to generate a personalized Admit Pass for Sonu Chhetri's offline batch, and send it directly to <strong class="text-emerald-500 font-mono">+91 891 892 9014</strong> via WhatsApp!
-                    </p>
-
-                    <form onsubmit="handlePassSubmit(event)" class="space-y-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-xs font-bold uppercase tracking-wider mb-1.5">Student Full Name *</label>
-                            <input type="text" id="passInputName" required placeholder="e.g., Aarav Sharma" oninput="updateLivePassCard()" class="w-full px-4 py-3.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:border-amber-500 focus:outline-none text-sm font-semibold">
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Class / Grade</label>
+                            <select id="student-class" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500 bg-white">
+                                <option value="Class 5">Class 5</option>
+                                <option value="Class 6">Class 6</option>
+                                <option value="Class 7">Class 7</option>
+                                <option value="Class 8">Class 8</option>
+                                <option value="Class 9">Class 9</option>
+                                <option value="Class 10">Class 10</option>
+                            </select>
                         </div>
-
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-xs font-bold uppercase tracking-wider mb-1.5">Select Class (5–10) *</label>
-                                <select id="passInputGrade" onchange="updateLivePassCard()" class="w-full px-4 py-3.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:border-amber-500 focus:outline-none text-sm font-semibold">
-                                    <option value="Class 5">Class 5</option>
-                                    <option value="Class 6">Class 6</option>
-                                    <option value="Class 7">Class 7</option>
-                                    <option value="Class 8">Class 8</option>
-                                    <option value="Class 9">Class 9</option>
-                                    <option value="Class 10" selected>Class 10 (Board Prep)</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-xs font-bold uppercase tracking-wider mb-1.5">Subject Focus *</label>
-                                <select id="passInputSubject" onchange="updateLivePassCard()" class="w-full px-4 py-3.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:border-amber-500 focus:outline-none text-sm font-semibold">
-                                    <option value="Maths & Full PCB (All 4)" selected>Maths + Full PCB (All)</option>
-                                    <option value="Mathematics Only">Mathematics Only</option>
-                                    <option value="PCB (Physics, Chem, Bio)">PCB (Science Only)</option>
-                                </select>
-                            </div>
-                        </div>
-
                         <div>
-                            <label class="block text-xs font-bold uppercase tracking-wider mb-1.5">Parent / Student Phone Number *</label>
-                            <input type="tel" id="passInputPhone" required placeholder="e.g., +91 98765 43210" oninput="updateLivePassCard()" class="w-full px-4 py-3.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:border-amber-500 focus:outline-none text-sm font-mono font-semibold">
-                        </div>
-
-                        <div class="pt-2 flex flex-wrap gap-3">
-                            <button type="submit" class="flex-1 bg-brand-gold hover:bg-brand-goldLight text-slate-950 font-black py-4 px-6 rounded-2xl shadow-xl shadow-amber-500/20 flex items-center justify-center gap-2 transition cursor-pointer">
-                                <i class="fa-solid fa-ticket"></i>
-                                <span>Lock Pass & Confirm</span>
-                            </button>
-                            <button type="button" onclick="sendPassViaWhatsApp()" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold py-4 px-6 rounded-2xl shadow-xl shadow-emerald-500/20 flex items-center justify-center gap-2 transition cursor-pointer">
-                                <i class="fa-brands fa-whatsapp text-lg"></i>
-                                <span>Send to Sonu Sir</span>
-                            </button>
-                        </div>
-                    </form>
-                </div>
-
-                <!-- Right Live Pass Preview Card -->
-                <div class="lg:col-span-6">
-                    <div class="bg-gradient-to-br from-slate-900 via-slate-900 to-slate-950 text-white rounded-3xl p-6 sm:p-8 border-2 border-amber-500/50 shadow-2xl relative overflow-hidden">
-                        <div class="absolute -right-12 -top-12 w-40 h-40 bg-amber-500/15 rounded-full blur-2xl pointer-events-none"></div>
-
-                        <div class="flex items-center justify-between border-b border-slate-800 pb-5 mb-5">
-                            <div class="flex items-center gap-3">
-                                <div class="relative w-12 h-12 rounded-2xl bg-brand-gold text-slate-950 font-black text-xl flex items-center justify-center overflow-hidden border border-amber-300">
-                                    <span class="sonu-avatar-fallback select-none">SC</span>
-                                    <img src="sonusir.jpg" alt="Sonu Chhetri" class="sonu-avatar-img absolute inset-0 w-full h-full object-cover hidden" onload="handleSonuImageLoad(this)" onerror="handleSonuImageError(this)">
-                                </div>
-                                <div>
-                                    <div class="text-[10px] font-mono uppercase tracking-widest text-amber-400">Official Offline Trial Admit Card</div>
-                                    <div class="font-black text-lg">Sonu Chhetri Tuition Classes</div>
-                                </div>
-                            </div>
-                            <span id="passPreviewId" class="font-mono text-xs bg-slate-800 text-amber-400 px-3 py-1 rounded-lg border border-slate-700">#SC-2026</span>
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-4 text-xs mb-6">
-                            <div class="bg-slate-800/60 p-3.5 rounded-xl border border-slate-800">
-                                <div class="text-slate-400 text-[10px] uppercase">Student Name</div>
-                                <div id="passPreviewName" class="font-extrabold text-sm sm:text-base text-white mt-0.5 truncate">Aarav Sharma</div>
-                            </div>
-                            <div class="bg-slate-800/60 p-3.5 rounded-xl border border-slate-800">
-                                <div class="text-slate-400 text-[10px] uppercase">Target Grade</div>
-                                <div id="passPreviewGrade" class="font-extrabold text-sm sm:text-base text-amber-400 mt-0.5">Class 10 (Board Prep)</div>
-                            </div>
-                            <div class="bg-slate-800/60 p-3.5 rounded-xl border border-slate-800">
-                                <div class="text-slate-400 text-[10px] uppercase">Enrolled Subjects</div>
-                                <div id="passPreviewSubject" class="font-bold text-xs sm:text-sm text-teal-400 mt-0.5">Maths & Full PCB (All 4)</div>
-                            </div>
-                            <div class="bg-slate-800/60 p-3.5 rounded-xl border border-slate-800">
-                                <div class="text-slate-400 text-[10px] uppercase">Batch Schedule</div>
-                                <div class="font-bold text-xs text-white mt-0.5">Mon, Wed, Sat (4:00–5:30 PM)</div>
-                            </div>
-                        </div>
-
-                        <div class="bg-slate-950/90 rounded-2xl p-4 border border-slate-800 space-y-2 text-xs">
-                            <div class="flex items-center justify-between">
-                                <span class="text-slate-400"><i class="fa-solid fa-location-dot text-amber-500 mr-1.5"></i> Center:</span>
-                                <span class="font-semibold text-right">Blossom English School, Ethelbari Checkpost</span>
-                            </div>
-                            <div class="flex items-center justify-between">
-                                <span class="text-slate-400"><i class="fa-solid fa-phone text-emerald-400 mr-1.5"></i> Educator Helpline:</span>
-                                <a href="tel:+918918929014" class="font-mono font-bold text-emerald-400 hover:underline">+91 891 892 9014</a>
-                            </div>
-                        </div>
-
-                        <div class="mt-5 flex flex-wrap items-center justify-between gap-2 pt-4 border-t border-slate-800/80 text-[11px] text-slate-400">
-                            <span>Present this pass at the center during 4:00 PM – 5:30 PM</span>
-                            <button type="button" onclick="copyPassDetails()" class="text-amber-400 hover:underline font-bold flex items-center gap-1">
-                                <i class="fa-regular fa-copy"></i> Copy Pass Text
-                            </button>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Contact Number</label>
+                            <input type="tel" id="student-phone" required placeholder="10-digit mobile no." class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500 bg-white">
                         </div>
                     </div>
+                    <button type="submit" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-4 rounded-xl shadow-md transition-all flex items-center justify-center space-x-2">
+                        <i class="fa-solid fa-ticket"></i>
+                        <span>Generate & Send Pass to Sonu Sir</span>
+                    </button>
+                </form>
+
+                <!-- Generated Pass Preview Modal / Card -->
+                <div id="pass-card" class="hidden mt-6 bg-white border-2 border-brand-500 rounded-2xl p-6 shadow-md space-y-4">
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-8 h-8 rounded-lg bg-brand-600 text-white flex items-center justify-center font-bold text-xs">SC</div>
+                            <span class="font-bold text-slate-900 text-sm">Trial Admit Pass</span>
+                        </div>
+                        <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-2.5 py-1 rounded-full">Valid</span>
+                    </div>
+                    <div class="space-y-2 text-sm">
+                        <p><strong class="text-slate-500">Student:</strong> <span id="pass-name" class="font-semibold text-slate-900"></span></p>
+                        <p><strong class="text-slate-500">Grade:</strong> <span id="pass-grade" class="font-semibold text-slate-900"></span></p>
+                        <p><strong class="text-slate-500">Phone:</strong> <span id="pass-phone" class="font-semibold text-slate-900"></span></p>
+                        <p><strong class="text-slate-500">Timing:</strong> <span class="font-semibold text-slate-900">Mon, Wed, Sat (4:00 - 5:30 PM)</span></p>
+                    </div>
+                    <a id="whatsapp-link" href="#" target="_blank" class="block w-full text-center bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 rounded-xl transition-all">
+                        <i class="fa-brands fa-whatsapp"></i> Send Pass to WhatsApp (+91 891 892 9014)
+                    </a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 6. LOCATION, CONTACT HUB & GOOGLE MAPS EMBED PREVIEW -->
-    <section id="location" class="py-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-3xl mx-auto mb-12">
-                <span class="text-xs font-bold uppercase tracking-widest text-teal-400 bg-teal-500/10 px-3.5 py-1.5 rounded-full border border-teal-500/20">Visit Our Offline Center</span>
-                <h2 class="text-3xl sm:text-4xl font-black mt-4 tracking-tight">Location Map & Direct Contact</h2>
-                <p class="text-slate-600 dark:text-slate-400 mt-2 text-sm sm:text-base">
-                    Conveniently located at Blossom English School, Ethelbari Checkpost, Alipurduar. Call or WhatsApp Sonu Chhetri directly for admissions.
-                </p>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-                <!-- Left Address & Contact Details -->
-                <div class="lg:col-span-5 bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-xl flex flex-col justify-between space-y-6">
-                    <div class="space-y-6">
-                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-500 text-xs font-bold">
-                            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span> Admissions Open for 2026 Batch
-                        </div>
-
-                        <div>
-                            <h3 class="text-2xl font-black">Sonu Chhetri's Tuition Center</h3>
-                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Offline In-Person Coaching • Grades 5 to 10</p>
-                        </div>
-
-                        <div class="space-y-4 text-sm">
-                            <div class="flex items-start gap-3.5 p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/70 dark:border-slate-700/60">
-                                <div class="w-10 h-10 rounded-xl bg-amber-500/15 text-amber-500 flex items-center justify-center shrink-0 text-lg">
-                                    <i class="fa-solid fa-location-dot"></i>
-                                </div>
-                                <div>
-                                    <div class="text-xs font-bold uppercase text-slate-400">Classroom Address</div>
-                                    <div class="font-bold mt-0.5">Blossom English School, Ethelbari Checkpost</div>
-                                    <div class="text-xs text-slate-500 dark:text-slate-400">Alipurduar – 735204, West Bengal, India</div>
-                                </div>
-                            </div>
-
-                            <div class="flex items-start gap-3.5 p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/70 dark:border-slate-700/60">
-                                <div class="w-10 h-10 rounded-xl bg-emerald-500/15 text-emerald-500 flex items-center justify-center shrink-0 text-lg">
-                                    <i class="fa-solid fa-phone-volume"></i>
-                                </div>
-                                <div class="flex-1">
-                                    <div class="text-xs font-bold uppercase text-slate-400">Phone & WhatsApp</div>
-                                    <a href="tel:+918918929014" class="font-mono font-black text-lg text-emerald-500 hover:underline block mt-0.5">+91 891 892 9014</a>
-                                    <button onclick="copyPhoneNumber()" class="text-[11px] font-semibold text-amber-500 hover:underline mt-0.5 inline-flex items-center gap-1">
-                                        <i class="fa-regular fa-copy"></i> Copy Phone Number
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div class="flex items-start gap-3.5 p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/70 dark:border-slate-700/60">
-                                <div class="w-10 h-10 rounded-xl bg-teal-500/15 text-teal-400 flex items-center justify-center shrink-0 text-lg">
-                                    <i class="fa-regular fa-clock"></i>
-                                </div>
-                                <div>
-                                    <div class="text-xs font-bold uppercase text-slate-400">Offline Class Days & Hours</div>
-                                    <div class="font-bold mt-0.5">Monday, Wednesday & Saturday</div>
-                                    <div class="text-xs font-mono text-amber-500 font-bold">4:00 PM to 5:30 PM</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Action Buttons -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-4 border-t border-slate-200 dark:border-slate-800">
-                        <a href="tel:+918918929014" class="flex items-center justify-center gap-2 bg-brand-gold hover:bg-brand-goldLight text-slate-950 font-extrabold py-3.5 px-4 rounded-xl text-xs sm:text-sm transition shadow-md">
-                            <i class="fa-solid fa-phone"></i> Call +91 891 892 9014
-                        </a>
-                        <a href="https://maps.app.goo.gl/WjfkUE8oEpRzGkLS6" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-2 bg-slate-900 dark:bg-slate-800 hover:bg-slate-700 text-white font-bold py-3.5 px-4 rounded-xl text-xs sm:text-sm border border-slate-700 transition">
-                            <i class="fa-solid fa-map-location-dot text-amber-400"></i> Open Google Maps
-                        </a>
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-white py-12 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+            <div class="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-brand-600 text-white flex items-center justify-center font-bold text-lg">SC</div>
+                    <div>
+                        <span class="text-lg font-bold">Sonu Chhetri Tuition Classes</span>
+                        <p class="text-xs text-slate-400">Maths & PCB • Classes 5 to 10</p>
                     </div>
                 </div>
-
-                <!-- Right Interactive Google Map Preview -->
-                <div class="lg:col-span-7 bg-white dark:bg-slate-900 rounded-3xl p-3 sm:p-4 border border-slate-200 dark:border-slate-800 shadow-xl flex flex-col">
-                    <div class="flex flex-wrap items-center justify-between gap-2 px-3 py-2.5 mb-2">
-                        <div class="flex items-center gap-2 text-xs font-bold">
-                            <span class="w-2.5 h-2.5 rounded-full bg-red-500"></span>
-                            <span>Live Map Preview: Blossom English School, Ethelbari Checkpost, Alipurduar (735204)</span>
-                        </div>
-                        <a href="https://maps.app.goo.gl/WjfkUE8oEpRzGkLS6" target="_blank" rel="noopener noreferrer" class="text-xs font-bold text-amber-500 hover:underline flex items-center gap-1">
-                            <span>Get Directions</span>
-                            <i class="fa-solid fa-up-right-from-square text-[10px]"></i>
-                        </a>
-                    </div>
-                    <div class="relative flex-1 min-h-[360px] rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800">
-                        <iframe
-                            title="Sonu Chhetri Tuition Location Map - Blossom English School Ethelbari Checkpost Alipurduar"
-                            src="https://maps.google.com/maps?q=Blossom+English+School+Ethelbari+Checkpost+Alipurduar+735204+West+Bengal+India&t=&z=15&ie=UTF8&iwloc=&output=embed"
-                            class="w-full h-full min-h-[360px] border-0"
-                            allowfullscreen=""
-                            loading="lazy"
-                            referrerpolicy="no-referrer-when-downgrade">
-                        </iframe>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- FLOATING QUICK-CONTACT ACTION BAR -->
-    <div class="fixed bottom-5 right-5 z-40 flex flex-col gap-2.5">
-        <a href="https://wa.me/918918929014?text=Hello%20Sonu%20Sir%2C%20I%20am%20interested%20in%20offline%20Tuition%20for%20Classes%205-10." target="_blank" rel="noopener noreferrer" title="WhatsApp Sonu Chhetri" class="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-xl shadow-emerald-500/30 flex items-center justify-center text-2xl hover:scale-110 transition">
-            <i class="fa-brands fa-whatsapp"></i>
-        </a>
-        <a href="tel:+918918929014" title="Call +91 891 892 9014" class="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-brand-gold hover:bg-brand-goldLight text-slate-950 shadow-xl shadow-amber-500/30 flex items-center justify-center text-xl hover:scale-110 transition">
-            <i class="fa-solid fa-phone-volume"></i>
-        </a>
-    </div>
-
-    <!-- FOOTER WITH ATTRIBUTION -->
-    <footer class="bg-slate-950 text-slate-400 pt-14 pb-10 border-t border-slate-800/80">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 pb-10 border-b border-slate-800/80">
-                <div class="space-y-3">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl bg-brand-gold text-slate-950 font-black flex items-center justify-center text-lg">SC</div>
-                        <span class="font-extrabold text-white text-lg">Sonu Chhetri Tuition</span>
-                    </div>
-                    <p class="text-xs text-slate-400 leading-relaxed">
-                        Dedicated offline coaching in Mathematics, Physics, Chemistry, and Biology (PCB) for students from Class 5 to Class 10.
-                    </p>
-                </div>
-
-                <div class="space-y-2 text-xs">
-                    <div class="font-bold text-white uppercase tracking-wider mb-2">Class Schedule & Venue</div>
-                    <p><i class="fa-regular fa-calendar text-amber-500 mr-2"></i>Monday, Wednesday & Saturday</p>
-                    <p><i class="fa-regular fa-clock text-teal-400 mr-2"></i>4:00 PM to 5:30 PM (Offline Mode)</p>
-                    <p><i class="fa-solid fa-location-dot text-indigo-400 mr-2"></i>Blossom English School, Ethelbari Checkpost, Alipurduar - 735204, West Bengal, India</p>
-                </div>
-
-                <div class="space-y-2 text-xs">
-                    <div class="font-bold text-white uppercase tracking-wider mb-2">Direct Admission Helpline</div>
-                    <p class="font-mono text-base font-extrabold text-emerald-400">
-                        <a href="tel:+918918929014" class="hover:underline"><i class="fa-solid fa-phone mr-2"></i>+91 891 892 9014</a>
-                    </p>
-                    <p class="pt-1">
-                        <a href="https://maps.app.goo.gl/WjfkUE8oEpRzGkLS6" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-amber-400 hover:underline font-semibold">
-                            <i class="fa-solid fa-map-pin"></i> View Location on Google Maps
-                        </a>
-                    </p>
+                <div class="flex items-center space-x-6 text-sm text-slate-400">
+                    <a href="#about" class="hover:text-white transition-colors">About</a>
+                    <a href="#subjects" class="hover:text-white transition-colors">Subjects</a>
+                    <a href="#schedule" class="hover:text-white transition-colors">Schedule</a>
+                    <a href="#location" class="hover:text-white transition-colors">Location</a>
                 </div>
             </div>
 
-            <!-- Bottom Attribution Bar -->
-            <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
-                <div>
-                    © 2026 Sonu Chhetri Tuition Classes. All Rights Reserved.
-                </div>
-
-                <!-- Requested Credit Badge -->
-                <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-gradient-to-r from-amber-500/10 via-teal-500/10 to-indigo-500/10 border border-amber-500/30 text-slate-200 shadow-lg">
-                    <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
-                    <span class="font-semibold tracking-wide">
-                        Built by <strong class="text-amber-400 font-extrabold">Sagnik</strong>. Assited by <strong class="text-teal-400 font-extrabold">Gemini 4 argon</strong>
-                    </span>
-                </div>
+            <div class="border-t border-slate-800 pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 space-y-4 sm:space-y-0">
+                <p>&copy; 2026 Sonu Chhetri Tuition. All rights reserved.</p>
+                <p class="font-medium text-slate-400">Built by Sagnik. Assited by Gemini 4 argon</p>
             </div>
         </div>
     </footer>
 
-    <!-- COMPLETE INTERACTIVE JAVASCRIPT ENGINE -->
+    <!-- Floating Quick WhatsApp Button -->
+    <a href="https://wa.me/918918929014" target="_blank" class="fixed bottom-6 right-6 z-50 bg-emerald-600 hover:bg-emerald-700 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-2xl hover:scale-110 transition-all text-2xl" aria-label="WhatsApp Contact">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
+    <!-- JavaScript for Mobile Menu & Trial Pass -->
     <script>
-        /* ==========================================
-           0. SONUSIR.JPG PORTRAIT & AVATAR HANDLER
-        ========================================== */
-        function handleSonuImageLoad(imgEl) {
-            imgEl.classList.remove('hidden');
-            const parent = imgEl.parentElement;
-            if (parent) {
-                const fallback = parent.querySelector('.sonu-avatar-fallback');
-                if (fallback) fallback.classList.add('hidden');
-            }
-            const statusBadge = document.getElementById('photoStatusBadge');
-            if (statusBadge) {
-                statusBadge.innerHTML = '<i class="fa-solid fa-circle-check text-emerald-500 mr-1"></i>sonusir.jpg Active';
-            }
-        }
-
-        function handleSonuImageError(imgEl) {
-            imgEl.classList.add('hidden');
-            const parent = imgEl.parentElement;
-            if (parent) {
-                const fallback = parent.querySelector('.sonu-avatar-fallback');
-                if (fallback) fallback.classList.remove('hidden');
-            }
-        }
-
-        function triggerSonuPhotoUpload() {
-            const fileInput = document.getElementById('sonuPhotoFileInput');
-            if (fileInput) fileInput.click();
-        }
-
-        function applyCustomSonuPhotoDataUrl(dataUrl) {
-            document.querySelectorAll('.sonu-avatar-img').forEach(img => {
-                img.src = dataUrl;
-                img.classList.remove('hidden');
-            });
-            document.querySelectorAll('.sonu-avatar-fallback').forEach(fb => {
-                fb.classList.add('hidden');
-            });
-            const statusBadge = document.getElementById('photoStatusBadge');
-            if (statusBadge) {
-                statusBadge.innerHTML = '<i class="fa-solid fa-circle-check text-emerald-500 mr-1"></i>sonusir.jpg Preview Loaded';
-            }
-            launchConfetti();
-        }
-
-        function previewUploadedSonuPhoto(event) {
-            const file = event.target.files && event.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                applyCustomSonuPhotoDataUrl(e.target.result);
-            };
-            reader.readAsDataURL(file);
-        }
-
-        function handleDragOver(event) {
-            event.preventDefault();
-            const dz = document.getElementById('sonuPortraitDropzone');
-            if (dz) dz.classList.add('ring-4', 'ring-amber-500');
-        }
-
-        function handleDragLeave(event) {
-            event.preventDefault();
-            const dz = document.getElementById('sonuPortraitDropzone');
-            if (dz) dz.classList.remove('ring-4', 'ring-amber-500');
-        }
-
-        function handleDropPhoto(event) {
-            event.preventDefault();
-            const dz = document.getElementById('sonuPortraitDropzone');
-            if (dz) dz.classList.remove('ring-4', 'ring-amber-500');
-            const file = event.dataTransfer.files && event.dataTransfer.files[0];
-            if (file && file.type.startsWith('image/')) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    applyCustomSonuPhotoDataUrl(e.target.result);
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        /* ==========================================
-           1. THEME TOGGLE & MOBILE NAVIGATION
-        ========================================== */
-        function toggleTheme() {
-            const htmlEl = document.documentElement;
-            htmlEl.classList.toggle('dark');
-        }
-
-        function toggleMobileNav() {
-            const drawer = document.getElementById('mobileNavDrawer');
-            const icon = document.getElementById('mobileMenuBtnIcon');
-            drawer.classList.toggle('hidden');
-            icon.className = drawer.classList.contains('hidden') ? 'fa-solid fa-bars' : 'fa-solid fa-xmark';
-        }
-
-        /* ==========================================
-           2. CUSTOM MODAL & CLIPBOARD HELPERS
-        ========================================== */
-        function showCustomModal(title, message, extraHtml = '') {
-            const modal = document.getElementById('customModal');
-            const box = document.getElementById('modalBox');
-            document.getElementById('modalTitle').textContent = title;
-            document.getElementById('modalMessage').textContent = message;
-            const extraEl = document.getElementById('modalExtra');
-            if (extraHtml) {
-                extraEl.innerHTML = extraHtml;
-                extraEl.classList.remove('hidden');
-            } else {
-                extraEl.classList.add('hidden');
-            }
-            modal.classList.remove('hidden');
-            setTimeout(() => {
-                box.classList.remove('scale-95', 'opacity-0');
-                box.classList.add('scale-100', 'opacity-100');
-            }, 20);
-        }
-
-        function closeCustomModal() {
-            const modal = document.getElementById('customModal');
-            const box = document.getElementById('modalBox');
-            box.classList.remove('scale-100', 'opacity-100');
-            box.classList.add('scale-95', 'opacity-0');
-            setTimeout(() => modal.classList.add('hidden'), 200);
-        }
-
-        function copyTextToClipboard(text, successMsg) {
-            const textArea = document.createElement('textarea');
-            textArea.value = text;
-            document.body.appendChild(textArea);
-            textArea.select();
-            try {
-                document.execCommand('copy');
-                showCustomModal('Copied to Clipboard!', successMsg);
-            } catch (err) {
-                showCustomModal('Info', text);
-            }
-            document.body.removeChild(textArea);
-        }
-
-        function copyPhoneNumber() {
-            copyTextToClipboard('+91 891 892 9014', 'Sonu Chhetri Sir\'s contact number (+91 891 892 9014) has been copied to your clipboard.');
-        }
-
-        /* ==========================================
-           3. LIVE NEXT-CLASS COUNTDOWN (MON, WED, SAT 4:00 PM)
-        ========================================== */
-        function updateClassCountdown() {
-            const now = new Date();
-            const classDays = [1, 3, 6]; // Monday=1, Wednesday=3, Saturday=6
-            let nextClassDate = null;
-
-            for (let i = 0; i <= 7; i++) {
-                const candidate = new Date(now);
-                candidate.setDate(now.getDate() + i);
-                const dayOfWeek = candidate.getDay();
-
-                if (classDays.includes(dayOfWeek)) {
-                    const start = new Date(candidate);
-                    start.setHours(16, 0, 0, 0);
-                    const end = new Date(candidate);
-                    end.setHours(17, 30, 0, 0);
-
-                    if (i === 0 && now >= start && now <= end) {
-                        document.getElementById('liveCountdownText').textContent = '🟢 CLASS IS LIVE NOW (4:00–5:30 PM)!';
-                        return;
-                    }
-                    if (now < start) {
-                        nextClassDate = start;
-                        break;
-                    }
-                }
-            }
-
-            if (nextClassDate) {
-                const diff = nextClassDate - now;
-                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-                const mins = Math.floor((diff / (1000 * 60)) % 60);
-                const secs = Math.floor((diff / 1000) % 60);
-
-                const dayStr = days > 0 ? `${days}d ` : '';
-                document.getElementById('liveCountdownText').textContent = `Next Class In: ${dayStr}${hours}h ${mins}m ${secs}s`;
-            }
-        }
-        setInterval(updateClassCountdown, 1000);
-
-        /* ==========================================
-           4. HERO SUBJECT PILL SWITCHER
-        ========================================== */
-        const heroSubjectInfo = {
-            maths: '<strong class="text-amber-500">Mathematics Focus:</strong> Step-by-step theorem proofs, mental calculation shortcuts, algebra, geometry, and board-level problem sets.',
-            physics: '<strong class="text-teal-400">Physics Focus:</strong> Motion, Force, Light Optics, Electricity, and mastering tricky numerical derivations with ease.',
-            chemistry: '<strong class="text-indigo-400">Chemistry Focus:</strong> Balancing chemical equations, Periodic Table trends, Acids/Bases, and atomic structure clarity.',
-            biology: '<strong class="text-emerald-400">Biology Focus:</strong> Neat labeled scientific diagrams, cell biology, human physiology, genetics, and high-scoring board answers.'
-        };
-
-        function updateHeroSubjectPreview(subKey) {
-            document.getElementById('heroSubjectPreviewBox').innerHTML = heroSubjectInfo[subKey];
-            ['maths', 'physics', 'chemistry', 'biology'].forEach(k => {
-                const btn = document.getElementById(`heroBtn-${k}`);
-                if (k === subKey) {
-                    btn.className = 'hero-sub-btn flex items-center gap-2.5 p-3 rounded-xl border border-amber-500 bg-amber-500/15 text-left transition';
-                } else {
-                    btn.className = 'hero-sub-btn flex items-center gap-2.5 p-3 rounded-xl border border-slate-200 dark:border-slate-700/80 hover:border-amber-500/50 text-left transition';
-                }
-            });
-        }
-
-        /* ==========================================
-           5. GRADE 5–10 & SUBJECT CURRICULUM EXPLORER
-        ========================================== */
-        let currentGrade = 10;
-        let currentSubject = 'Mathematics';
-
-        const curriculumDatabase = {
-            Mathematics: {
-                title: (g) => g >= 9 ? `Class ${g} Board-Level Mathematics & Analytical Geometry` : `Class ${g} Foundation Mathematics & Fast Arithmetic`,
-                desc: (g) => g >= 9
-                    ? `Comprehensive mastery of Class ${g} Algebra, Trigonometry, Coordinate Geometry, Mensuration, and Statistics with weekly board test papers.`
-                    : `Building rock-solid basics in Class ${g} Fractions, Decimals, Ratios, Basic Algebra, Practical Geometry, and Olympiad-style logical puzzles.`,
-                modules: (g) => g >= 9
-                    ? ['Quadratic & Linear Equations', 'Trigonometry & Identities', 'Circles & Triangle Theorems', 'Surface Area, Volume & Statistics']
-                    : ['Number System & HCF/LCM', 'Algebraic Expressions & Linear Eqs', 'Lines, Angles & Triangles', 'Mensuration & Data Handling']
-            },
-            Physics: {
-                title: (g) => `Class ${g} Conceptual Physics & Numericals Lab`,
-                desc: (g) => `Understanding natural laws through real-life examples, ray diagrams, circuit analysis, and step-by-step unit conversions for Class ${g}.`,
-                modules: (g) => g >= 9
-                    ? ['Laws of Motion & Gravitation', 'Work, Energy & Sound Waves', 'Light Reflection & Refraction', 'Electricity & Magnetic Effects']
-                    : ['Measurement, Motion & Time', 'Light, Shadows & Mirrors', 'Heat, Temperature & Transfer', 'Electric Current & Simple Circuits']
-            },
-            Chemistry: {
-                title: (g) => `Class ${g} Chemical Reactions & Atomic Science`,
-                desc: (g) => `Making Chemistry intuitive for Class ${g}—from states of matter and physical/chemical changes to balancing complex equations and carbon compounds.`,
-                modules: (g) => g >= 9
-                    ? ['Chemical Equations & Reactions', 'Acids, Bases, Salts & Metals', 'Carbon & Its Compounds', 'Atomic Structure & Periodic Trends']
-                    : ['Matter, Elements & Compounds', 'Physical & Chemical Changes', 'Acids, Bases & Indicators', 'Synthetic Fibers, Metals & Non-Metals']
-            },
-            Biology: {
-                title: (g) => `Class ${g} Life Sciences & Diagram Mastery`,
-                desc: (g) => `Structured points and neat diagram practice for Class ${g} Biology so students score maximum marks in school and board exams.`,
-                modules: (g) => g >= 9
-                    ? ['Cell: Fundamental Unit of Life', 'Life Processes (Nutrition, Respiration)', 'Control, Coordination & Reproduction', 'Heredity, Evolution & Ecosystem']
-                    : ['Plant & Animal Nutrition', 'Cell Structure & Microorganisms', 'Human Body & Organ Systems', 'Photosynthesis & Conservation']
-            }
-        };
-
-        function selectGrade(grade) {
-            currentGrade = grade;
-            renderCurriculumExplorer();
-        }
-
-        function selectSubject(subject) {
-            currentSubject = subject;
-            renderCurriculumExplorer();
-        }
-
-        function renderCurriculumExplorer() {
-            for (let g = 5; g <= 10; g++) {
-                const btn = document.getElementById(`gradeBtn-${g}`);
-                if (g === currentGrade) {
-                    btn.className = 'grade-btn px-5 py-3 rounded-2xl font-extrabold text-sm transition border bg-brand-gold text-slate-950 border-amber-500 shadow-lg shadow-amber-500/20';
-                } else {
-                    btn.className = 'grade-btn px-5 py-3 rounded-2xl font-extrabold text-sm transition border bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-amber-500/50';
-                }
-            }
-
-            ['Mathematics', 'Physics', 'Chemistry', 'Biology'].forEach(sub => {
-                const tab = document.getElementById(`subTab-${sub}`);
-                if (sub === currentSubject) {
-                    tab.className = 'sub-tab flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm transition bg-teal-500 text-slate-950 shadow-md';
-                } else {
-                    tab.className = 'sub-tab flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm transition bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700';
-                }
-            });
-
-            const data = curriculumDatabase[currentSubject];
-            document.getElementById('currBadgeGrade').textContent = `Class ${currentGrade}`;
-            document.getElementById('currBadgeSubject').textContent = currentSubject;
-            document.getElementById('currTitle').textContent = data.title(currentGrade);
-            document.getElementById('currDesc').textContent = data.desc(currentGrade);
-            document.getElementById('currActionText').textContent = `Enroll for Class ${currentGrade} ${currentSubject}`;
-
-            const modules = data.modules(currentGrade);
-            const grid = document.getElementById('currModulesGrid');
-            grid.innerHTML = modules.map(m => `
-                <div class="flex items-center gap-2.5 p-3 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700/80 text-xs font-bold">
-                    <i class="fa-solid fa-circle-check text-amber-500"></i>
-                    <span>${m}</span>
-                </div>
-            `).join('');
-        }
-
-        function prefillPassFromExplorer() {
-            document.getElementById('passInputGrade').value = `Class ${currentGrade}`;
-            updateLivePassCard();
-        }
-
-        /* ==========================================
-           6. INTERACTIVE CONCEPT SIMULATOR LABS
-        ========================================== */
-        let activeLab = 'math';
-        let pendulumAnimId = null;
-        let pendulumAngle = Math.PI / 4;
-        let pendulumVel = 0;
-
-        function switchLab(labName) {
-            activeLab = labName;
-            ['math', 'physics', 'chemistry', 'biology'].forEach(id => {
-                const panel = document.getElementById(`labPanel-${id}`);
-                const tab = document.getElementById(`labTab-${id}`);
-                if (id === labName) {
-                    panel.classList.remove('hidden');
-                    panel.classList.add('grid');
-                    tab.className = 'lab-tab px-5 py-3 rounded-2xl font-extrabold text-xs sm:text-sm flex items-center gap-2 border transition bg-brand-gold text-slate-950 border-amber-500 shadow-lg';
-                } else {
-                    panel.classList.add('hidden');
-                    panel.classList.remove('grid');
-                    tab.className = 'lab-tab px-5 py-3 rounded-2xl font-extrabold text-xs sm:text-sm flex items-center gap-2 border transition bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 hover:border-amber-500/50';
-                }
-            });
-
-            if (labName === 'math') setTimeout(drawMathGraph, 50);
-            if (labName === 'physics') startPhysicsLoop();
-        }
-
-        function drawMathGraph() {
-            const canvas = document.getElementById('mathCanvas');
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-            canvas.width = canvas.clientWidth || 500;
-            canvas.height = canvas.clientHeight || 300;
-
-            const a = parseFloat(document.getElementById('mathSliderA').value);
-            const b = parseFloat(document.getElementById('mathSliderB').value);
-            const c = parseFloat(document.getElementById('mathSliderC').value);
-
-            document.getElementById('mathValA').textContent = a.toFixed(1);
-            document.getElementById('mathValB').textContent = b.toFixed(1);
-            document.getElementById('mathValC').textContent = c.toFixed(1);
-
-            const disc = (b * b) - (4 * a * c);
-            const vertexX = a !== 0 ? (-b / (2 * a)) : 0;
-            const vertexY = (a * vertexX * vertexX) + (b * vertexX) + c;
-            const rootStatus = a === 0 ? 'Linear Line (a = 0)' : (disc > 0 ? '2 Real Roots' : (disc === 0 ? '1 Equal Root' : 'Complex Roots'));
-            document.getElementById('mathFormulaOutput').textContent = `Discriminant (Δ): ${disc.toFixed(2)} → ${rootStatus} | Vertex: (${vertexX.toFixed(2)}, ${vertexY.toFixed(2)})`;
-
-            const w = canvas.width;
-            const h = canvas.height;
-            const cx = w / 2;
-            const cy = h / 2;
-            const scale = 25;
-
-            ctx.clearRect(0, 0, w, h);
-
-            // Grid lines
-            ctx.strokeStyle = '#1e293b';
-            ctx.lineWidth = 1;
-            for (let x = cx % scale; x < w; x += scale) {
-                ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
-            }
-            for (let y = cy % scale; y < h; y += scale) {
-                ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
-            }
-
-            // Axes
-            ctx.strokeStyle = '#64748b';
-            ctx.lineWidth = 2;
-            ctx.beginPath(); ctx.moveTo(0, cy); ctx.lineTo(w, cy); ctx.stroke();
-            ctx.beginPath(); ctx.moveTo(cx, 0); ctx.lineTo(cx, h); ctx.stroke();
-
-            // Plot y = ax^2 + bx + c
-            ctx.strokeStyle = '#f59e0b';
-            ctx.lineWidth = 3;
-            ctx.beginPath();
-            for (let px = 0; px <= w; px += 2) {
-                const x = (px - cx) / scale;
-                const y = (a * x * x) + (b * x) + c;
-                const py = cy - (y * scale);
-                if (px === 0) ctx.moveTo(px, py);
-                else ctx.lineTo(px, py);
-            }
-            ctx.stroke();
-        }
-
-        function updatePhysicsParams() {
-            const L = parseFloat(document.getElementById('physSliderL').value);
-            const g = parseFloat(document.getElementById('physSliderG').value);
-            document.getElementById('physValL').textContent = `${L} cm`;
-            let planet = 'Custom';
-            if (Math.abs(g - 9.8) < 0.5) planet = 'Earth';
-            else if (g < 3) planet = 'Moon';
-            else if (g > 20) planet = 'Jupiter';
-            document.getElementById('physValG').textContent = `${g.toFixed(1)} m/s² (${planet})`;
-
-            const period = 2 * Math.PI * Math.sqrt((L / 100) / g);
-            document.getElementById('physFormulaOutput').textContent = `Time Period (T): ${period.toFixed(2)} seconds per swing`;
-        }
-
-        function startPhysicsLoop() {
-            if (pendulumAnimId) cancelAnimationFrame(pendulumAnimId);
-            const canvas = document.getElementById('physicsCanvas');
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-
-            function step() {
-                if (activeLab !== 'physics') return;
-                canvas.width = canvas.clientWidth || 500;
-                canvas.height = canvas.clientHeight || 300;
-                const L = parseFloat(document.getElementById('physSliderL').value);
-                const g = parseFloat(document.getElementById('physSliderG').value);
-
-                const angularAcc = (-g / L) * Math.sin(pendulumAngle) * 0.45;
-                pendulumVel += angularAcc;
-                pendulumVel *= 0.995;
-                pendulumAngle += pendulumVel;
-
-                const originX = canvas.width / 2;
-                const originY = 30;
-                const bobX = originX + L * Math.sin(pendulumAngle);
-                const bobY = originY + L * Math.cos(pendulumAngle);
-
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-                // Support bar
-                ctx.strokeStyle = '#475569';
-                ctx.lineWidth = 4;
-                ctx.beginPath(); ctx.moveTo(originX - 50, originY); ctx.lineTo(originX + 50, originY); ctx.stroke();
-
-                // String
-                ctx.strokeStyle = '#94a3b8';
-                ctx.lineWidth = 2.5;
-                ctx.beginPath(); ctx.moveTo(originX, originY); ctx.lineTo(bobX, bobY); ctx.stroke();
-
-                // Bob
-                ctx.fillStyle = '#14b8a6';
-                ctx.beginPath(); ctx.arc(bobX, bobY, 18, 0, Math.PI * 2); ctx.fill();
-                ctx.strokeStyle = '#f59e0b';
-                ctx.lineWidth = 3;
-                ctx.stroke();
-
-                pendulumAnimId = requestAnimationFrame(step);
-            }
-            step();
-        }
-
-        function updateChemLab() {
-            const ph = parseFloat(document.getElementById('chemPhSlider').value);
-            const badge = document.getElementById('chemPhBadge');
-            const fill = document.getElementById('chemLiquidFill');
-            const label = document.getElementById('chemBeakerLabel');
-            const nameEl = document.getElementById('chemSubName');
-            const litmusEl = document.getElementById('chemLitmusText');
-
-            let color = '#10b981';
-            let type = 'Neutral';
-            let sample = 'Pure Distilled Water (H₂O)';
-            let litmus = 'No change in Red or Blue Litmus paper. Equal H⁺ and OH⁻ ions.';
-
-            if (ph < 3) {
-                color = '#ef4444'; type = 'Strong Acid';
-                sample = 'Hydrochloric Acid (HCl) / Gastric Juice';
-                litmus = 'Turns Blue Litmus bright Red. High concentration of H⁺ ions.';
-            } else if (ph < 6.5) {
-                color = '#f59e0b'; type = 'Weak Acid';
-                sample = 'Lemon Juice / Citric Acid / Vinegar';
-                litmus = 'Turns Blue Litmus light Red. Sour taste & acidic nature.';
-            } else if (ph <= 7.5) {
-                color = '#10b981'; type = 'Neutral';
-                sample = 'Pure Water (H₂O) / Normal Blood';
-                litmus = 'Neutral salt/water balance. Does not change litmus color.';
-            } else if (ph <= 11) {
-                color = '#3b82f6'; type = 'Weak Base (Alkali)';
-                sample = 'Baking Soda (NaHCO₃) / Antacid Solution';
-                litmus = 'Turns Red Litmus Blue. Soapy touch & neutralizes excess acid.';
-            } else {
-                color = '#8b5cf6'; type = 'Strong Base (Alkali)';
-                sample = 'Sodium Hydroxide (NaOH) / Bleach';
-                litmus = 'Turns Red Litmus deep Violet/Blue. High OH⁻ ion concentration.';
-            }
-
-            badge.textContent = `pH ${ph.toFixed(1)} (${type})`;
-            label.textContent = `pH ${ph.toFixed(1)}`;
-            fill.style.backgroundColor = color;
-            nameEl.textContent = `Example: ${sample}`;
-            litmusEl.textContent = `Litmus & Ion Note: ${litmus}`;
-        }
-
-        const organelleData = {
-            nucleus: {
-                title: 'Nucleus — Control Center of the Cell',
-                desc: 'Contains chromosomes made of DNA and protein. Controls hereditary traits, cell growth, and division.'
-            },
-            mitochondria: {
-                title: 'Mitochondria — Powerhouse of the Cell',
-                desc: 'Generates cellular energy in the form of ATP (Adenosine Triphosphate) through cellular respiration. Has its own DNA and ribosomes!'
-            },
-            chloroplast: {
-                title: 'Chloroplast — Kitchen of the Plant Cell',
-                desc: 'Contains green chlorophyll pigment that captures sunlight to synthesize glucose during Photosynthesis.'
-            },
-            ribosome: {
-                title: 'Ribosomes — Protein Synthesis Factories',
-                desc: 'Minute particles attached to Rough ER or floating freely in cytoplasm that assemble amino acids into essential proteins.'
-            }
-        };
-
-        function inspectOrganelle(key) {
-            const info = organelleData[key];
-            if (!info) return;
-            document.getElementById('bioOrgTitle').textContent = info.title;
-            document.getElementById('bioOrgDesc').textContent = info.desc;
-        }
-
-        /* ==========================================
-           7. DIAGNOSTIC QUIZ ENGINE & CONFETTI
-        ========================================== */
-        const quizQuestions = [
-            {
-                q: '1. [Mathematics] If a right-angled triangle has base = 3 cm and perpendicular = 4 cm, what is the length of its hypotenuse?',
-                options: ['5 cm', '6 cm', '7 cm', '12 cm'],
-                correct: 0,
-                explanation: 'Correct! By Pythagoras Theorem: √(3² + 4²) = √(9 + 16) = √25 = 5 cm.'
-            },
-            {
-                q: '2. [Physics & Chemistry] Which cell organelle is known as the "Powerhouse of the Cell" AND what is the pH of pure neutral water?',
-                options: ['Nucleus & pH 0', 'Mitochondria & pH 7', 'Ribosome & pH 14', 'Vacuole & pH 5'],
-                correct: 1,
-                explanation: 'Spot on! Mitochondria synthesizes ATP energy, and pure water is neutral at pH 7.'
-            },
-            {
-                q: '3. [Class Info] On which days and timings does Sonu Chhetri conduct his offline Maths & PCB classes?',
-                options: ['Tue, Thu, Sun (6–7 PM)', 'Mon, Wed, Sat (4:00–5:30 PM)', 'Daily Online Only', 'Sunday Morning Only'],
-                correct: 1,
-                explanation: 'Awesome! Classes are held offline every Monday, Wednesday, and Saturday from 4:00 PM to 5:30 PM at Blossom English School, Ethelbari.'
-            }
-        ];
-
-        let quizIdx = 0;
-        let quizScore = 0;
-
-        function renderQuizQuestion() {
-            const item = quizQuestions[quizIdx];
-            document.getElementById('quizStepBadge').textContent = `Question ${quizIdx + 1} of ${quizQuestions.length}`;
-            document.getElementById('quizScoreBadge').textContent = `Score: ${quizScore} / ${quizQuestions.length}`;
-            document.getElementById('quizQuestionText').textContent = item.q;
-            document.getElementById('quizFeedbackText').classList.add('hidden');
-            document.getElementById('quizNextBtn').classList.add('hidden');
-
-            const container = document.getElementById('quizOptionsContainer');
-            container.innerHTML = item.options.map((opt, idx) => `
-                <button onclick="answerQuiz(${idx})" id="quizOpt-${idx}" class="quiz-opt-btn p-4 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-amber-500 text-left font-bold text-sm transition flex items-center justify-between">
-                    <span>${opt}</span>
-                    <i class="fa-regular fa-circle text-slate-400"></i>
-                </button>
-            `).join('');
-        }
-
-        function answerQuiz(chosenIdx) {
-            const item = quizQuestions[quizIdx];
-            const buttons = document.querySelectorAll('.quiz-opt-btn');
-            buttons.forEach(b => b.disabled = true);
-
-            const feedback = document.getElementById('quizFeedbackText');
-            feedback.classList.remove('hidden');
-
-            if (chosenIdx === item.correct) {
-                quizScore++;
-                document.getElementById(`quizOpt-${chosenIdx}`).className = 'p-4 rounded-2xl border-2 border-emerald-500 bg-emerald-500/15 text-left font-bold text-sm flex items-center justify-between text-emerald-500';
-                feedback.className = 'mt-5 text-xs sm:text-sm font-semibold p-3.5 rounded-xl bg-emerald-500/15 text-emerald-400 border border-emerald-500/30';
-                feedback.innerHTML = `<i class="fa-solid fa-circle-check mr-1.5"></i> ${item.explanation}`;
-            } else {
-                document.getElementById(`quizOpt-${chosenIdx}`).className = 'p-4 rounded-2xl border-2 border-red-500 bg-red-500/15 text-left font-bold text-sm flex items-center justify-between text-red-400';
-                document.getElementById(`quizOpt-${item.correct}`).className = 'p-4 rounded-2xl border-2 border-emerald-500 bg-emerald-500/15 text-left font-bold text-sm flex items-center justify-between text-emerald-500';
-                feedback.className = 'mt-5 text-xs sm:text-sm font-semibold p-3.5 rounded-xl bg-amber-500/15 text-amber-400 border border-amber-500/30';
-                feedback.innerHTML = `<i class="fa-solid fa-lightbulb mr-1.5"></i> ${item.explanation}`;
-            }
-
-            document.getElementById('quizScoreBadge').textContent = `Score: ${quizScore} / ${quizQuestions.length}`;
-            document.getElementById('quizNextBtn').classList.remove('hidden');
-        }
-
-        function nextQuizQuestion() {
-            quizIdx++;
-            if (quizIdx < quizQuestions.length) {
-                renderQuizQuestion();
-            } else {
-                document.getElementById('quizQuestionBox').classList.add('hidden');
-                const resBox = document.getElementById('quizResultBox');
-                resBox.classList.remove('hidden');
-                document.getElementById('quizFinalTitle').textContent = `You Scored ${quizScore} / ${quizQuestions.length}!`;
-                document.getElementById('quizFinalDesc').textContent = `Fantastic job! Your quiz badge has been unlocked. Book your offline trial session with Sonu Chhetri Sir now.`;
-                launchConfetti();
-            }
-        }
-
-        function resetQuiz() {
-            quizIdx = 0;
-            quizScore = 0;
-            document.getElementById('quizResultBox').classList.add('hidden');
-            document.getElementById('quizQuestionBox').classList.remove('hidden');
-            renderQuizQuestion();
-        }
-
-        /* ==========================================
-           8. STUDENT ADMISSION PASS & WHATSAPP
-        ========================================== */
-        function updateLivePassCard() {
-            const name = document.getElementById('passInputName').value.trim() || 'Aarav Sharma';
-            const grade = document.getElementById('passInputGrade').value;
-            const subject = document.getElementById('passInputSubject').value;
-
-            document.getElementById('passPreviewName').textContent = name;
-            document.getElementById('passPreviewGrade').textContent = grade;
-            document.getElementById('passPreviewSubject').textContent = subject;
-        }
-
-        function getFormattedPassDetails() {
-            const name = document.getElementById('passInputName').value.trim() || 'Student';
-            const grade = document.getElementById('passInputGrade').value;
-            const subject = document.getElementById('passInputSubject').value;
-            const phone = document.getElementById('passInputPhone').value.trim() || 'Not provided';
-            const passId = document.getElementById('passPreviewId').textContent;
-
-            return `Hello Sonu Chhetri Sir! I have generated my Trial Class Admit Pass (${passId}):\n• Student Name: ${name}\n• Class: ${grade}\n• Subjects: ${subject}\n• Contact Phone: ${phone}\n• Schedule: Mon, Wed, Sat (4:00 PM - 5:30 PM)\n• Center: Blossom English School, Ethelbari Checkpost, Alipurduar`;
-        }
-
-        function handlePassSubmit(e) {
-            e.preventDefault();
-            const randomId = '#SC-' + Math.floor(1000 + Math.random() * 9000);
-            document.getElementById('passPreviewId').textContent = randomId;
-            updateLivePassCard();
-            launchConfetti();
-
-            const waUrl = `https://wa.me/918918929014?text=${encodeURIComponent(getFormattedPassDetails())}`;
-            const extraButtons = `
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                    <a href="${waUrl}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-3 px-4 rounded-xl text-xs">
-                        <i class="fa-brands fa-whatsapp text-base"></i> Send Pass on WhatsApp
-                    </a>
-                    <a href="tel:+918918929014" class="flex items-center justify-center gap-2 bg-slate-800 text-amber-400 font-bold py-3 px-4 rounded-xl text-xs border border-slate-700">
-                        <i class="fa-solid fa-phone"></i> Call +91 891 892 9014
-                    </a>
-                </div>
-            `;
-            showCustomModal(
-                `Pass ${randomId} Ready!`,
-                'Your Trial Class Admit Pass has been generated. Send it directly to Sonu Chhetri Sir on WhatsApp or call +91 891 892 9014 to confirm your seat!',
-                extraButtons
-            );
-        }
-
-        function sendPassViaWhatsApp() {
-            const waUrl = `https://wa.me/918918929014?text=${encodeURIComponent(getFormattedPassDetails())}`;
-            window.open(waUrl, '_blank', 'noopener,noreferrer');
-        }
-
-        function copyPassDetails() {
-            copyTextToClipboard(getFormattedPassDetails(), 'Your trial class pass details have been copied! You can paste them in WhatsApp or SMS to +91 891 892 9014.');
-        }
-
-        /* ==========================================
-           9. CONFETTI & HERO PARTICLE BACKGROUND
-        ========================================== */
-        function launchConfetti() {
-            const canvas = document.getElementById('confettiCanvas');
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-
-            const pieces = Array.from({ length: 70 }, () => ({
-                x: Math.random() * canvas.width,
-                y: -20 - Math.random() * 100,
-                size: 6 + Math.random() * 6,
-                color: ['#f59e0b', '#14b8a6', '#6366f1', '#10b981', '#f43f5e'][Math.floor(Math.random() * 5)],
-                vx: -2 + Math.random() * 4,
-                vy: 3 + Math.random() * 5,
-                angle: Math.random() * Math.PI * 2
-            }));
-
-            let frame = 0;
-            function animateConfetti() {
-                frame++;
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                pieces.forEach(p => {
-                    p.x += p.vx;
-                    p.y += p.vy;
-                    p.angle += 0.08;
-                    ctx.save();
-                    ctx.translate(p.x, p.y);
-                    ctx.rotate(p.angle);
-                    ctx.fillStyle = p.color;
-                    ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
-                    ctx.restore();
-                });
-                if (frame < 120) requestAnimationFrame(animateConfetti);
-                else ctx.clearRect(0, 0, canvas.width, canvas.height);
-            }
-            animateConfetti();
-        }
-
-        function initHeroParticles() {
-            const canvas = document.getElementById('heroCanvas');
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-            let w = (canvas.width = canvas.offsetWidth);
-            let h = (canvas.height = canvas.offsetHeight);
-
-            const symbols = ['π', '∑', '√', 'Δ', 'H₂O', 'F=ma', 'DNA', '∞', 'θ', 'pH', '∫', 'Ω'];
-            const nodes = Array.from({ length: 28 }, (_, i) => ({
-                x: Math.random() * w,
-                y: Math.random() * h,
-                vx: (-0.4 + Math.random() * 0.8),
-                vy: (-0.4 + Math.random() * 0.8),
-                text: symbols[i % symbols.length]
-            }));
-
-            window.addEventListener('resize', () => {
-                w = canvas.width = canvas.offsetWidth;
-                h = canvas.height = canvas.offsetHeight;
-                drawMathGraph();
-            });
-
-            function drawParticles() {
-                ctx.clearRect(0, 0, w, h);
-                ctx.font = 'bold 13px "JetBrains Mono", monospace';
-
-                for (let i = 0; i < nodes.length; i++) {
-                    const n = nodes[i];
-                    n.x += n.vx;
-                    n.y += n.vy;
-                    if (n.x < 0 || n.x > w) n.vx *= -1;
-                    if (n.y < 0 || n.y > h) n.vy *= -1;
-
-                    ctx.fillStyle = 'rgba(245, 158, 11, 0.35)';
-                    ctx.fillText(n.text, n.x, n.y);
-
-                    for (let j = i + 1; j < nodes.length; j++) {
-                        const m = nodes[j];
-                        const dist = Math.hypot(n.x - m.x, n.y - m.y);
-                        if (dist < 130) {
-                            ctx.strokeStyle = `rgba(20, 184, 166, ${0.18 * (1 - dist / 130)})`;
-                            ctx.lineWidth = 1;
-                            ctx.beginPath();
-                            ctx.moveTo(n.x, n.y);
-                            ctx.lineTo(m.x, m.y);
-                            ctx.stroke();
-                        }
-                    }
-                }
-                requestAnimationFrame(drawParticles);
-            }
-            drawParticles();
-        }
-
-        // Spotlight Mouse Tracker
-        document.addEventListener('mousemove', (e) => {
-            document.querySelectorAll('.spotlight-card').forEach(card => {
-                const rect = card.getBoundingClientRect();
-                card.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
-                card.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+        // Toggle Mobile Menu
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Close mobile menu on click
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
             });
         });
 
-        // Initialize Everything on Load
-        window.onload = function () {
-            updateClassCountdown();
-            renderCurriculumExplorer();
-            switchLab('math');
-            updatePhysicsParams();
-            updateChemLab();
-            renderQuizQuestion();
-            initHeroParticles();
-        };
+        // Trial Pass Generator Function
+        function generatePass(event) {
+            event.preventDefault();
+            const name = document.getElementById('student-name').value;
+            const grade = document.getElementById('student-class').value;
+            const phone = document.getElementById('student-phone').value;
+
+            document.getElementById('pass-name').innerText = name;
+            document.getElementById('pass-grade').innerText = grade;
+            document.getElementById('pass-phone').innerText = phone;
+
+            const msg = `Hello Sonu Sir, I want to book a Trial Class Admit Pass for my child.%0A%0A*Student Name:* ${name}%0A*Class:* ${grade}%0A*Contact:* ${phone}%0A*Timing:* Mon, Wed, Sat (4:00 PM - 5:30 PM)%0A*Location:* Ethelbari Checkpost, Alipurduar`;
+            
+            document.getElementById('whatsapp-link').href = `https://wa.me/918918929014?text=${msg}`;
+            
+            const passCard = document.getElementById('pass-card');
+            passCard.classList.remove('hidden');
+            passCard.scrollIntoView({ behavior: 'smooth' });
+        }
     </script>
 </body>
 </html>
