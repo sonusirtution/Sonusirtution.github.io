@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Canvas Confetti for Celebration Effect -->
+    <!-- Canvas Confetti -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script>
         tailwind.config = {
@@ -51,7 +51,6 @@
                         radial-gradient(circle at 80% 80%, rgba(79, 70, 229, 0.1), transparent 40%),
                         #090d16;
         }
-        /* Floating background symbols animation */
         @keyframes floatSymbol {
             0% { transform: translateY(0px) rotate(0deg); opacity: 0.15; }
             50% { transform: translateY(-25px) rotate(8deg); opacity: 0.3; }
@@ -65,11 +64,21 @@
             color: rgba(99, 102, 241, 0.25);
             font-weight: 800;
         }
+        /* Hover card glow & interactive popup simulation like the reference */
+        .interactive-hover-card {
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .interactive-hover-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(99, 102, 241, 0.6);
+            box-shadow: 0 20px 30px -10px rgba(79, 70, 229, 0.3);
+        }
     </style>
 </head>
 <body class="bg-dark-900 text-slate-100 font-sans antialiased selection:bg-brand-500 selection:text-white relative overflow-x-hidden">
 
-    <!-- Floating Background Academic Symbols (Maths, Physics, Chemistry, Biology) -->
+    <!-- Floating Background Academic Symbols -->
     <div class="absolute inset-0 overflow-hidden pointer-events-none z-0">
         <span class="floating-symbol text-5xl" style="top: 10%; left: 5%; animation-delay: 0s;">∫</span>
         <span class="floating-symbol text-4xl" style="top: 25%; right: 8%; animation-delay: 1.5s;">E=mc²</span>
@@ -80,14 +89,13 @@
         <span class="floating-symbol text-4xl" style="top: 75%; right: 40%; animation-delay: 1s;">⚛</span>
     </div>
 
-    <!-- Top Announcement Bar with Live Countdown Timer -->
+    <!-- Top Announcement Bar with Countdown -->
     <div class="bg-gradient-to-r from-brand-900 via-indigo-950 to-brand-900 text-white text-xs sm:text-sm py-2.5 px-4 text-center font-medium relative z-20 border-b border-indigo-500/20">
         <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-center space-y-1 sm:space-y-0 sm:space-x-4">
             <div>
                 <span class="bg-emerald-500 text-white text-xs px-2.5 py-0.5 rounded-full font-bold mr-2 uppercase tracking-wide animate-pulse">Admissions Open</span> 
                 Classes 5–10 • Maths & PCB • Ethelbari Checkpost, Alipurduar
             </div>
-            <!-- Next Tuition Timer Badge -->
             <div id="next-class-timer" class="bg-black/30 px-3 py-1 rounded-lg text-indigo-200 border border-indigo-500/30 text-xs font-semibold">
                 ⏳ Next Class in: <span id="countdown-clock" class="text-emerald-400 font-bold">Calculating...</span>
             </div>
@@ -97,7 +105,6 @@
     <!-- Sticky Navigation -->
     <nav class="sticky top-0 z-50 glass-card shadow-lg transition-all duration-300 border-b border-slate-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            <!-- Brand Logo / Name -->
             <a href="#" class="flex items-center space-x-3 group">
                 <div class="w-12 h-12 rounded-xl bg-brand-600 text-white flex items-center justify-center font-bold text-xl shadow-lg shadow-brand-500/30 group-hover:scale-105 transition-transform overflow-hidden border border-indigo-400/30">
                     <img src="sonusir.jpg" alt="Sonu Sir" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://api.iconify.design/lucide:graduation-cap.svg?color=white';">
@@ -108,36 +115,32 @@
                 </div>
             </a>
 
-            <!-- Desktop Navigation Links -->
             <div class="hidden md:flex items-center space-x-8 font-medium text-slate-300">
                 <a href="#about" class="hover:text-brand-400 transition-colors">About</a>
                 <a href="#subjects" class="hover:text-brand-400 transition-colors">Subjects</a>
                 <a href="#schedule" class="hover:text-brand-400 transition-colors">Schedule</a>
                 <a href="#location" class="hover:text-brand-400 transition-colors">Location</a>
-                <a href="#trial" class="hover:text-brand-400 transition-colors">Trial Pass</a>
+                <a href="#appointment" class="hover:text-brand-400 transition-colors">Book Appointment</a>
             </div>
 
-            <!-- Call to Action -->
             <div class="hidden sm:flex items-center space-x-3">
-                <a href="tel:+918918929014" class="inline-flex items-center space-x-2 bg-brand-600 hover:bg-brand-500 text-white px-4 py-2.5 rounded-xl font-semibold shadow-lg shadow-brand-500/30 hover:shadow-brand-500/50 transition-all transform hover:-translate-y-0.5 border border-indigo-400/30">
+                <a href="tel:+918918929014" class="inline-flex items-center space-x-2 bg-brand-600 hover:bg-brand-500 text-white px-4 py-2.5 rounded-xl font-semibold shadow-lg shadow-brand-500/30 transition-all transform hover:-translate-y-0.5 border border-indigo-400/30">
                     <i class="fa-solid fa-phone text-xs"></i>
                     <span>+91 891 892 9014</span>
                 </a>
             </div>
 
-            <!-- Mobile Menu Button -->
             <button id="menu-btn" class="md:hidden text-slate-300 focus:outline-none p-2 rounded-lg hover:bg-slate-800">
                 <i class="fa-solid fa-bars text-xl"></i>
             </button>
         </div>
 
-        <!-- Mobile Menu Dropdown -->
         <div id="mobile-menu" class="hidden md:hidden bg-dark-800 border-t border-slate-800 px-6 py-4 space-y-3 shadow-2xl">
             <a href="#about" class="block font-medium text-slate-300 hover:text-brand-400 py-1">About</a>
             <a href="#subjects" class="block font-medium text-slate-300 hover:text-brand-400 py-1">Subjects</a>
             <a href="#schedule" class="block font-medium text-slate-300 hover:text-brand-400 py-1">Schedule</a>
             <a href="#location" class="block font-medium text-slate-300 hover:text-brand-400 py-1">Location</a>
-            <a href="#trial" class="block font-medium text-slate-300 hover:text-brand-400 py-1">Trial Pass</a>
+            <a href="#appointment" class="block font-medium text-slate-300 hover:text-brand-400 py-1">Book Appointment</a>
             <div class="pt-2 border-t border-slate-700 flex flex-col space-y-2">
                 <a href="tel:+918918929014" class="flex items-center justify-center space-x-2 bg-brand-600 text-white py-2.5 rounded-xl font-semibold shadow-lg">
                     <i class="fa-solid fa-phone"></i>
@@ -151,7 +154,6 @@
     <header class="relative hero-gradient pt-12 pb-24 overflow-hidden z-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-                <!-- Left Content -->
                 <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
                     <div class="inline-flex items-center space-x-2 bg-indigo-950/80 border border-indigo-500/30 text-brand-300 px-4 py-1.5 rounded-full text-sm font-semibold shadow-inner">
                         <i class="fa-solid fa-award text-brand-400"></i>
@@ -164,9 +166,8 @@
                         Personalized offline guidance by <strong class="text-white">Sonu Chhetri</strong>. Dedicated focus on fundamental clarity, problem-solving skills, and academic success right here at Ethelbari Checkpost, Alipurduar.
                     </p>
 
-                    <!-- Quick Badge Highlights -->
                     <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2">
-                        <div class="bg-dark-800/80 backdrop-blur-md p-3.5 rounded-xl border border-slate-700/80 shadow-lg hover:border-brand-500/50 transition-all hover:scale-105">
+                        <div class="bg-dark-800/85 backdrop-blur-md p-3.5 rounded-xl border border-slate-700/80 shadow-lg hover:border-brand-500/50 transition-all hover:scale-105">
                             <div class="w-10 h-10 rounded-lg bg-emerald-950 text-emerald-400 flex items-center justify-center font-bold border border-emerald-500/30">
                                 <i class="fa-solid fa-graduation-cap"></i>
                             </div>
@@ -175,7 +176,7 @@
                                 <p class="text-sm font-bold text-white">Class 5 to 10</p>
                             </div>
                         </div>
-                        <div class="bg-dark-800/80 backdrop-blur-md p-3.5 rounded-xl border border-slate-700/80 shadow-lg hover:border-brand-500/50 transition-all hover:scale-105">
+                        <div class="bg-dark-800/85 backdrop-blur-md p-3.5 rounded-xl border border-slate-700/80 shadow-lg hover:border-brand-500/50 transition-all hover:scale-105">
                             <div class="w-10 h-10 rounded-lg bg-blue-950 text-blue-400 flex items-center justify-center font-bold border border-blue-500/30">
                                 <i class="fa-solid fa-book-open"></i>
                             </div>
@@ -184,7 +185,7 @@
                                 <p class="text-sm font-bold text-white">Maths & PCB</p>
                             </div>
                         </div>
-                        <div class="bg-dark-800/80 backdrop-blur-md p-3.5 rounded-xl border border-slate-700/80 shadow-lg col-span-2 sm:col-span-1 hover:border-brand-500/50 transition-all hover:scale-105">
+                        <div class="bg-dark-800/85 backdrop-blur-md p-3.5 rounded-xl border border-slate-700/80 shadow-lg col-span-2 sm:col-span-1 hover:border-brand-500/50 transition-all hover:scale-105">
                             <div class="w-10 h-10 rounded-lg bg-purple-950 text-purple-400 flex items-center justify-center font-bold border border-purple-500/30">
                                 <i class="fa-solid fa-location-dot"></i>
                             </div>
@@ -195,11 +196,10 @@
                         </div>
                     </div>
 
-                    <!-- CTA Buttons -->
                     <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start space-y-3 sm:space-y-0 sm:space-x-4 pt-4">
-                        <a href="#trial" class="w-full sm:w-auto bg-brand-600 hover:bg-brand-500 text-white font-semibold px-8 py-4 rounded-xl shadow-lg shadow-brand-500/30 transition-all text-center flex items-center justify-center space-x-2 border border-indigo-400/30 hover:scale-105">
-                            <span>Book Free Trial Class</span>
-                            <i class="fa-solid fa-arrow-right text-sm"></i>
+                        <a href="#appointment" class="w-full sm:w-auto bg-brand-600 hover:bg-brand-500 text-white font-semibold px-8 py-4 rounded-xl shadow-lg shadow-brand-500/30 transition-all text-center flex items-center justify-center space-x-2 border border-indigo-400/30 hover:scale-105">
+                            <span>Book Parent Appointment</span>
+                            <i class="fa-solid fa-calendar-check text-sm"></i>
                         </a>
                         <a href="https://wa.me/918918929014" target="_blank" class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-8 py-4 rounded-xl shadow-lg shadow-emerald-500/30 transition-all text-center flex items-center justify-center space-x-2 border border-emerald-400/30 hover:scale-105">
                             <i class="fa-brands fa-whatsapp text-lg"></i>
@@ -208,18 +208,23 @@
                     </div>
                 </div>
 
-                <!-- Right Educator Spotlight Card -->
+                <!-- Sonu Chhetri Featured Card with Floating Glow & Interactive Hover Effect -->
                 <div class="lg:col-span-5 flex justify-center">
-                    <div class="relative w-full max-w-sm group">
-                        <div class="absolute -inset-2 bg-gradient-to-r from-brand-600 to-purple-600 rounded-3xl blur-xl opacity-40 group-hover:opacity-75 transition duration-500"></div>
-                        <div class="relative bg-dark-800/90 backdrop-blur-xl border border-slate-700 rounded-3xl p-6 shadow-2xl text-center space-y-4">
-                            <!-- Avatar Container -->
-                            <div class="relative w-36 h-36 mx-auto rounded-2xl overflow-hidden shadow-inner border-2 border-brand-500/50 group-hover:scale-105 transition-transform duration-300">
+                    <div class="relative w-full max-w-sm group interactive-hover-card p-1 rounded-3xl bg-gradient-to-b from-indigo-500/40 via-transparent to-purple-500/40">
+                        <div class="absolute -inset-2 bg-gradient-to-r from-brand-600 to-purple-600 rounded-3xl blur-xl opacity-40 group-hover:opacity-85 transition duration-500"></div>
+                        <div class="relative bg-dark-800/95 backdrop-blur-xl border border-slate-700 rounded-3xl p-6 shadow-2xl text-center space-y-4">
+                            
+                            <!-- Floating interactive tag like the reference screenshot -->
+                            <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-brand-600 to-indigo-600 text-white text-xs font-extrabold px-4 py-1 rounded-full shadow-lg border border-indigo-300/30 uppercase tracking-wider">
+                                Lead Educator
+                            </div>
+
+                            <div class="relative w-36 h-36 mx-auto rounded-2xl overflow-hidden shadow-inner border-2 border-brand-500/50 group-hover:scale-105 transition-transform duration-300 mt-2">
                                 <img src="sonusir.jpg" alt="Sonu Chhetri" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=400&q=80';">
                             </div>
                             <div>
-                                <h3 class="text-2xl font-bold text-white">Sonu Chhetri</h3>
-                                <p class="text-brand-400 font-medium text-sm">Lead Educator & Founder</p>
+                                <h3 class="text-2xl font-bold text-white group-hover:text-brand-400 transition-colors">Sonu Chhetri</h3>
+                                <p class="text-brand-400 font-medium text-sm">Maths & PCB Specialist</p>
                             </div>
                             <p class="text-slate-300 text-sm leading-relaxed px-2">
                                 "Focusing on clear fundamentals, structured practice, and individual attention for every student in Classes 5 to 10."
@@ -244,29 +249,29 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="bg-dark-800 border border-slate-700/80 rounded-2xl p-8 hover:shadow-2xl hover:border-brand-500/50 hover:-translate-y-1 transition-all duration-300 group">
+                <div class="bg-dark-800 border border-slate-700/85 rounded-2xl p-8 interactive-hover-card group">
                     <div class="w-14 h-14 bg-indigo-950 text-indigo-400 rounded-xl flex items-center justify-center text-2xl font-bold mb-6 border border-indigo-500/30 group-hover:scale-110 transition-transform">
                         <i class="fa-solid fa-bullseye"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-white mb-3">Concept Clarity</h3>
+                    <h3 class="text-xl font-bold text-white mb-3 group-hover:text-indigo-400 transition-colors">Concept Clarity</h3>
                     <p class="text-slate-400 leading-relaxed">
                         Complex mathematical formulas and scientific principles broken down into simple, easy-to-understand concepts for lasting memory.
                     </p>
                 </div>
-                <div class="bg-dark-800 border border-slate-700/80 rounded-2xl p-8 hover:shadow-2xl hover:border-brand-500/50 hover:-translate-y-1 transition-all duration-300 group">
+                <div class="bg-dark-800 border border-slate-700/85 rounded-2xl p-8 interactive-hover-card group">
                     <div class="w-14 h-14 bg-purple-950 text-purple-400 rounded-xl flex items-center justify-center text-2xl font-bold mb-6 border border-purple-500/30 group-hover:scale-110 transition-transform">
                         <i class="fa-solid fa-users-rectangle"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-white mb-3">Small Batch Attention</h3>
+                    <h3 class="text-xl font-bold text-white mb-3 group-hover:text-purple-400 transition-colors">Small Batch Attention</h3>
                     <p class="text-slate-400 leading-relaxed">
                         Controlled batch sizes ensuring personalized doubt clearing, direct interaction, and complete focus on every single student.
                     </p>
                 </div>
-                <div class="bg-dark-800 border border-slate-700/80 rounded-2xl p-8 hover:shadow-2xl hover:border-brand-500/50 hover:-translate-y-1 transition-all duration-300 group">
+                <div class="bg-dark-800 border border-slate-700/85 rounded-2xl p-8 interactive-hover-card group">
                     <div class="w-14 h-14 bg-emerald-950 text-emerald-400 rounded-xl flex items-center justify-center text-2xl font-bold mb-6 border border-emerald-500/30 group-hover:scale-110 transition-transform">
                         <i class="fa-solid fa-clipboard-check"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-white mb-3">Regular Assessments</h3>
+                    <h3 class="text-xl font-bold text-white mb-3 group-hover:text-emerald-400 transition-colors">Regular Assessments</h3>
                     <p class="text-slate-400 leading-relaxed">
                         Weekly chapter tests and board-pattern practice sessions to build student confidence and eliminate exam fear.
                     </p>
@@ -275,7 +280,7 @@
         </div>
     </section>
 
-    <!-- Subjects Offered -->
+    <!-- Subjects Offered (With Tech-Style Interactive Hover Cards matching the reference) -->
     <section id="subjects" class="py-20 bg-dark-900 relative z-10 border-t border-slate-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="max-w-3xl mx-auto text-center space-y-4 mb-16">
@@ -284,41 +289,64 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <!-- Mathematics -->
-                <div class="bg-dark-800 border border-slate-700/80 rounded-2xl p-6 shadow-lg hover:shadow-2xl hover:border-blue-500/50 hover:-translate-y-1.5 transition-all group">
-                    <div class="w-12 h-12 bg-blue-950 text-blue-400 rounded-xl flex items-center justify-center text-xl font-bold mb-4 border border-blue-500/30 group-hover:scale-110 transition-transform">
-                        <i class="fa-solid fa-calculator"></i>
+                <!-- Mathematics Card -->
+                <div class="bg-dark-800 border border-slate-700/90 rounded-2xl p-6 interactive-hover-card group flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 bg-blue-950 text-blue-400 rounded-xl flex items-center justify-center text-xl font-bold mb-4 border border-blue-500/30 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-calculator"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2 group-hover:text-blue-400 transition-colors">Mathematics</h3>
+                        <p class="text-slate-400 text-sm mb-4">Algebra, Geometry, Trigonometry, Arithmetic & Problem Solving.</p>
                     </div>
-                    <h3 class="text-lg font-bold text-white mb-2">Mathematics</h3>
-                    <p class="text-slate-400 text-sm mb-4">Algebra, Geometry, Trigonometry, Arithmetic & Problem Solving.</p>
-                    <span class="inline-block text-xs font-semibold text-brand-400 bg-brand-950/80 border border-brand-500/30 px-2.5 py-1 rounded-full">Classes 5 – 10</span>
+                    <div class="pt-4 border-t border-slate-700/60 flex items-center justify-between">
+                        <span class="inline-block text-xs font-semibold text-brand-400 bg-brand-950/80 border border-brand-500/30 px-2.5 py-1 rounded-full">Classes 5 – 10</span>
+                        <span class="text-xs font-bold text-blue-400 group-hover:translate-x-1 transition-transform flex items-center space-x-1"><span>Explore</span> <i class="fa-solid fa-arrow-right"></i></span>
+                    </div>
                 </div>
-                <!-- Physics -->
-                <div class="bg-dark-800 border border-slate-700/80 rounded-2xl p-6 shadow-lg hover:shadow-2xl hover:border-purple-500/50 hover:-translate-y-1.5 transition-all group">
-                    <div class="w-12 h-12 bg-purple-950 text-purple-400 rounded-xl flex items-center justify-center text-xl font-bold mb-4 border border-purple-500/30 group-hover:scale-110 transition-transform">
-                        <i class="fa-solid fa-atom"></i>
+
+                <!-- Physics Card -->
+                <div class="bg-dark-800 border border-slate-700/90 rounded-2xl p-6 interactive-hover-card group flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 bg-purple-950 text-purple-400 rounded-xl flex items-center justify-center text-xl font-bold mb-4 border border-purple-500/30 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-atom"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2 group-hover:text-purple-400 transition-colors">Physics</h3>
+                        <p class="text-slate-400 text-sm mb-4">Motion, Force, Light, Electricity, Magnetism & Numericals.</p>
                     </div>
-                    <h3 class="text-lg font-bold text-white mb-2">Physics</h3>
-                    <p class="text-slate-400 text-sm mb-4">Motion, Force, Light, Electricity, Magnetism & Numericals.</p>
-                    <span class="inline-block text-xs font-semibold text-brand-400 bg-brand-950/80 border border-brand-500/30 px-2.5 py-1 rounded-full">Classes 5 – 10</span>
+                    <div class="pt-4 border-t border-slate-700/60 flex items-center justify-between">
+                        <span class="inline-block text-xs font-semibold text-brand-400 bg-brand-950/80 border border-brand-500/30 px-2.5 py-1 rounded-full">Classes 5 – 10</span>
+                        <span class="text-xs font-bold text-purple-400 group-hover:translate-x-1 transition-transform flex items-center space-x-1"><span>Explore</span> <i class="fa-solid fa-arrow-right"></i></span>
+                    </div>
                 </div>
-                <!-- Chemistry -->
-                <div class="bg-dark-800 border border-slate-700/80 rounded-2xl p-6 shadow-lg hover:shadow-2xl hover:border-emerald-500/50 hover:-translate-y-1.5 transition-all group">
-                    <div class="w-12 h-12 bg-emerald-950 text-emerald-400 rounded-xl flex items-center justify-center text-xl font-bold mb-4 border border-emerald-500/30 group-hover:scale-110 transition-transform">
-                        <i class="fa-solid fa-flask"></i>
+
+                <!-- Chemistry Card -->
+                <div class="bg-dark-800 border border-slate-700/90 rounded-2xl p-6 interactive-hover-card group flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 bg-emerald-950 text-emerald-400 rounded-xl flex items-center justify-center text-xl font-bold mb-4 border border-emerald-500/30 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-flask"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2 group-hover:text-emerald-400 transition-colors">Chemistry</h3>
+                        <p class="text-slate-400 text-sm mb-4">Matter, Atoms, Molecules, Chemical Reactions & Equations.</p>
                     </div>
-                    <h3 class="text-lg font-bold text-white mb-2">Chemistry</h3>
-                    <p class="text-slate-400 text-sm mb-4">Matter, Atoms, Molecules, Chemical Reactions & Equations.</p>
-                    <span class="inline-block text-xs font-semibold text-brand-400 bg-brand-950/80 border border-brand-500/30 px-2.5 py-1 rounded-full">Classes 5 – 10</span>
+                    <div class="pt-4 border-t border-slate-700/60 flex items-center justify-between">
+                        <span class="inline-block text-xs font-semibold text-brand-400 bg-brand-950/80 border border-brand-500/30 px-2.5 py-1 rounded-full">Classes 5 – 10</span>
+                        <span class="text-xs font-bold text-emerald-400 group-hover:translate-x-1 transition-transform flex items-center space-x-1"><span>Explore</span> <i class="fa-solid fa-arrow-right"></i></span>
+                    </div>
                 </div>
-                <!-- Biology -->
-                <div class="bg-dark-800 border border-slate-700/80 rounded-2xl p-6 shadow-lg hover:shadow-2xl hover:border-amber-500/50 hover:-translate-y-1.5 transition-all group">
-                    <div class="w-12 h-12 bg-amber-950 text-amber-400 rounded-xl flex items-center justify-center text-xl font-bold mb-4 border border-amber-500/30 group-hover:scale-110 transition-transform">
-                        <i class="fa-solid fa-dna"></i>
+
+                <!-- Biology Card -->
+                <div class="bg-dark-800 border border-slate-700/90 rounded-2xl p-6 interactive-hover-card group flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 bg-amber-950 text-amber-400 rounded-xl flex items-center justify-center text-xl font-bold mb-4 border border-amber-500/30 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-dna"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2 group-hover:text-amber-400 transition-colors">Biology</h3>
+                        <p class="text-slate-400 text-sm mb-4">Cell Structure, Plant & Human Physiology, Life Processes.</p>
                     </div>
-                    <h3 class="text-lg font-bold text-white mb-2">Biology</h3>
-                    <p class="text-slate-400 text-sm mb-4">Cell Structure, Plant & Human Physiology, Life Processes.</p>
-                    <span class="inline-block text-xs font-semibold text-brand-400 bg-brand-950/80 border border-brand-500/30 px-2.5 py-1 rounded-full">Classes 5 – 10</span>
+                    <div class="pt-4 border-t border-slate-700/60 flex items-center justify-between">
+                        <span class="inline-block text-xs font-semibold text-brand-400 bg-brand-950/80 border border-brand-500/30 px-2.5 py-1 rounded-full">Classes 5 – 10</span>
+                        <span class="text-xs font-bold text-amber-400 group-hover:translate-x-1 transition-transform flex items-center space-x-1"><span>Explore</span> <i class="fa-solid fa-arrow-right"></i></span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -332,7 +360,7 @@
                 <p class="text-slate-400 text-lg">Structured weekly batches designed for consistent learning.</p>
             </div>
 
-            <div class="max-w-xl mx-auto bg-gradient-to-br from-indigo-950 via-dark-800 to-indigo-950 text-white rounded-3xl p-8 shadow-2xl relative overflow-hidden border border-indigo-500/30">
+            <div class="max-w-xl mx-auto bg-gradient-to-br from-indigo-950 via-dark-800 to-indigo-950 text-white rounded-3xl p-8 shadow-2xl relative overflow-hidden border border-indigo-500/30 interactive-hover-card">
                 <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-indigo-500/10 rounded-full blur-3xl"></div>
                 <div class="relative z-10 space-y-6">
                     <div class="flex items-center justify-between border-b border-indigo-500/20 pb-4">
@@ -368,8 +396,8 @@
                     </div>
 
                     <div class="pt-2">
-                        <a href="#trial" class="block w-full text-center bg-brand-600 hover:bg-brand-500 text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-brand-500/30 border border-indigo-400/30 hover:scale-[1.02]">
-                            Reserve Your Slot
+                        <a href="#appointment" class="block w-full text-center bg-brand-600 hover:bg-brand-500 text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-brand-500/30 border border-indigo-400/30 hover:scale-[1.02]">
+                            Book Consultation
                         </a>
                     </div>
                 </div>
@@ -386,8 +414,7 @@
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-                <!-- Location Details Card -->
-                <div class="lg:col-span-5 bg-dark-800 border border-slate-700 rounded-3xl p-8 shadow-xl space-y-6">
+                <div class="lg:col-span-5 bg-dark-800 border border-slate-700 rounded-3xl p-8 shadow-xl space-y-6 interactive-hover-card">
                     <div class="flex items-start space-x-4">
                         <div class="w-12 h-12 bg-red-950 text-red-400 rounded-2xl flex items-center justify-center text-xl flex-shrink-0 mt-1 border border-red-500/30">
                             <i class="fa-solid fa-map-pin"></i>
@@ -412,7 +439,6 @@
                     </div>
                 </div>
 
-                <!-- Google Maps Preview Box -->
                 <div class="lg:col-span-7 h-[400px] rounded-3xl overflow-hidden border border-slate-700 shadow-xl relative bg-slate-800">
                     <iframe 
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3568.0!2d89.3!3d26.6!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zSGVhciBCbG9zc29tIEVuZ2xpc2ggU2Nob29sLCBFdGhlbGJhcmkgQ2hlY2twb3N0!5e0!3m2!1sen!2sin!4v1650000000000!5m2!1sen!2sin" 
@@ -429,23 +455,29 @@
         </div>
     </section>
 
-    <!-- Trial Pass Generator Section -->
-    <section id="trial" class="py-20 bg-dark-800/60 relative z-10 border-t border-slate-800">
+    <!-- Book Appointment Section -->
+    <section id="appointment" class="py-20 bg-dark-800/60 relative z-10 border-t border-slate-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="max-w-3xl mx-auto text-center space-y-4 mb-16">
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-white">Request Trial Class Admit Pass</h2>
-                <p class="text-slate-400 text-lg">Fill in student details below to generate an instant trial class admit pass and send it directly to Sonu Sir via WhatsApp.</p>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white">Book an Appointment with Sonu Sir</h2>
+                <p class="text-slate-400 text-lg">Parents can schedule a direct meeting/consultation to discuss student progress and admissions.</p>
             </div>
 
-            <div class="max-w-xl mx-auto bg-dark-800 border border-slate-700 rounded-3xl p-8 shadow-2xl">
-                <form id="pass-form" class="space-y-4" onsubmit="generatePass(event)">
-                    <div>
-                        <label class="block text-sm font-semibold text-slate-300 mb-1">Student Full Name</label>
-                        <input type="text" id="student-name" required placeholder="e.g. Rahul Sharma" class="w-full px-4 py-3 rounded-xl border border-slate-700 bg-dark-900 text-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+            <div class="max-w-xl mx-auto bg-dark-800 border border-slate-700 rounded-3xl p-8 shadow-2xl interactive-hover-card">
+                <form id="appointment-form" class="space-y-4" onsubmit="bookAppointment(event)">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-300 mb-1">Parent's Name</label>
+                            <input type="text" id="parent-name" required placeholder="e.g. Mr. Sharma" class="w-full px-4 py-3 rounded-xl border border-slate-700 bg-dark-900 text-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-300 mb-1">Student's Full Name</label>
+                            <input type="text" id="student-name" required placeholder="e.g. Rahul Sharma" class="w-full px-4 py-3 rounded-xl border border-slate-700 bg-dark-900 text-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                        </div>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-semibold text-slate-300 mb-1">Class / Grade</label>
+                            <label class="block text-sm font-semibold text-slate-300 mb-1">Student Class / Grade</label>
                             <select id="student-class" class="w-full px-4 py-3 rounded-xl border border-slate-700 bg-dark-900 text-white focus:outline-none focus:ring-2 focus:ring-brand-500">
                                 <option value="Class 5">Class 5</option>
                                 <option value="Class 6">Class 6</option>
@@ -457,32 +489,36 @@
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-slate-300 mb-1">Contact Number</label>
-                            <input type="tel" id="student-phone" required placeholder="10-digit mobile no." class="w-full px-4 py-3 rounded-xl border border-slate-700 bg-dark-900 text-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                            <input type="tel" id="parent-phone" required placeholder="10-digit mobile no." class="w-full px-4 py-3 rounded-xl border border-slate-700 bg-dark-900 text-white focus:outline-none focus:ring-2 focus:ring-brand-500">
                         </div>
                     </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-300 mb-1">Preferred Meeting Date</label>
+                        <input type="date" id="appointment-date" required class="w-full px-4 py-3 rounded-xl border border-slate-700 bg-dark-900 text-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                    </div>
                     <button type="submit" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-bold py-4 rounded-xl shadow-lg shadow-brand-500/30 transition-all flex items-center justify-center space-x-2 border border-indigo-400/30 hover:scale-[1.02]">
-                        <i class="fa-solid fa-ticket"></i>
-                        <span>Generate & Send Pass to Sonu Sir</span>
+                        <i class="fa-solid fa-calendar-check"></i>
+                        <span>Confirm Appointment & Send to Sonu Sir</span>
                     </button>
                 </form>
 
-                <!-- Generated Pass Preview Modal / Card -->
-                <div id="pass-card" class="hidden mt-6 bg-dark-900 border-2 border-brand-500 rounded-2xl p-6 shadow-2xl space-y-4 animate-fade-in">
+                <div id="appointment-card" class="hidden mt-6 bg-dark-900 border-2 border-brand-500 rounded-2xl p-6 shadow-2xl space-y-4">
                     <div class="flex items-center justify-between border-b border-slate-800 pb-3">
                         <div class="flex items-center space-x-2">
                             <div class="w-8 h-8 rounded-lg bg-brand-600 text-white flex items-center justify-center font-bold text-xs">SC</div>
-                            <span class="font-bold text-white text-sm">Trial Admit Pass</span>
+                            <span class="font-bold text-white text-sm">Meeting Appointment Booked</span>
                         </div>
-                        <span class="bg-emerald-950 text-emerald-400 border border-emerald-500/30 text-xs font-bold px-2.5 py-1 rounded-full">Valid</span>
+                        <span class="bg-emerald-950 text-emerald-400 border border-emerald-500/30 text-xs font-bold px-2.5 py-1 rounded-full">Confirmed</span>
                     </div>
                     <div class="space-y-2 text-sm text-slate-300">
-                        <p><strong class="text-slate-500">Student:</strong> <span id="pass-name" class="font-semibold text-white"></span></p>
-                        <p><strong class="text-slate-500">Grade:</strong> <span id="pass-grade" class="font-semibold text-white"></span></p>
-                        <p><strong class="text-slate-500">Phone:</strong> <span id="pass-phone" class="font-semibold text-white"></span></p>
-                        <p><strong class="text-slate-500">Timing:</strong> <span class="font-semibold text-white">Mon, Wed, Sat (4:00 - 5:30 PM)</span></p>
+                        <p><strong class="text-slate-500">Parent:</strong> <span id="conf-parent" class="font-semibold text-white"></span></p>
+                        <p><strong class="text-slate-500">Student:</strong> <span id="conf-student" class="font-semibold text-white"></span></p>
+                        <p><strong class="text-slate-500">Grade:</strong> <span id="conf-grade" class="font-semibold text-white"></span></p>
+                        <p><strong class="text-slate-500">Contact:</strong> <span id="conf-phone" class="font-semibold text-white"></span></p>
+                        <p><strong class="text-slate-500">Preferred Date:</strong> <span id="conf-date" class="font-semibold text-white"></span></p>
                     </div>
                     <a id="whatsapp-link" href="#" target="_blank" class="block w-full text-center bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-3 rounded-xl transition-all shadow-lg shadow-emerald-500/30 border border-emerald-400/30">
-                        <i class="fa-brands fa-whatsapp"></i> Send Pass to WhatsApp (+91 891 892 9014)
+                        <i class="fa-brands fa-whatsapp"></i> Send Appointment Request to Sonu Sir (+91 891 892 9014)
                     </a>
                 </div>
             </div>
@@ -520,9 +556,8 @@
         <i class="fa-brands fa-whatsapp"></i>
     </a>
 
-    <!-- JavaScript for Mobile Menu, Countdown Timer & Confetti -->
+    <!-- JavaScript -->
     <script>
-        // Toggle Mobile Menu
         const menuBtn = document.getElementById('menu-btn');
         const mobileMenu = document.getElementById('mobile-menu');
 
@@ -536,23 +571,18 @@
             });
         });
 
-        // Next Tuition Class Countdown Timer (Mon, Wed, Sat at 4:00 PM)
+        // Countdown Timer
         function updateCountdown() {
             const now = new Date();
-            // Class days: 1 (Mon), 3 (Wed), 6 (Sat) at 16:00 (4:00 PM)
             const classDays = [1, 3, 6]; 
             let target = new Date();
             target.setHours(16, 0, 0, 0);
 
-            let found = false;
             for (let i = 0; i < 8; i++) {
                 let day = (now.getDay() + i) % 7;
                 if (classDays.includes(day)) {
                     target.setDate(now.getDate() + i);
-                    if (target > now) {
-                        found = true;
-                        break;
-                    }
+                    if (target > now) break;
                 }
             }
 
@@ -574,26 +604,29 @@
         setInterval(updateCountdown, 1000);
         updateCountdown();
 
-        // Trial Pass Generator Function with Confetti Effect
-        function generatePass(event) {
+        // Appointment Booking Function with Confetti
+        function bookAppointment(event) {
             event.preventDefault();
-            const name = document.getElementById('student-name').value;
+            const parentName = document.getElementById('parent-name').value;
+            const studentName = document.getElementById('student-name').value;
             const grade = document.getElementById('student-class').value;
-            const phone = document.getElementById('student-phone').value;
+            const phone = document.getElementById('parent-phone').value;
+            const date = document.getElementById('appointment-date').value;
 
-            document.getElementById('pass-name').innerText = name;
-            document.getElementById('pass-grade').innerText = grade;
-            document.getElementById('pass-phone').innerText = phone;
+            document.getElementById('conf-parent').innerText = parentName;
+            document.getElementById('conf-student').innerText = studentName;
+            document.getElementById('conf-grade').innerText = grade;
+            document.getElementById('conf-phone').innerText = phone;
+            document.getElementById('conf-date').innerText = date;
 
-            const msg = `Hello Sonu Sir, I want to book a Trial Class Admit Pass for my child.%0A%0A*Student Name:* ${name}%0A*Class:* ${grade}%0A*Contact:* ${phone}%0A*Timing:* Mon, Wed, Sat (4:00 PM - 5:30 PM)%0A*Location:* Ethelbari Checkpost, Alipurduar`;
+            const msg = `Hello Sonu Sir, I would like to book a parent appointment to meet you.%0A%0A*Parent Name:* ${parentName}%0A*Student Name:* ${studentName}%0A*Class:* ${grade}%0A*Contact:* ${phone}%0A*Preferred Date:* ${date}%0A*Location:* Ethelbari Checkpost, Alipurduar`;
             
             document.getElementById('whatsapp-link').href = `https://wa.me/918918929014?text=${msg}`;
             
-            const passCard = document.getElementById('pass-card');
-            passCard.classList.remove('hidden');
-            passCard.scrollIntoView({ behavior: 'smooth' });
+            const appointmentCard = document.getElementById('appointment-card');
+            appointmentCard.classList.remove('hidden');
+            appointmentCard.scrollIntoView({ behavior: 'smooth' });
 
-            // Trigger Confetti Celebration Effect
             if (typeof confetti === 'function') {
                 confetti({
                     particleCount: 100,
