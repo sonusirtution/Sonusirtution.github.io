@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en" class="scroll-smooth dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,8 +10,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti for Celebration Effect -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     fontFamily: {
@@ -25,6 +28,12 @@
                             600: '#4f46e5',
                             700: '#4338ca',
                             900: '#312e81',
+                        },
+                        dark: {
+                            900: '#090d16',
+                            800: '#111827',
+                            700: '#1f2937',
+                            600: '#374151'
                         }
                     }
                 }
@@ -33,70 +42,104 @@
     </script>
     <style>
         .glass-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(226, 232, 240, 0.8);
+            background: rgba(17, 24, 39, 0.85);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         .hero-gradient {
-            background: radial-gradient(circle at top right, rgba(99, 102, 241, 0.12), transparent 50%),
-                        radial-gradient(circle at bottom left, rgba(79, 70, 229, 0.08), transparent 50%);
+            background: radial-gradient(circle at 20% 20%, rgba(99, 102, 241, 0.15), transparent 40%),
+                        radial-gradient(circle at 80% 80%, rgba(79, 70, 229, 0.1), transparent 40%),
+                        #090d16;
+        }
+        /* Floating background symbols animation */
+        @keyframes floatSymbol {
+            0% { transform: translateY(0px) rotate(0deg); opacity: 0.15; }
+            50% { transform: translateY(-25px) rotate(8deg); opacity: 0.3; }
+            100% { transform: translateY(0px) rotate(0deg); opacity: 0.15; }
+        }
+        .floating-symbol {
+            position: absolute;
+            animation: floatSymbol 8s ease-in-out infinite;
+            pointer-events: none;
+            user-select: none;
+            color: rgba(99, 102, 241, 0.25);
+            font-weight: 800;
         }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-brand-500 selection:text-white">
+<body class="bg-dark-900 text-slate-100 font-sans antialiased selection:bg-brand-500 selection:text-white relative overflow-x-hidden">
 
-    <!-- Top Announcement Bar -->
-    <div class="bg-brand-900 text-white text-xs sm:text-sm py-2 px-4 text-center font-medium">
-        <span class="bg-emerald-500 text-white text-xs px-2 py-0.5 rounded-full font-bold mr-2 uppercase tracking-wide">Admissions Open</span> 
-        Classes 5 to 10 • Maths & PCB (Physics, Chemistry, Biology) • Ethelbari Checkpost, Alipurduar
+    <!-- Floating Background Academic Symbols (Maths, Physics, Chemistry, Biology) -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        <span class="floating-symbol text-5xl" style="top: 10%; left: 5%; animation-delay: 0s;">∫</span>
+        <span class="floating-symbol text-4xl" style="top: 25%; right: 8%; animation-delay: 1.5s;">E=mc²</span>
+        <span class="floating-symbol text-6xl" style="top: 45%; left: 8%; animation-delay: 3s;">H₂O</span>
+        <span class="floating-symbol text-5xl" style="top: 65%; right: 12%; animation-delay: 2s;">DNA</span>
+        <span class="floating-symbol text-4xl" style="top: 85%; left: 15%; animation-delay: 4s;">π</span>
+        <span class="floating-symbol text-5xl" style="top: 35%; left: 45%; animation-delay: 2.5s;">∑</span>
+        <span class="floating-symbol text-4xl" style="top: 75%; right: 40%; animation-delay: 1s;">⚛</span>
+    </div>
+
+    <!-- Top Announcement Bar with Live Countdown Timer -->
+    <div class="bg-gradient-to-r from-brand-900 via-indigo-950 to-brand-900 text-white text-xs sm:text-sm py-2.5 px-4 text-center font-medium relative z-20 border-b border-indigo-500/20">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-center space-y-1 sm:space-y-0 sm:space-x-4">
+            <div>
+                <span class="bg-emerald-500 text-white text-xs px-2.5 py-0.5 rounded-full font-bold mr-2 uppercase tracking-wide animate-pulse">Admissions Open</span> 
+                Classes 5–10 • Maths & PCB • Ethelbari Checkpost, Alipurduar
+            </div>
+            <!-- Next Tuition Timer Badge -->
+            <div id="next-class-timer" class="bg-black/30 px-3 py-1 rounded-lg text-indigo-200 border border-indigo-500/30 text-xs font-semibold">
+                ⏳ Next Class in: <span id="countdown-clock" class="text-emerald-400 font-bold">Calculating...</span>
+            </div>
+        </div>
     </div>
 
     <!-- Sticky Navigation -->
-    <nav class="sticky top-0 z-50 glass-card shadow-sm transition-all duration-300">
+    <nav class="sticky top-0 z-50 glass-card shadow-lg transition-all duration-300 border-b border-slate-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <!-- Brand Logo / Name -->
             <a href="#" class="flex items-center space-x-3 group">
-                <div class="w-12 h-12 rounded-xl bg-brand-600 text-white flex items-center justify-center font-bold text-xl shadow-md group-hover:scale-105 transition-transform overflow-hidden">
+                <div class="w-12 h-12 rounded-xl bg-brand-600 text-white flex items-center justify-center font-bold text-xl shadow-lg shadow-brand-500/30 group-hover:scale-105 transition-transform overflow-hidden border border-indigo-400/30">
                     <img src="sonusir.jpg" alt="Sonu Sir" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://api.iconify.design/lucide:graduation-cap.svg?color=white';">
                 </div>
                 <div>
-                    <span class="text-lg font-bold tracking-tight text-slate-900 block leading-tight">Sonu Chhetri Tuition</span>
-                    <span class="text-xs font-semibold text-brand-600 uppercase tracking-wider">Maths & Science Expert</span>
+                    <span class="text-lg font-bold tracking-tight text-white block leading-tight">Sonu Chhetri Tuition</span>
+                    <span class="text-xs font-semibold text-brand-400 uppercase tracking-wider">Maths & Science Expert</span>
                 </div>
             </a>
 
             <!-- Desktop Navigation Links -->
-            <div class="hidden md:flex items-center space-x-8 font-medium text-slate-600">
-                <a href="#about" class="hover:text-brand-600 transition-colors">About</a>
-                <a href="#subjects" class="hover:text-brand-600 transition-colors">Subjects</a>
-                <a href="#schedule" class="hover:text-brand-600 transition-colors">Schedule</a>
-                <a href="#location" class="hover:text-brand-600 transition-colors">Location</a>
-                <a href="#trial" class="hover:text-brand-600 transition-colors">Trial Pass</a>
+            <div class="hidden md:flex items-center space-x-8 font-medium text-slate-300">
+                <a href="#about" class="hover:text-brand-400 transition-colors">About</a>
+                <a href="#subjects" class="hover:text-brand-400 transition-colors">Subjects</a>
+                <a href="#schedule" class="hover:text-brand-400 transition-colors">Schedule</a>
+                <a href="#location" class="hover:text-brand-400 transition-colors">Location</a>
+                <a href="#trial" class="hover:text-brand-400 transition-colors">Trial Pass</a>
             </div>
 
             <!-- Call to Action -->
             <div class="hidden sm:flex items-center space-x-3">
-                <a href="tel:+918918929014" class="inline-flex items-center space-x-2 bg-brand-600 hover:bg-brand-700 text-white px-4 py-2.5 rounded-xl font-semibold shadow-md shadow-brand-500/20 hover:shadow-lg transition-all transform hover:-translate-y-0.5">
+                <a href="tel:+918918929014" class="inline-flex items-center space-x-2 bg-brand-600 hover:bg-brand-500 text-white px-4 py-2.5 rounded-xl font-semibold shadow-lg shadow-brand-500/30 hover:shadow-brand-500/50 transition-all transform hover:-translate-y-0.5 border border-indigo-400/30">
                     <i class="fa-solid fa-phone text-xs"></i>
                     <span>+91 891 892 9014</span>
                 </a>
             </div>
 
             <!-- Mobile Menu Button -->
-            <button id="menu-btn" class="md:hidden text-slate-700 focus:outline-none p-2 rounded-lg hover:bg-slate-100">
+            <button id="menu-btn" class="md:hidden text-slate-300 focus:outline-none p-2 rounded-lg hover:bg-slate-800">
                 <i class="fa-solid fa-bars text-xl"></i>
             </button>
         </div>
 
         <!-- Mobile Menu Dropdown -->
-        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-slate-100 px-6 py-4 space-y-3 shadow-xl">
-            <a href="#about" class="block font-medium text-slate-700 hover:text-brand-600 py-1">About</a>
-            <a href="#subjects" class="block font-medium text-slate-700 hover:text-brand-600 py-1">Subjects</a>
-            <a href="#schedule" class="block font-medium text-slate-700 hover:text-brand-600 py-1">Schedule</a>
-            <a href="#location" class="block font-medium text-slate-700 hover:text-brand-600 py-1">Location</a>
-            <a href="#trial" class="block font-medium text-slate-700 hover:text-brand-600 py-1">Trial Pass</a>
-            <div class="pt-2 border-t border-slate-100 flex flex-col space-y-2">
-                <a href="tel:+918918929014" class="flex items-center justify-center space-x-2 bg-brand-600 text-white py-2.5 rounded-xl font-semibold">
+        <div id="mobile-menu" class="hidden md:hidden bg-dark-800 border-t border-slate-800 px-6 py-4 space-y-3 shadow-2xl">
+            <a href="#about" class="block font-medium text-slate-300 hover:text-brand-400 py-1">About</a>
+            <a href="#subjects" class="block font-medium text-slate-300 hover:text-brand-400 py-1">Subjects</a>
+            <a href="#schedule" class="block font-medium text-slate-300 hover:text-brand-400 py-1">Schedule</a>
+            <a href="#location" class="block font-medium text-slate-300 hover:text-brand-400 py-1">Location</a>
+            <a href="#trial" class="block font-medium text-slate-300 hover:text-brand-400 py-1">Trial Pass</a>
+            <div class="pt-2 border-t border-slate-700 flex flex-col space-y-2">
+                <a href="tel:+918918929014" class="flex items-center justify-center space-x-2 bg-brand-600 text-white py-2.5 rounded-xl font-semibold shadow-lg">
                     <i class="fa-solid fa-phone"></i>
                     <span>Call +91 891 892 9014</span>
                 </a>
@@ -105,60 +148,60 @@
     </nav>
 
     <!-- Hero Section -->
-    <header class="relative hero-gradient pt-12 pb-20 overflow-hidden">
+    <header class="relative hero-gradient pt-12 pb-24 overflow-hidden z-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
                 <!-- Left Content -->
                 <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
-                    <div class="inline-flex items-center space-x-2 bg-indigo-50 border border-indigo-100 text-brand-700 px-3.5 py-1.5 rounded-full text-sm font-semibold">
-                        <i class="fa-solid fa-award"></i>
+                    <div class="inline-flex items-center space-x-2 bg-indigo-950/80 border border-indigo-500/30 text-brand-300 px-4 py-1.5 rounded-full text-sm font-semibold shadow-inner">
+                        <i class="fa-solid fa-award text-brand-400"></i>
                         <span>Excellence in Offline School Coaching</span>
                     </div>
-                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight">
-                        Build Strong Concepts in <span class="text-brand-600">Maths & PCB</span> for Grades 5–10
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-tight">
+                        Build Strong Concepts in <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">Maths & PCB</span> for Grades 5–10
                     </h1>
-                    <p class="text-lg text-slate-600 max-w-2xl mx-auto lg:mx-0">
-                        Personalized offline guidance by <strong class="text-slate-900">Sonu Chhetri</strong>. Dedicated focus on fundamental clarity, problem-solving skills, and academic success right here at Ethelbari Checkpost, Alipurduar.
+                    <p class="text-lg text-slate-300 max-w-2xl mx-auto lg:mx-0">
+                        Personalized offline guidance by <strong class="text-white">Sonu Chhetri</strong>. Dedicated focus on fundamental clarity, problem-solving skills, and academic success right here at Ethelbari Checkpost, Alipurduar.
                     </p>
 
                     <!-- Quick Badge Highlights -->
                     <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2">
-                        <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm flex items-center space-x-3">
-                            <div class="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
+                        <div class="bg-dark-800/80 backdrop-blur-md p-3.5 rounded-xl border border-slate-700/80 shadow-lg hover:border-brand-500/50 transition-all hover:scale-105">
+                            <div class="w-10 h-10 rounded-lg bg-emerald-950 text-emerald-400 flex items-center justify-center font-bold border border-emerald-500/30">
                                 <i class="fa-solid fa-graduation-cap"></i>
                             </div>
-                            <div class="text-left">
-                                <p class="text-xs text-slate-500 font-medium">Grades</p>
-                                <p class="text-sm font-bold text-slate-800">Class 5 to 10</p>
+                            <div class="text-left mt-2">
+                                <p class="text-xs text-slate-400 font-medium">Grades</p>
+                                <p class="text-sm font-bold text-white">Class 5 to 10</p>
                             </div>
                         </div>
-                        <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm flex items-center space-x-3">
-                            <div class="w-10 h-10 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
+                        <div class="bg-dark-800/80 backdrop-blur-md p-3.5 rounded-xl border border-slate-700/80 shadow-lg hover:border-brand-500/50 transition-all hover:scale-105">
+                            <div class="w-10 h-10 rounded-lg bg-blue-950 text-blue-400 flex items-center justify-center font-bold border border-blue-500/30">
                                 <i class="fa-solid fa-book-open"></i>
                             </div>
-                            <div class="text-left">
-                                <p class="text-xs text-slate-500 font-medium">Subjects</p>
-                                <p class="text-sm font-bold text-slate-800">Maths & PCB</p>
+                            <div class="text-left mt-2">
+                                <p class="text-xs text-slate-400 font-medium">Subjects</p>
+                                <p class="text-sm font-bold text-white">Maths & PCB</p>
                             </div>
                         </div>
-                        <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm col-span-2 sm:col-span-1 flex items-center space-x-3">
-                            <div class="w-10 h-10 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center font-bold">
+                        <div class="bg-dark-800/80 backdrop-blur-md p-3.5 rounded-xl border border-slate-700/80 shadow-lg col-span-2 sm:col-span-1 hover:border-brand-500/50 transition-all hover:scale-105">
+                            <div class="w-10 h-10 rounded-lg bg-purple-950 text-purple-400 flex items-center justify-center font-bold border border-purple-500/30">
                                 <i class="fa-solid fa-location-dot"></i>
                             </div>
-                            <div class="text-left">
-                                <p class="text-xs text-slate-500 font-medium">Location</p>
-                                <p class="text-sm font-bold text-slate-800">Ethelbari, Alipurduar</p>
+                            <div class="text-left mt-2">
+                                <p class="text-xs text-slate-400 font-medium">Location</p>
+                                <p class="text-sm font-bold text-white">Ethelbari, Alipurduar</p>
                             </div>
                         </div>
                     </div>
 
                     <!-- CTA Buttons -->
                     <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start space-y-3 sm:space-y-0 sm:space-x-4 pt-4">
-                        <a href="#trial" class="w-full sm:w-auto bg-brand-600 hover:bg-brand-700 text-white font-semibold px-8 py-4 rounded-xl shadow-lg shadow-brand-500/25 transition-all text-center flex items-center justify-center space-x-2">
+                        <a href="#trial" class="w-full sm:w-auto bg-brand-600 hover:bg-brand-500 text-white font-semibold px-8 py-4 rounded-xl shadow-lg shadow-brand-500/30 transition-all text-center flex items-center justify-center space-x-2 border border-indigo-400/30 hover:scale-105">
                             <span>Book Free Trial Class</span>
                             <i class="fa-solid fa-arrow-right text-sm"></i>
                         </a>
-                        <a href="https://wa.me/918918929014" target="_blank" class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-8 py-4 rounded-xl shadow-lg shadow-emerald-500/25 transition-all text-center flex items-center justify-center space-x-2">
+                        <a href="https://wa.me/918918929014" target="_blank" class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-8 py-4 rounded-xl shadow-lg shadow-emerald-500/30 transition-all text-center flex items-center justify-center space-x-2 border border-emerald-400/30 hover:scale-105">
                             <i class="fa-brands fa-whatsapp text-lg"></i>
                             <span>Chat on WhatsApp</span>
                         </a>
@@ -167,23 +210,23 @@
 
                 <!-- Right Educator Spotlight Card -->
                 <div class="lg:col-span-5 flex justify-center">
-                    <div class="relative w-full max-w-sm">
-                        <div class="absolute -inset-1.5 bg-gradient-to-r from-brand-600 to-indigo-600 rounded-3xl blur-lg opacity-30"></div>
-                        <div class="relative bg-white border border-slate-200 rounded-3xl p-6 shadow-xl text-center space-y-4">
+                    <div class="relative w-full max-w-sm group">
+                        <div class="absolute -inset-2 bg-gradient-to-r from-brand-600 to-purple-600 rounded-3xl blur-xl opacity-40 group-hover:opacity-75 transition duration-500"></div>
+                        <div class="relative bg-dark-800/90 backdrop-blur-xl border border-slate-700 rounded-3xl p-6 shadow-2xl text-center space-y-4">
                             <!-- Avatar Container -->
-                            <div class="relative w-36 h-36 mx-auto rounded-2xl overflow-hidden shadow-inner border-4 border-brand-50">
+                            <div class="relative w-36 h-36 mx-auto rounded-2xl overflow-hidden shadow-inner border-2 border-brand-500/50 group-hover:scale-105 transition-transform duration-300">
                                 <img src="sonusir.jpg" alt="Sonu Chhetri" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=400&q=80';">
                             </div>
                             <div>
-                                <h3 class="text-2xl font-bold text-slate-900">Sonu Chhetri</h3>
-                                <p class="text-brand-600 font-medium text-sm">Lead Educator & Founder</p>
+                                <h3 class="text-2xl font-bold text-white">Sonu Chhetri</h3>
+                                <p class="text-brand-400 font-medium text-sm">Lead Educator & Founder</p>
                             </div>
-                            <p class="text-slate-600 text-sm leading-relaxed px-2">
+                            <p class="text-slate-300 text-sm leading-relaxed px-2">
                                 "Focusing on clear fundamentals, structured practice, and individual attention for every student in Classes 5 to 10."
                             </p>
-                            <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500 px-2 font-medium">
-                                <span class="flex items-center space-x-1"><i class="fa-solid fa-chalkboard-user text-brand-600"></i><span>Offline Classes</span></span>
-                                <span class="flex items-center space-x-1"><i class="fa-solid fa-check-circle text-emerald-600"></i><span>Proven Results</span></span>
+                            <div class="pt-2 border-t border-slate-700/60 flex items-center justify-between text-xs text-slate-400 px-2 font-medium">
+                                <span class="flex items-center space-x-1"><i class="fa-solid fa-chalkboard-user text-brand-400"></i><span>Offline Classes</span></span>
+                                <span class="flex items-center space-x-1"><i class="fa-solid fa-check-circle text-emerald-400"></i><span>Proven Results</span></span>
                             </div>
                         </div>
                     </div>
@@ -193,38 +236,38 @@
     </header>
 
     <!-- Meet Sonu Sir Section -->
-    <section id="about" class="py-20 bg-white">
+    <section id="about" class="py-20 bg-dark-800/60 relative z-10 border-t border-slate-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="max-w-3xl mx-auto text-center space-y-4 mb-16">
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">Meet Your Educator</h2>
-                <p class="text-slate-600 text-lg">Dedicated mentoring tailored to each student's pace and school curriculum.</p>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white">Meet Your Educator</h2>
+                <p class="text-slate-400 text-lg">Dedicated mentoring tailored to each student's pace and school curriculum.</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-8 hover:shadow-lg transition-all duration-300">
-                    <div class="w-14 h-14 bg-brand-100 text-brand-600 rounded-xl flex items-center justify-center text-2xl font-bold mb-6">
+                <div class="bg-dark-800 border border-slate-700/80 rounded-2xl p-8 hover:shadow-2xl hover:border-brand-500/50 hover:-translate-y-1 transition-all duration-300 group">
+                    <div class="w-14 h-14 bg-indigo-950 text-indigo-400 rounded-xl flex items-center justify-center text-2xl font-bold mb-6 border border-indigo-500/30 group-hover:scale-110 transition-transform">
                         <i class="fa-solid fa-bullseye"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-slate-900 mb-3">Concept Clarity</h3>
-                    <p class="text-slate-600 leading-relaxed">
+                    <h3 class="text-xl font-bold text-white mb-3">Concept Clarity</h3>
+                    <p class="text-slate-400 leading-relaxed">
                         Complex mathematical formulas and scientific principles broken down into simple, easy-to-understand concepts for lasting memory.
                     </p>
                 </div>
-                <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-8 hover:shadow-lg transition-all duration-300">
-                    <div class="w-14 h-14 bg-indigo-100 text-indigo-600 rounded-xl flex items-center justify-center text-2xl font-bold mb-6">
+                <div class="bg-dark-800 border border-slate-700/80 rounded-2xl p-8 hover:shadow-2xl hover:border-brand-500/50 hover:-translate-y-1 transition-all duration-300 group">
+                    <div class="w-14 h-14 bg-purple-950 text-purple-400 rounded-xl flex items-center justify-center text-2xl font-bold mb-6 border border-purple-500/30 group-hover:scale-110 transition-transform">
                         <i class="fa-solid fa-users-rectangle"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-slate-900 mb-3">Small Batch Attention</h3>
-                    <p class="text-slate-600 leading-relaxed">
+                    <h3 class="text-xl font-bold text-white mb-3">Small Batch Attention</h3>
+                    <p class="text-slate-400 leading-relaxed">
                         Controlled batch sizes ensuring personalized doubt clearing, direct interaction, and complete focus on every single student.
                     </p>
                 </div>
-                <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-8 hover:shadow-lg transition-all duration-300">
-                    <div class="w-14 h-14 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center text-2xl font-bold mb-6">
+                <div class="bg-dark-800 border border-slate-700/80 rounded-2xl p-8 hover:shadow-2xl hover:border-brand-500/50 hover:-translate-y-1 transition-all duration-300 group">
+                    <div class="w-14 h-14 bg-emerald-950 text-emerald-400 rounded-xl flex items-center justify-center text-2xl font-bold mb-6 border border-emerald-500/30 group-hover:scale-110 transition-transform">
                         <i class="fa-solid fa-clipboard-check"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-slate-900 mb-3">Regular Assessments</h3>
-                    <p class="text-slate-600 leading-relaxed">
+                    <h3 class="text-xl font-bold text-white mb-3">Regular Assessments</h3>
+                    <p class="text-slate-400 leading-relaxed">
                         Weekly chapter tests and board-pattern practice sessions to build student confidence and eliminate exam fear.
                     </p>
                 </div>
@@ -233,99 +276,99 @@
     </section>
 
     <!-- Subjects Offered -->
-    <section id="subjects" class="py-20 bg-slate-50 border-t border-slate-200/60">
+    <section id="subjects" class="py-20 bg-dark-900 relative z-10 border-t border-slate-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="max-w-3xl mx-auto text-center space-y-4 mb-16">
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">Subjects & Curriculum</h2>
-                <p class="text-slate-600 text-lg">Specialized offline coaching for middle and high school students.</p>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white">Subjects & Curriculum</h2>
+                <p class="text-slate-400 text-lg">Specialized offline coaching for middle and high school students.</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <!-- Mathematics -->
-                <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all group">
-                    <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-xl font-bold mb-4 group-hover:scale-110 transition-transform">
+                <div class="bg-dark-800 border border-slate-700/80 rounded-2xl p-6 shadow-lg hover:shadow-2xl hover:border-blue-500/50 hover:-translate-y-1.5 transition-all group">
+                    <div class="w-12 h-12 bg-blue-950 text-blue-400 rounded-xl flex items-center justify-center text-xl font-bold mb-4 border border-blue-500/30 group-hover:scale-110 transition-transform">
                         <i class="fa-solid fa-calculator"></i>
                     </div>
-                    <h3 class="text-lg font-bold text-slate-900 mb-2">Mathematics</h3>
-                    <p class="text-slate-600 text-sm mb-4">Algebra, Geometry, Trigonometry, Arithmetic & Problem Solving.</p>
-                    <span class="inline-block text-xs font-semibold text-brand-600 bg-brand-50 px-2.5 py-1 rounded-full">Classes 5 – 10</span>
+                    <h3 class="text-lg font-bold text-white mb-2">Mathematics</h3>
+                    <p class="text-slate-400 text-sm mb-4">Algebra, Geometry, Trigonometry, Arithmetic & Problem Solving.</p>
+                    <span class="inline-block text-xs font-semibold text-brand-400 bg-brand-950/80 border border-brand-500/30 px-2.5 py-1 rounded-full">Classes 5 – 10</span>
                 </div>
                 <!-- Physics -->
-                <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all group">
-                    <div class="w-12 h-12 bg-purple-50 text-purple-600 rounded-xl flex items-center justify-center text-xl font-bold mb-4 group-hover:scale-110 transition-transform">
+                <div class="bg-dark-800 border border-slate-700/80 rounded-2xl p-6 shadow-lg hover:shadow-2xl hover:border-purple-500/50 hover:-translate-y-1.5 transition-all group">
+                    <div class="w-12 h-12 bg-purple-950 text-purple-400 rounded-xl flex items-center justify-center text-xl font-bold mb-4 border border-purple-500/30 group-hover:scale-110 transition-transform">
                         <i class="fa-solid fa-atom"></i>
                     </div>
-                    <h3 class="text-lg font-bold text-slate-900 mb-2">Physics</h3>
-                    <p class="text-slate-600 text-sm mb-4">Motion, Force, Light, Electricity, Magnetism & Numericals.</p>
-                    <span class="inline-block text-xs font-semibold text-brand-600 bg-brand-50 px-2.5 py-1 rounded-full">Classes 5 – 10</span>
+                    <h3 class="text-lg font-bold text-white mb-2">Physics</h3>
+                    <p class="text-slate-400 text-sm mb-4">Motion, Force, Light, Electricity, Magnetism & Numericals.</p>
+                    <span class="inline-block text-xs font-semibold text-brand-400 bg-brand-950/80 border border-brand-500/30 px-2.5 py-1 rounded-full">Classes 5 – 10</span>
                 </div>
                 <!-- Chemistry -->
-                <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all group">
-                    <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center text-xl font-bold mb-4 group-hover:scale-110 transition-transform">
+                <div class="bg-dark-800 border border-slate-700/80 rounded-2xl p-6 shadow-lg hover:shadow-2xl hover:border-emerald-500/50 hover:-translate-y-1.5 transition-all group">
+                    <div class="w-12 h-12 bg-emerald-950 text-emerald-400 rounded-xl flex items-center justify-center text-xl font-bold mb-4 border border-emerald-500/30 group-hover:scale-110 transition-transform">
                         <i class="fa-solid fa-flask"></i>
                     </div>
-                    <h3 class="text-lg font-bold text-slate-900 mb-2">Chemistry</h3>
-                    <p class="text-slate-600 text-sm mb-4">Matter, Atoms, Molecules, Chemical Reactions & Equations.</p>
-                    <span class="inline-block text-xs font-semibold text-brand-600 bg-brand-50 px-2.5 py-1 rounded-full">Classes 5 – 10</span>
+                    <h3 class="text-lg font-bold text-white mb-2">Chemistry</h3>
+                    <p class="text-slate-400 text-sm mb-4">Matter, Atoms, Molecules, Chemical Reactions & Equations.</p>
+                    <span class="inline-block text-xs font-semibold text-brand-400 bg-brand-950/80 border border-brand-500/30 px-2.5 py-1 rounded-full">Classes 5 – 10</span>
                 </div>
                 <!-- Biology -->
-                <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all group">
-                    <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center text-xl font-bold mb-4 group-hover:scale-110 transition-transform">
+                <div class="bg-dark-800 border border-slate-700/80 rounded-2xl p-6 shadow-lg hover:shadow-2xl hover:border-amber-500/50 hover:-translate-y-1.5 transition-all group">
+                    <div class="w-12 h-12 bg-amber-950 text-amber-400 rounded-xl flex items-center justify-center text-xl font-bold mb-4 border border-amber-500/30 group-hover:scale-110 transition-transform">
                         <i class="fa-solid fa-dna"></i>
                     </div>
-                    <h3 class="text-lg font-bold text-slate-900 mb-2">Biology</h3>
-                    <p class="text-slate-600 text-sm mb-4">Cell Structure, Plant & Human Physiology, Life Processes.</p>
-                    <span class="inline-block text-xs font-semibold text-brand-600 bg-brand-50 px-2.5 py-1 rounded-full">Classes 5 – 10</span>
+                    <h3 class="text-lg font-bold text-white mb-2">Biology</h3>
+                    <p class="text-slate-400 text-sm mb-4">Cell Structure, Plant & Human Physiology, Life Processes.</p>
+                    <span class="inline-block text-xs font-semibold text-brand-400 bg-brand-950/80 border border-brand-500/30 px-2.5 py-1 rounded-full">Classes 5 – 10</span>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Schedule Section -->
-    <section id="schedule" class="py-20 bg-white border-t border-slate-200/60">
+    <section id="schedule" class="py-20 bg-dark-800/60 relative z-10 border-t border-slate-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="max-w-3xl mx-auto text-center space-y-4 mb-16">
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">Class Schedule & Timings</h2>
-                <p class="text-slate-600 text-lg">Structured weekly batches designed for consistent learning.</p>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white">Class Schedule & Timings</h2>
+                <p class="text-slate-400 text-lg">Structured weekly batches designed for consistent learning.</p>
             </div>
 
-            <div class="max-w-xl mx-auto bg-gradient-to-br from-brand-900 to-indigo-900 text-white rounded-3xl p-8 shadow-xl relative overflow-hidden">
-                <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-white/5 rounded-full blur-2xl"></div>
+            <div class="max-w-xl mx-auto bg-gradient-to-br from-indigo-950 via-dark-800 to-indigo-950 text-white rounded-3xl p-8 shadow-2xl relative overflow-hidden border border-indigo-500/30">
+                <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-indigo-500/10 rounded-full blur-3xl"></div>
                 <div class="relative z-10 space-y-6">
-                    <div class="flex items-center justify-between border-b border-white/10 pb-4">
+                    <div class="flex items-center justify-between border-b border-indigo-500/20 pb-4">
                         <div>
                             <span class="text-xs uppercase tracking-wider text-indigo-300 font-semibold block">Mode</span>
-                            <span class="text-lg font-bold">Offline Classroom Coaching</span>
+                            <span class="text-lg font-bold text-white">Offline Classroom Coaching</span>
                         </div>
-                        <div class="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center">
-                            <i class="fa-solid fa-school text-xl"></i>
+                        <div class="w-12 h-12 rounded-2xl bg-indigo-900/50 flex items-center justify-center border border-indigo-500/30">
+                            <i class="fa-solid fa-school text-xl text-indigo-300"></i>
                         </div>
                     </div>
 
                     <div class="space-y-4">
-                        <div class="flex items-center space-x-4 bg-white/10 p-4 rounded-2xl backdrop-blur-sm">
-                            <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center font-bold">
+                        <div class="flex items-center space-x-4 bg-dark-900/60 p-4 rounded-2xl border border-slate-700/60">
+                            <div class="w-10 h-10 rounded-xl bg-indigo-950 flex items-center justify-center font-bold border border-indigo-500/30 text-indigo-300">
                                 <i class="fa-regular fa-clock"></i>
                             </div>
                             <div>
-                                <p class="text-xs text-indigo-200 font-medium">Timing</p>
-                                <p class="text-lg font-extrabold">4:00 PM – 5:30 PM</p>
+                                <p class="text-xs text-indigo-300 font-medium">Timing</p>
+                                <p class="text-lg font-extrabold text-white">4:00 PM – 5:30 PM</p>
                             </div>
                         </div>
 
-                        <div class="flex items-center space-x-4 bg-white/10 p-4 rounded-2xl backdrop-blur-sm">
-                            <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center font-bold">
+                        <div class="flex items-center space-x-4 bg-dark-900/60 p-4 rounded-2xl border border-slate-700/60">
+                            <div class="w-10 h-10 rounded-xl bg-indigo-950 flex items-center justify-center font-bold border border-indigo-500/30 text-indigo-300">
                                 <i class="fa-regular fa-calendar-days"></i>
                             </div>
                             <div>
-                                <p class="text-xs text-indigo-200 font-medium">Class Days</p>
-                                <p class="text-lg font-extrabold">Monday, Wednesday & Saturday</p>
+                                <p class="text-xs text-indigo-300 font-medium">Class Days</p>
+                                <p class="text-lg font-extrabold text-white">Monday, Wednesday & Saturday</p>
                             </div>
                         </div>
                     </div>
 
                     <div class="pt-2">
-                        <a href="#trial" class="block w-full text-center bg-white text-brand-900 font-bold py-3.5 rounded-xl hover:bg-indigo-50 transition-colors shadow-md">
+                        <a href="#trial" class="block w-full text-center bg-brand-600 hover:bg-brand-500 text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-brand-500/30 border border-indigo-400/30 hover:scale-[1.02]">
                             Reserve Your Slot
                         </a>
                     </div>
@@ -335,34 +378,34 @@
     </section>
 
     <!-- Location & Map Section -->
-    <section id="location" class="py-20 bg-slate-50 border-t border-slate-200/60">
+    <section id="location" class="py-20 bg-dark-900 relative z-10 border-t border-slate-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="max-w-3xl mx-auto text-center space-y-4 mb-16">
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">Our Tuition Location</h2>
-                <p class="text-slate-600 text-lg">Easily accessible offline center in Alipurduar, West Bengal.</p>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white">Our Tuition Location</h2>
+                <p class="text-slate-400 text-lg">Easily accessible offline center in Alipurduar, West Bengal.</p>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
                 <!-- Location Details Card -->
-                <div class="lg:col-span-5 bg-white border border-slate-200 rounded-3xl p-8 shadow-sm space-y-6">
+                <div class="lg:col-span-5 bg-dark-800 border border-slate-700 rounded-3xl p-8 shadow-xl space-y-6">
                     <div class="flex items-start space-x-4">
-                        <div class="w-12 h-12 bg-red-50 text-red-600 rounded-2xl flex items-center justify-center text-xl flex-shrink-0 mt-1">
+                        <div class="w-12 h-12 bg-red-950 text-red-400 rounded-2xl flex items-center justify-center text-xl flex-shrink-0 mt-1 border border-red-500/30">
                             <i class="fa-solid fa-map-pin"></i>
                         </div>
                         <div>
-                            <h3 class="text-lg font-bold text-slate-900 mb-1">Center Address</h3>
-                            <p class="text-slate-600 text-sm leading-relaxed">
+                            <h3 class="text-lg font-bold text-white mb-1">Center Address</h3>
+                            <p class="text-slate-300 text-sm leading-relaxed">
                                 Near Blossom English School, Ethelbari Checkpost, Alipurduar - 735204, West Bengal, India.
                             </p>
                         </div>
                     </div>
 
-                    <div class="border-t border-slate-100 pt-6 space-y-3">
-                        <a href="https://maps.app.goo.gl/WjfkUE8oEpRzGkLS6" target="_blank" class="w-full flex items-center justify-center space-x-2 bg-slate-900 hover:bg-slate-800 text-white font-semibold py-3.5 rounded-xl transition-all shadow-sm">
+                    <div class="border-t border-slate-700/80 pt-6 space-y-3">
+                        <a href="https://maps.app.goo.gl/WjfkUE8oEpRzGkLS6" target="_blank" class="w-full flex items-center justify-center space-x-2 bg-slate-700 hover:bg-slate-600 text-white font-semibold py-3.5 rounded-xl transition-all shadow-md border border-slate-600">
                             <i class="fa-solid fa-location-arrow"></i>
                             <span>Open in Google Maps</span>
                         </a>
-                        <a href="tel:+918918929014" class="w-full flex items-center justify-center space-x-2 bg-brand-50 hover:bg-brand-100 text-brand-700 font-semibold py-3.5 rounded-xl transition-all">
+                        <a href="tel:+918918929014" class="w-full flex items-center justify-center space-x-2 bg-brand-950/80 hover:bg-brand-900 text-brand-300 font-semibold py-3.5 rounded-xl transition-all border border-brand-500/30">
                             <i class="fa-solid fa-phone"></i>
                             <span>Call +91 891 892 9014</span>
                         </a>
@@ -370,7 +413,7 @@
                 </div>
 
                 <!-- Google Maps Preview Box -->
-                <div class="lg:col-span-7 h-[400px] rounded-3xl overflow-hidden border border-slate-200 shadow-sm relative bg-slate-200">
+                <div class="lg:col-span-7 h-[400px] rounded-3xl overflow-hidden border border-slate-700 shadow-xl relative bg-slate-800">
                     <iframe 
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3568.0!2d89.3!3d26.6!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zSGVhciBCbG9zc29tIEVuZ2xpc2ggU2Nob29sLCBFdGhlbGJhcmkgQ2hlY2twb3N0!5e0!3m2!1sen!2sin!4v1650000000000!5m2!1sen!2sin" 
                         width="100%" 
@@ -379,7 +422,7 @@
                         allowfullscreen="" 
                         loading="lazy" 
                         referrerpolicy="no-referrer-when-downgrade"
-                        class="w-full h-full">
+                        class="w-full h-full filter invert hue-rotate-180 contrast-125">
                     </iframe>
                 </div>
             </div>
@@ -387,23 +430,23 @@
     </section>
 
     <!-- Trial Pass Generator Section -->
-    <section id="trial" class="py-20 bg-white border-t border-slate-200/60">
+    <section id="trial" class="py-20 bg-dark-800/60 relative z-10 border-t border-slate-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="max-w-3xl mx-auto text-center space-y-4 mb-16">
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">Request Trial Class Admit Pass</h2>
-                <p class="text-slate-600 text-lg">Fill in student details below to generate an instant trial class admit pass and send it directly to Sonu Sir via WhatsApp.</p>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white">Request Trial Class Admit Pass</h2>
+                <p class="text-slate-400 text-lg">Fill in student details below to generate an instant trial class admit pass and send it directly to Sonu Sir via WhatsApp.</p>
             </div>
 
-            <div class="max-w-xl mx-auto bg-slate-50 border border-slate-200 rounded-3xl p-8 shadow-sm">
+            <div class="max-w-xl mx-auto bg-dark-800 border border-slate-700 rounded-3xl p-8 shadow-2xl">
                 <form id="pass-form" class="space-y-4" onsubmit="generatePass(event)">
                     <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-1">Student Full Name</label>
-                        <input type="text" id="student-name" required placeholder="e.g. Rahul Sharma" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500 bg-white">
+                        <label class="block text-sm font-semibold text-slate-300 mb-1">Student Full Name</label>
+                        <input type="text" id="student-name" required placeholder="e.g. Rahul Sharma" class="w-full px-4 py-3 rounded-xl border border-slate-700 bg-dark-900 text-white focus:outline-none focus:ring-2 focus:ring-brand-500">
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-1">Class / Grade</label>
-                            <select id="student-class" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500 bg-white">
+                            <label class="block text-sm font-semibold text-slate-300 mb-1">Class / Grade</label>
+                            <select id="student-class" class="w-full px-4 py-3 rounded-xl border border-slate-700 bg-dark-900 text-white focus:outline-none focus:ring-2 focus:ring-brand-500">
                                 <option value="Class 5">Class 5</option>
                                 <option value="Class 6">Class 6</option>
                                 <option value="Class 7">Class 7</option>
@@ -413,32 +456,32 @@
                             </select>
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-1">Contact Number</label>
-                            <input type="tel" id="student-phone" required placeholder="10-digit mobile no." class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500 bg-white">
+                            <label class="block text-sm font-semibold text-slate-300 mb-1">Contact Number</label>
+                            <input type="tel" id="student-phone" required placeholder="10-digit mobile no." class="w-full px-4 py-3 rounded-xl border border-slate-700 bg-dark-900 text-white focus:outline-none focus:ring-2 focus:ring-brand-500">
                         </div>
                     </div>
-                    <button type="submit" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-4 rounded-xl shadow-md transition-all flex items-center justify-center space-x-2">
+                    <button type="submit" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-bold py-4 rounded-xl shadow-lg shadow-brand-500/30 transition-all flex items-center justify-center space-x-2 border border-indigo-400/30 hover:scale-[1.02]">
                         <i class="fa-solid fa-ticket"></i>
                         <span>Generate & Send Pass to Sonu Sir</span>
                     </button>
                 </form>
 
                 <!-- Generated Pass Preview Modal / Card -->
-                <div id="pass-card" class="hidden mt-6 bg-white border-2 border-brand-500 rounded-2xl p-6 shadow-md space-y-4">
-                    <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div id="pass-card" class="hidden mt-6 bg-dark-900 border-2 border-brand-500 rounded-2xl p-6 shadow-2xl space-y-4 animate-fade-in">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
                         <div class="flex items-center space-x-2">
                             <div class="w-8 h-8 rounded-lg bg-brand-600 text-white flex items-center justify-center font-bold text-xs">SC</div>
-                            <span class="font-bold text-slate-900 text-sm">Trial Admit Pass</span>
+                            <span class="font-bold text-white text-sm">Trial Admit Pass</span>
                         </div>
-                        <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-2.5 py-1 rounded-full">Valid</span>
+                        <span class="bg-emerald-950 text-emerald-400 border border-emerald-500/30 text-xs font-bold px-2.5 py-1 rounded-full">Valid</span>
                     </div>
-                    <div class="space-y-2 text-sm">
-                        <p><strong class="text-slate-500">Student:</strong> <span id="pass-name" class="font-semibold text-slate-900"></span></p>
-                        <p><strong class="text-slate-500">Grade:</strong> <span id="pass-grade" class="font-semibold text-slate-900"></span></p>
-                        <p><strong class="text-slate-500">Phone:</strong> <span id="pass-phone" class="font-semibold text-slate-900"></span></p>
-                        <p><strong class="text-slate-500">Timing:</strong> <span class="font-semibold text-slate-900">Mon, Wed, Sat (4:00 - 5:30 PM)</span></p>
+                    <div class="space-y-2 text-sm text-slate-300">
+                        <p><strong class="text-slate-500">Student:</strong> <span id="pass-name" class="font-semibold text-white"></span></p>
+                        <p><strong class="text-slate-500">Grade:</strong> <span id="pass-grade" class="font-semibold text-white"></span></p>
+                        <p><strong class="text-slate-500">Phone:</strong> <span id="pass-phone" class="font-semibold text-white"></span></p>
+                        <p><strong class="text-slate-500">Timing:</strong> <span class="font-semibold text-white">Mon, Wed, Sat (4:00 - 5:30 PM)</span></p>
                     </div>
-                    <a id="whatsapp-link" href="#" target="_blank" class="block w-full text-center bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 rounded-xl transition-all">
+                    <a id="whatsapp-link" href="#" target="_blank" class="block w-full text-center bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-3 rounded-xl transition-all shadow-lg shadow-emerald-500/30 border border-emerald-400/30">
                         <i class="fa-brands fa-whatsapp"></i> Send Pass to WhatsApp (+91 891 892 9014)
                     </a>
                 </div>
@@ -447,13 +490,13 @@
     </section>
 
     <!-- Footer -->
-    <footer class="bg-slate-900 text-white py-12 border-t border-slate-800">
+    <footer class="bg-dark-900 text-white py-12 border-t border-slate-800 relative z-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
             <div class="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
                 <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 rounded-xl bg-brand-600 text-white flex items-center justify-center font-bold text-lg">SC</div>
+                    <div class="w-10 h-10 rounded-xl bg-brand-600 text-white flex items-center justify-center font-bold text-lg border border-indigo-400/30">SC</div>
                     <div>
-                        <span class="text-lg font-bold">Sonu Chhetri Tuition Classes</span>
+                        <span class="text-lg font-bold text-white">Sonu Chhetri Tuition Classes</span>
                         <p class="text-xs text-slate-400">Maths & PCB • Classes 5 to 10</p>
                     </div>
                 </div>
@@ -473,11 +516,11 @@
     </footer>
 
     <!-- Floating Quick WhatsApp Button -->
-    <a href="https://wa.me/918918929014" target="_blank" class="fixed bottom-6 right-6 z-50 bg-emerald-600 hover:bg-emerald-700 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-2xl hover:scale-110 transition-all text-2xl" aria-label="WhatsApp Contact">
+    <a href="https://wa.me/918918929014" target="_blank" class="fixed bottom-6 right-6 z-50 bg-emerald-600 hover:bg-emerald-500 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-2xl hover:scale-110 transition-all text-2xl border border-emerald-400/40" aria-label="WhatsApp Contact">
         <i class="fa-brands fa-whatsapp"></i>
     </a>
 
-    <!-- JavaScript for Mobile Menu & Trial Pass -->
+    <!-- JavaScript for Mobile Menu, Countdown Timer & Confetti -->
     <script>
         // Toggle Mobile Menu
         const menuBtn = document.getElementById('menu-btn');
@@ -487,14 +530,51 @@
             mobileMenu.classList.toggle('hidden');
         });
 
-        // Close mobile menu on click
         mobileMenu.querySelectorAll('a').forEach(link => {
             link.addEventListener('click', () => {
                 mobileMenu.classList.add('hidden');
             });
         });
 
-        // Trial Pass Generator Function
+        // Next Tuition Class Countdown Timer (Mon, Wed, Sat at 4:00 PM)
+        function updateCountdown() {
+            const now = new Date();
+            // Class days: 1 (Mon), 3 (Wed), 6 (Sat) at 16:00 (4:00 PM)
+            const classDays = [1, 3, 6]; 
+            let target = new Date();
+            target.setHours(16, 0, 0, 0);
+
+            let found = false;
+            for (let i = 0; i < 8; i++) {
+                let day = (now.getDay() + i) % 7;
+                if (classDays.includes(day)) {
+                    target.setDate(now.getDate() + i);
+                    if (target > now) {
+                        found = true;
+                        break;
+                    }
+                }
+            }
+
+            const diff = target - now;
+            if (diff > 0) {
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+                let timeStr = '';
+                if (days > 0) timeStr += `${days}d `;
+                timeStr += `${hours}h ${minutes}m ${seconds}s`;
+                document.getElementById('countdown-clock').innerText = timeStr;
+            } else {
+                document.getElementById('countdown-clock').innerText = "Class is starting / Live now!";
+            }
+        }
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // Trial Pass Generator Function with Confetti Effect
         function generatePass(event) {
             event.preventDefault();
             const name = document.getElementById('student-name').value;
@@ -512,6 +592,15 @@
             const passCard = document.getElementById('pass-card');
             passCard.classList.remove('hidden');
             passCard.scrollIntoView({ behavior: 'smooth' });
+
+            // Trigger Confetti Celebration Effect
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 }
+                });
+            }
         }
     </script>
 </body>
