@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sonu Chhetri Tuition | Maths & PCB (Classes 5-10) | Alipurduar</title>
+    <title>Sonu Chhetri Tuition | Maths & PCB (Classes 5-10) | Alipurduar.</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome for Icons -->
@@ -24,16 +24,17 @@
                         brand: {
                             50: '#eef2ff',
                             100: '#e0e7ff',
+                            400: '#818cf8',
                             500: '#6366f1',
                             600: '#4f46e5',
                             700: '#4338ca',
                             900: '#312e81',
                         },
                         dark: {
-                            900: '#090d16',
-                            800: '#111827',
-                            700: '#1f2937',
-                            600: '#374151'
+                            950: '#04070d',
+                            900: '#070b14',
+                            800: '#0f172a',
+                            700: '#1e293b'
                         }
                     }
                 }
@@ -41,197 +42,432 @@
         }
     </script>
     <style>
-        .glass-card {
-            background: rgba(17, 24, 39, 0.85);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        body {
+            background-color: #04070d;
+            overflow-x: hidden;
         }
-        .hero-gradient {
-            background: radial-gradient(circle at 20% 20%, rgba(99, 102, 241, 0.15), transparent 40%),
-                        radial-gradient(circle at 80% 80%, rgba(79, 70, 229, 0.1), transparent 40%),
-                        #090d16;
+
+        /* Top Scroll Progress Bar */
+        #scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #06b6d4, #6366f1, #ec4899);
+            width: 0%;
+            z-index: 100;
+            transition: width 0.1s ease-out;
         }
+
+        /* Interactive Canvas Background */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Floating Academic Symbols */
         @keyframes floatSymbol {
-            0% { transform: translateY(0px) rotate(0deg); opacity: 0.15; }
-            50% { transform: translateY(-25px) rotate(8deg); opacity: 0.3; }
-            100% { transform: translateY(0px) rotate(0deg); opacity: 0.15; }
+            0%, 100% { transform: translateY(0px) rotate(0deg) scale(1); opacity: 0.12; }
+            50% { transform: translateY(-30px) rotate(10deg) scale(1.08); opacity: 0.28; }
         }
         .floating-symbol {
-            position: absolute;
-            animation: floatSymbol 8s ease-in-out infinite;
+            position: fixed;
+            animation: floatSymbol 9s ease-in-out infinite;
             pointer-events: none;
             user-select: none;
-            color: rgba(99, 102, 241, 0.25);
+            background: linear-gradient(135deg, rgba(6, 182, 212, 0.35), rgba(99, 102, 241, 0.35));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             font-weight: 800;
+            z-index: 1;
         }
-        /* Hover card glow & interactive popup simulation like the reference */
-        .interactive-hover-card {
+
+        /* Glassmorphism Pill Header */
+        .glass-pill {
+            background: rgba(15, 23, 42, 0.78);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 25px rgba(99, 102, 241, 0.12);
+        }
+
+        /* Mouse-Tracking Spotlight & 3D Tilt Cards */
+        .spotlight-card {
             position: relative;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            overflow: hidden;
+            transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+            transform-style: preserve-3d;
         }
-        .interactive-hover-card:hover {
-            transform: translateY(-6px);
-            border-color: rgba(99, 102, 241, 0.6);
-            box-shadow: 0 20px 30px -10px rgba(79, 70, 229, 0.3);
+        .spotlight-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(500px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(99, 102, 241, 0.16), transparent 40%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .spotlight-card:hover::before {
+            opacity: 1;
+        }
+        .spotlight-card:hover {
+            border-color: rgba(99, 102, 241, 0.5);
+            box-shadow: 0 25px 45px -12px rgba(79, 70, 229, 0.28);
+        }
+
+        /* Rotating Orbital SVG Graphic */
+        @keyframes spinSlow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .orbit-ring-1 { animation: spinSlow 22s linear infinite; }
+
+        /* Tech-Style Underlined Hover Trigger & Gradient Popup Card */
+        .hover-trigger {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+            padding-bottom: 2px;
+        }
+        .hover-trigger-cyan {
+            color: #22d3ee;
+            border-bottom: 2px dashed rgba(34, 211, 238, 0.7);
+        }
+        .hover-trigger-pink {
+            color: #f43f5e;
+            border-bottom: 2px dashed rgba(244, 63, 94, 0.7);
+        }
+        .hover-trigger-amber {
+            color: #fbbf24;
+            border-bottom: 2px dashed rgba(251, 191, 36, 0.7);
+        }
+        .hover-card-popup {
+            position: absolute;
+            bottom: calc(100% + 14px);
+            left: 50%;
+            transform: translateX(-50%) translateY(12px) scale(0.95);
+            width: 290px;
+            background: linear-gradient(135deg, #06b6d4 0%, #4f46e5 55%, #7e22ce 100%);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 1.25rem;
+            padding: 1.25rem;
+            box-shadow: 0 25px 50px -12px rgba(79, 70, 229, 0.65), 0 0 30px rgba(6, 182, 212, 0.35);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 80;
+            pointer-events: none;
+            text-align: left;
+            font-weight: 400;
+            line-height: 1.4;
+        }
+        .hover-card-popup::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 8px;
+            border-style: solid;
+            border-color: #4f46e5 transparent transparent transparent;
+        }
+        .hover-trigger:hover .hover-card-popup {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0) scale(1);
+            pointer-events: auto;
+        }
+
+        /* Animated Aurora Mesh Blobs */
+        .aurora-blob {
+            position: absolute;
+            filter: blur(90px);
+            opacity: 0.25;
+            pointer-events: none;
+            z-index: 0;
         }
     </style>
 </head>
-<body class="bg-dark-900 text-slate-100 font-sans antialiased selection:bg-brand-500 selection:text-white relative overflow-x-hidden">
+<body class="text-slate-100 font-sans antialiased selection:bg-cyan-500 selection:text-slate-950 relative">
+
+    <!-- Scroll Progress Bar -->
+    <div id="scroll-progress"></div>
+
+    <!-- Interactive Starfield & Particle Network Canvas -->
+    <canvas id="bg-canvas"></canvas>
 
     <!-- Floating Background Academic Symbols -->
-    <div class="absolute inset-0 overflow-hidden pointer-events-none z-0">
-        <span class="floating-symbol text-5xl" style="top: 10%; left: 5%; animation-delay: 0s;">∫</span>
-        <span class="floating-symbol text-4xl" style="top: 25%; right: 8%; animation-delay: 1.5s;">E=mc²</span>
-        <span class="floating-symbol text-6xl" style="top: 45%; left: 8%; animation-delay: 3s;">H₂O</span>
-        <span class="floating-symbol text-5xl" style="top: 65%; right: 12%; animation-delay: 2s;">DNA</span>
-        <span class="floating-symbol text-4xl" style="top: 85%; left: 15%; animation-delay: 4s;">π</span>
-        <span class="floating-symbol text-5xl" style="top: 35%; left: 45%; animation-delay: 2.5s;">∑</span>
-        <span class="floating-symbol text-4xl" style="top: 75%; right: 40%; animation-delay: 1s;">⚛</span>
+    <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
+        <span class="floating-symbol text-5xl" style="top: 12%; left: 6%; animation-delay: 0s;">∫dx</span>
+        <span class="floating-symbol text-4xl" style="top: 22%; right: 7%; animation-delay: 1.5s;">E=mc²</span>
+        <span class="floating-symbol text-6xl" style="top: 48%; left: 4%; animation-delay: 3s;">H₂O</span>
+        <span class="floating-symbol text-5xl" style="top: 68%; right: 8%; animation-delay: 2s;">DNA</span>
+        <span class="floating-symbol text-5xl" style="top: 82%; left: 12%; animation-delay: 4s;">π</span>
+        <span class="floating-symbol text-5xl" style="top: 38%; right: 38%; animation-delay: 2.5s;">∑</span>
+        <span class="floating-symbol text-4xl" style="top: 76%; right: 32%; animation-delay: 1s;">sin²θ+cos²θ=1</span>
     </div>
 
-    <!-- Top Announcement Bar with Countdown -->
-    <div class="bg-gradient-to-r from-brand-900 via-indigo-950 to-brand-900 text-white text-xs sm:text-sm py-2.5 px-4 text-center font-medium relative z-20 border-b border-indigo-500/20">
-        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-center space-y-1 sm:space-y-0 sm:space-x-4">
-            <div>
-                <span class="bg-emerald-500 text-white text-xs px-2.5 py-0.5 rounded-full font-bold mr-2 uppercase tracking-wide animate-pulse">Admissions Open</span> 
-                Classes 5–10 • Maths & PCB • Ethelbari Checkpost, Alipurduar
+    <!-- Top Live Status & Class Countdown Bar -->
+    <div class="bg-gradient-to-r from-slate-950 via-indigo-950/90 to-slate-950 text-white text-xs sm:text-sm py-2.5 px-4 text-center font-medium relative z-30 border-b border-indigo-500/20 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-center space-y-1.5 sm:space-y-0 sm:space-x-6">
+            <div class="flex items-center space-x-2">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping mr-1.5"></span>
+                    ADMISSIONS OPEN
+                </span>
+                <span class="text-slate-300">Classes 5–10 • Maths & PCB • Ethelbari Checkpost, Alipurduar</span>
             </div>
-            <div id="next-class-timer" class="bg-black/30 px-3 py-1 rounded-lg text-indigo-200 border border-indigo-500/30 text-xs font-semibold">
-                ⏳ Next Class in: <span id="countdown-clock" class="text-emerald-400 font-bold">Calculating...</span>
+            <div id="next-class-timer" class="bg-slate-900/90 px-3.5 py-1 rounded-full text-cyan-300 border border-cyan-500/30 text-xs font-bold shadow-inner">
+                <i class="fa-regular fa-clock mr-1"></i> Next Tuition in: <span id="countdown-clock" class="text-white font-extrabold">Calculating...</span>
             </div>
         </div>
     </div>
 
-    <!-- Sticky Navigation -->
-    <nav class="sticky top-0 z-50 glass-card shadow-lg transition-all duration-300 border-b border-slate-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            <a href="#" class="flex items-center space-x-3 group">
-                <div class="w-12 h-12 rounded-xl bg-brand-600 text-white flex items-center justify-center font-bold text-xl shadow-lg shadow-brand-500/30 group-hover:scale-105 transition-transform overflow-hidden border border-indigo-400/30">
-                    <img src="sonusir.jpg" alt="Sonu Sir" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://api.iconify.design/lucide:graduation-cap.svg?color=white';">
+    <!-- Floating Pill Navbar -->
+    <div class="sticky top-4 z-50 max-w-6xl mx-auto px-4 mt-4">
+        <nav class="glass-pill rounded-2xl px-4 sm:px-6 h-20 flex items-center justify-between transition-all duration-300">
+            <a href="#" class="flex items-center space-x-3.5 group sfx-hover sfx-click">
+                <div class="relative w-12 h-12 rounded-full bg-gradient-to-tr from-cyan-500 to-indigo-600 p-0.5 shadow-lg shadow-cyan-500/25 group-hover:scale-105 transition-transform">
+                    <img src="sonusir.jpg" alt="Sonu Sir" class="w-full h-full object-cover rounded-full bg-slate-900" onerror="this.onerror=null; this.src='https://api.iconify.design/lucide:graduation-cap.svg?color=white';">
                 </div>
                 <div>
-                    <span class="text-lg font-bold tracking-tight text-white block leading-tight">Sonu Chhetri Tuition</span>
-                    <span class="text-xs font-semibold text-brand-400 uppercase tracking-wider">Maths & Science Expert</span>
+                    <span class="text-lg font-extrabold tracking-tight text-white block leading-tight group-hover:text-cyan-400 transition-colors">Sonu Chhetri</span>
+                    <span class="text-xs font-semibold text-cyan-400 tracking-wider">Maths & PCB Educator</span>
                 </div>
             </a>
 
-            <div class="hidden md:flex items-center space-x-8 font-medium text-slate-300">
-                <a href="#about" class="hover:text-brand-400 transition-colors">About</a>
-                <a href="#subjects" class="hover:text-brand-400 transition-colors">Subjects</a>
-                <a href="#schedule" class="hover:text-brand-400 transition-colors">Schedule</a>
-                <a href="#location" class="hover:text-brand-400 transition-colors">Location</a>
-                <a href="#appointment" class="hover:text-brand-400 transition-colors">Book Appointment</a>
+            <!-- Navigation Links -->
+            <div class="hidden lg:flex items-center space-x-1 font-semibold text-sm text-slate-300">
+                <a href="#about" class="px-3 py-2 rounded-xl hover:bg-white/5 hover:text-cyan-400 transition-all sfx-hover sfx-click">About</a>
+                <a href="#subjects" class="px-3 py-2 rounded-xl hover:bg-white/5 hover:text-cyan-400 transition-all sfx-hover sfx-click">Subjects</a>
+                <a href="#curriculum" class="px-3 py-2 rounded-xl hover:bg-white/5 hover:text-cyan-400 transition-all sfx-hover sfx-click">Classes 5–10</a>
+                <a href="#schedule" class="px-3 py-2 rounded-xl hover:bg-white/5 hover:text-cyan-400 transition-all sfx-hover sfx-click">Schedule</a>
+                <a href="#location" class="px-3 py-2 rounded-xl hover:bg-white/5 hover:text-cyan-400 transition-all sfx-hover sfx-click">Map</a>
             </div>
 
-            <div class="hidden sm:flex items-center space-x-3">
-                <a href="tel:+918918929014" class="inline-flex items-center space-x-2 bg-brand-600 hover:bg-brand-500 text-white px-4 py-2.5 rounded-xl font-semibold shadow-lg shadow-brand-500/30 transition-all transform hover:-translate-y-0.5 border border-indigo-400/30">
-                    <i class="fa-solid fa-phone text-xs"></i>
-                    <span>+91 891 892 9014</span>
+            <!-- Action Buttons + SFX Toggle (Enabled by default) -->
+            <div class="hidden sm:flex items-center space-x-2.5">
+                <button id="sfx-toggle-desktop" onclick="toggleSFX()" class="px-3.5 py-2 rounded-xl border border-cyan-500/50 bg-cyan-950/50 text-cyan-300 hover:bg-cyan-900/60 font-extrabold text-xs tracking-wider transition-all flex items-center space-x-1.5 shadow-sm shadow-cyan-500/10">
+                    <i id="sfx-icon-desktop" class="fa-solid fa-volume-high text-cyan-400"></i>
+                    <span id="sfx-text-desktop">SFX: ON</span>
+                </button>
+                <a href="tel:+918918929014" class="px-3.5 py-2 rounded-xl border border-slate-700 bg-slate-900/80 text-slate-200 hover:border-cyan-400 hover:text-cyan-300 font-bold text-xs transition-all sfx-hover sfx-click">
+                    <i class="fa-solid fa-phone mr-1"></i> Call
+                </a>
+                <a href="#appointment" class="inline-flex items-center space-x-2 bg-gradient-to-r from-cyan-500 via-indigo-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-lg shadow-indigo-500/30 transition-all transform hover:-translate-y-0.5 sfx-hover sfx-click">
+                    <span>Appointment</span>
+                    <i class="fa-solid fa-arrow-right text-xs"></i>
                 </a>
             </div>
 
-            <button id="menu-btn" class="md:hidden text-slate-300 focus:outline-none p-2 rounded-lg hover:bg-slate-800">
-                <i class="fa-solid fa-bars text-xl"></i>
-            </button>
-        </div>
+            <!-- Mobile Hamburger + Mobile SFX Button -->
+            <div class="flex sm:hidden items-center space-x-2">
+                <button id="sfx-toggle-mobile" onclick="toggleSFX()" class="px-3 py-2 rounded-xl border border-cyan-500/50 bg-cyan-950/50 text-cyan-300 font-extrabold text-xs">
+                    <span id="sfx-text-mobile">SFX: ON</span>
+                </button>
+                <button id="menu-btn" class="text-slate-300 focus:outline-none p-2.5 rounded-xl hover:bg-slate-800 border border-slate-700 sfx-click">
+                    <i class="fa-solid fa-bars text-lg"></i>
+                </button>
+            </div>
+        </nav>
 
-        <div id="mobile-menu" class="hidden md:hidden bg-dark-800 border-t border-slate-800 px-6 py-4 space-y-3 shadow-2xl">
-            <a href="#about" class="block font-medium text-slate-300 hover:text-brand-400 py-1">About</a>
-            <a href="#subjects" class="block font-medium text-slate-300 hover:text-brand-400 py-1">Subjects</a>
-            <a href="#schedule" class="block font-medium text-slate-300 hover:text-brand-400 py-1">Schedule</a>
-            <a href="#location" class="block font-medium text-slate-300 hover:text-brand-400 py-1">Location</a>
-            <a href="#appointment" class="block font-medium text-slate-300 hover:text-brand-400 py-1">Book Appointment</a>
-            <div class="pt-2 border-t border-slate-700 flex flex-col space-y-2">
-                <a href="tel:+918918929014" class="flex items-center justify-center space-x-2 bg-brand-600 text-white py-2.5 rounded-xl font-semibold shadow-lg">
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden lg:hidden mt-2 glass-pill rounded-2xl px-6 py-5 space-y-3 shadow-2xl">
+            <a href="#about" class="block font-semibold text-slate-200 hover:text-cyan-400 py-1.5 sfx-click">About Sonu Sir</a>
+            <a href="#subjects" class="block font-semibold text-slate-200 hover:text-cyan-400 py-1.5 sfx-click">Subjects (Maths & PCB)</a>
+            <a href="#curriculum" class="block font-semibold text-slate-200 hover:text-cyan-400 py-1.5 sfx-click">Class 5–10 Focus</a>
+            <a href="#schedule" class="block font-semibold text-slate-200 hover:text-cyan-400 py-1.5 sfx-click">Batch Timings</a>
+            <a href="#location" class="block font-semibold text-slate-200 hover:text-cyan-400 py-1.5 sfx-click">Location & Map</a>
+            <a href="#appointment" class="block font-semibold text-cyan-400 py-1.5 sfx-click">Book Parent Appointment →</a>
+            <div class="pt-3 border-t border-slate-800 flex flex-col space-y-2">
+                <a href="tel:+918918929014" class="flex items-center justify-center space-x-2 bg-gradient-to-r from-cyan-500 to-indigo-600 text-white py-3 rounded-xl font-bold shadow-lg sfx-click">
                     <i class="fa-solid fa-phone"></i>
                     <span>Call +91 891 892 9014</span>
                 </a>
             </div>
         </div>
-    </nav>
+    </div>
 
     <!-- Hero Section -->
-    <header class="relative hero-gradient pt-12 pb-24 overflow-hidden z-10">
+    <header class="relative pt-14 pb-24 z-10">
+        <!-- Glowing Background Mesh Blobs -->
+        <div class="aurora-blob w-96 h-96 bg-cyan-500 rounded-full top-10 left-10"></div>
+        <div class="aurora-blob w-96 h-96 bg-purple-600 rounded-full bottom-10 right-10"></div>
+
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <!-- Quick Feature Bar -->
+            <div class="max-w-4xl mx-auto mb-12 glass-pill rounded-2xl p-3 px-6 hidden sm:flex items-center justify-around text-xs md:text-sm font-bold text-slate-200">
+                <a href="#subjects" class="flex items-center space-x-2 hover:text-cyan-400 transition-colors py-1 sfx-hover sfx-click">
+                    <i class="fa-solid fa-bolt text-amber-400"></i>
+                    <span class="underline decoration-slate-600 underline-offset-4">Maths & Numericals</span>
+                </a>
+                <span class="text-slate-700">|</span>
+                <a href="#subjects" class="flex items-center space-x-2 hover:text-pink-400 transition-colors py-1 sfx-hover sfx-click">
+                    <i class="fa-solid fa-fire text-rose-500"></i>
+                    <span class="underline decoration-slate-600 underline-offset-4">Physics, Chemistry & Biology</span>
+                </a>
+                <span class="text-slate-700">|</span>
+                <a href="#appointment" class="flex items-center space-x-2 hover:text-emerald-400 transition-colors py-1 sfx-hover sfx-click">
+                    <i class="fa-solid fa-layer-group text-emerald-400"></i>
+                    <span class="underline decoration-slate-600 underline-offset-4">1-on-1 Parent Consultation</span>
+                </a>
+            </div>
+
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <!-- Left Hero Content -->
                 <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
-                    <div class="inline-flex items-center space-x-2 bg-indigo-950/80 border border-indigo-500/30 text-brand-300 px-4 py-1.5 rounded-full text-sm font-semibold shadow-inner">
-                        <i class="fa-solid fa-award text-brand-400"></i>
-                        <span>Excellence in Offline School Coaching</span>
+                    <div class="inline-flex items-center space-x-2.5 bg-slate-900/90 border border-cyan-500/30 text-cyan-300 px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold shadow-lg">
+                        <i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i>
+                        <span>DEDICATED OFFLINE COACHING • CLASSES 5 TO 10</span>
                     </div>
-                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-tight">
-                        Build Strong Concepts in <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">Maths & PCB</span> for Grades 5–10
+
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.15]">
+                        Master 
+                        <!-- Underlined Hover Trigger 1: Maths & PCB -->
+                        <span class="hover-trigger hover-trigger-cyan sfx-hover">
+                            Maths & PCB
+                            <span class="hover-card-popup">
+                                <span class="inline-block bg-slate-950/70 text-cyan-300 text-[10px] font-extrabold px-2.5 py-1 rounded-md uppercase tracking-wider mb-2">Core Subjects</span>
+                                <span class="block text-base font-extrabold text-white mb-1">Maths, Physics, Chemistry & Bio</span>
+                                <span class="block text-xs text-indigo-100 mb-3">Step-by-step board syllabus coverage, formula mastery, and regular chapter tests for Classes 5 to 10.</span>
+                                <a href="#subjects" class="inline-flex items-center space-x-1 bg-white text-slate-950 font-extrabold text-xs px-3.5 py-1.5 rounded-full shadow hover:bg-cyan-50 transition-colors sfx-click">
+                                    <span>View Subjects</span>
+                                    <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                                </a>
+                            </span>
+                        </span>
+                        with
+                        <br class="hidden sm:inline">
+                        <!-- Underlined Hover Trigger 2: Sonu Chhetri -->
+                        <span class="hover-trigger hover-trigger-pink sfx-hover">
+                            Sonu Chhetri
+                            <span class="hover-card-popup">
+                                <span class="inline-block bg-slate-950/70 text-rose-300 text-[10px] font-extrabold px-2.5 py-1 rounded-md uppercase tracking-wider mb-2">Lead Educator</span>
+                                <span class="block text-base font-extrabold text-white mb-1">Personal Offline Mentorship</span>
+                                <span class="block text-xs text-indigo-100 mb-3">Focused classroom teaching with direct doubt-clearing and personal attention for every student.</span>
+                                <a href="#appointment" class="inline-flex items-center space-x-1 bg-white text-slate-950 font-extrabold text-xs px-3.5 py-1.5 rounded-full shadow hover:bg-cyan-50 transition-colors sfx-click">
+                                    <span>Meet Sonu Sir</span>
+                                    <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                                </a>
+                            </span>
+                        </span>
+                        in
+                        <!-- Underlined Hover Trigger 3: Ethelbari -->
+                        <span class="hover-trigger hover-trigger-amber sfx-hover">
+                            Ethelbari
+                            <span class="hover-card-popup">
+                                <span class="inline-block bg-slate-950/70 text-amber-300 text-[10px] font-extrabold px-2.5 py-1 rounded-md uppercase tracking-wider mb-2">Verified Center</span>
+                                <span class="block text-base font-extrabold text-white mb-1">Near Blossom English School</span>
+                                <span class="block text-xs text-indigo-100 mb-3">Ethelbari Checkpost, Alipurduar (735204). Safe, accessible offline learning environment.</span>
+                                <a href="https://share.google/VNcF2TF5WQJQnlJAo" target="_blank" class="inline-flex items-center space-x-1 bg-white text-slate-950 font-extrabold text-xs px-3.5 py-1.5 rounded-full shadow hover:bg-cyan-50 transition-colors sfx-click">
+                                    <span>Open Map</span>
+                                    <i class="fa-solid fa-location-arrow text-[10px]"></i>
+                                </a>
+                            </span>
+                        </span>.
                     </h1>
-                    <p class="text-lg text-slate-300 max-w-2xl mx-auto lg:mx-0">
-                        Personalized offline guidance by <strong class="text-white">Sonu Chhetri</strong>. Dedicated focus on fundamental clarity, problem-solving skills, and academic success right here at Ethelbari Checkpost, Alipurduar.
+
+                    <p class="text-base sm:text-lg text-slate-300 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+                        Hover over the underlined words above for instant cards! Build rock-solid school fundamentals, eliminate exam fear, and achieve top grades through disciplined offline classroom coaching.
                     </p>
 
-                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2">
-                        <div class="bg-dark-800/85 backdrop-blur-md p-3.5 rounded-xl border border-slate-700/80 shadow-lg hover:border-brand-500/50 transition-all hover:scale-105">
-                            <div class="w-10 h-10 rounded-lg bg-emerald-950 text-emerald-400 flex items-center justify-center font-bold border border-emerald-500/30">
-                                <i class="fa-solid fa-graduation-cap"></i>
+                    <!-- Interactive Mini Metric Cards -->
+                    <div class="grid grid-cols-3 gap-3 sm:gap-4 pt-2">
+                        <div class="spotlight-card p-4 rounded-2xl text-left sfx-hover">
+                            <div class="w-9 h-9 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 flex items-center justify-center font-bold mb-2">
+                                <i class="fa-solid fa-user-graduate"></i>
                             </div>
-                            <div class="text-left mt-2">
-                                <p class="text-xs text-slate-400 font-medium">Grades</p>
-                                <p class="text-sm font-bold text-white">Class 5 to 10</p>
-                            </div>
+                            <p class="text-xs text-slate-400 font-medium">Classes</p>
+                            <p class="text-sm sm:text-base font-extrabold text-white">Grade 5 – 10</p>
                         </div>
-                        <div class="bg-dark-800/85 backdrop-blur-md p-3.5 rounded-xl border border-slate-700/80 shadow-lg hover:border-brand-500/50 transition-all hover:scale-105">
-                            <div class="w-10 h-10 rounded-lg bg-blue-950 text-blue-400 flex items-center justify-center font-bold border border-blue-500/30">
-                                <i class="fa-solid fa-book-open"></i>
+                        <div class="spotlight-card p-4 rounded-2xl text-left sfx-hover">
+                            <div class="w-9 h-9 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 flex items-center justify-center font-bold mb-2">
+                                <i class="fa-solid fa-calendar-week"></i>
                             </div>
-                            <div class="text-left mt-2">
-                                <p class="text-xs text-slate-400 font-medium">Subjects</p>
-                                <p class="text-sm font-bold text-white">Maths & PCB</p>
-                            </div>
+                            <p class="text-xs text-slate-400 font-medium">Weekly Days</p>
+                            <p class="text-sm sm:text-base font-extrabold text-white">Mon, Wed, Sat</p>
                         </div>
-                        <div class="bg-dark-800/85 backdrop-blur-md p-3.5 rounded-xl border border-slate-700/80 shadow-lg col-span-2 sm:col-span-1 hover:border-brand-500/50 transition-all hover:scale-105">
-                            <div class="w-10 h-10 rounded-lg bg-purple-950 text-purple-400 flex items-center justify-center font-bold border border-purple-500/30">
-                                <i class="fa-solid fa-location-dot"></i>
+                        <div class="spotlight-card p-4 rounded-2xl text-left sfx-hover">
+                            <div class="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center justify-center font-bold mb-2">
+                                <i class="fa-solid fa-clock"></i>
                             </div>
-                            <div class="text-left mt-2">
-                                <p class="text-xs text-slate-400 font-medium">Location</p>
-                                <p class="text-sm font-bold text-white">Ethelbari, Alipurduar</p>
-                            </div>
+                            <p class="text-xs text-slate-400 font-medium">Batch Time</p>
+                            <p class="text-sm sm:text-base font-extrabold text-white">4:00 – 5:30 PM</p>
                         </div>
                     </div>
 
+                    <!-- Hero CTA Buttons -->
                     <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start space-y-3 sm:space-y-0 sm:space-x-4 pt-4">
-                        <a href="#appointment" class="w-full sm:w-auto bg-brand-600 hover:bg-brand-500 text-white font-semibold px-8 py-4 rounded-xl shadow-lg shadow-brand-500/30 transition-all text-center flex items-center justify-center space-x-2 border border-indigo-400/30 hover:scale-105">
+                        <a href="#appointment" class="w-full sm:w-auto bg-gradient-to-r from-cyan-500 via-indigo-600 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white font-extrabold px-8 py-4 rounded-2xl shadow-xl shadow-indigo-500/25 transition-all text-center flex items-center justify-center space-x-2.5 hover:scale-105 sfx-hover sfx-click">
+                            <i class="fa-solid fa-calendar-check"></i>
                             <span>Book Parent Appointment</span>
-                            <i class="fa-solid fa-calendar-check text-sm"></i>
                         </a>
-                        <a href="https://wa.me/918918929014" target="_blank" class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-8 py-4 rounded-xl shadow-lg shadow-emerald-500/30 transition-all text-center flex items-center justify-center space-x-2 border border-emerald-400/30 hover:scale-105">
-                            <i class="fa-brands fa-whatsapp text-lg"></i>
-                            <span>Chat on WhatsApp</span>
+                        <a href="https://wa.me/918918929014" target="_blank" class="w-full sm:w-auto bg-slate-900/90 hover:bg-emerald-600 text-white font-bold px-7 py-4 rounded-2xl border border-emerald-500/40 shadow-lg transition-all text-center flex items-center justify-center space-x-2 hover:scale-105 sfx-hover sfx-click">
+                            <i class="fa-brands fa-whatsapp text-emerald-400 text-xl"></i>
+                            <span>WhatsApp (+91 891 892 9014)</span>
                         </a>
                     </div>
                 </div>
 
-                <!-- Sonu Chhetri Featured Card with Floating Glow & Interactive Hover Effect -->
+                <!-- Right Hero 3D Graphic Portrait Card -->
                 <div class="lg:col-span-5 flex justify-center">
-                    <div class="relative w-full max-w-sm group interactive-hover-card p-1 rounded-3xl bg-gradient-to-b from-indigo-500/40 via-transparent to-purple-500/40">
-                        <div class="absolute -inset-2 bg-gradient-to-r from-brand-600 to-purple-600 rounded-3xl blur-xl opacity-40 group-hover:opacity-85 transition duration-500"></div>
-                        <div class="relative bg-dark-800/95 backdrop-blur-xl border border-slate-700 rounded-3xl p-6 shadow-2xl text-center space-y-4">
-                            
-                            <!-- Floating interactive tag like the reference screenshot -->
-                            <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-brand-600 to-indigo-600 text-white text-xs font-extrabold px-4 py-1 rounded-full shadow-lg border border-indigo-300/30 uppercase tracking-wider">
-                                Lead Educator
+                    <div class="relative w-full max-w-sm">
+                        <!-- Animated SVG Orbital Rings Behind Card -->
+                        <svg class="absolute -inset-8 w-[calc(100%+4rem)] h-[calc(100%+4rem)] pointer-events-none opacity-40 orbit-ring-1" viewBox="0 0 400 400" fill="none">
+                            <circle cx="200" cy="200" r="185" stroke="url(#grad1)" stroke-width="1.5" stroke-dasharray="12 12"/>
+                            <circle cx="200" cy="15" r="5" fill="#22d3ee"/>
+                            <circle cx="385" cy="200" r="4" fill="#ec4899"/>
+                            <defs>
+                                <linearGradient id="grad1" x1="0" y1="0" x2="400" y2="400">
+                                    <stop offset="0%" stop-color="#06b6d4"/>
+                                    <stop offset="50%" stop-color="#6366f1"/>
+                                    <stop offset="100%" stop-color="#ec4899"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+
+                        <div class="spotlight-card tilt-card rounded-3xl p-7 shadow-2xl text-center space-y-5 relative z-10 border border-indigo-500/30 sfx-hover">
+                            <div class="inline-flex items-center space-x-1.5 bg-gradient-to-r from-cyan-500/20 to-indigo-500/20 border border-cyan-400/30 text-cyan-300 text-xs font-extrabold px-3.5 py-1 rounded-full uppercase tracking-wider">
+                                <i class="fa-solid fa-certificate text-amber-400"></i>
+                                <span>Lead Mentor</span>
                             </div>
 
-                            <div class="relative w-36 h-36 mx-auto rounded-2xl overflow-hidden shadow-inner border-2 border-brand-500/50 group-hover:scale-105 transition-transform duration-300 mt-2">
-                                <img src="sonusir.jpg" alt="Sonu Chhetri" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=400&q=80';">
+                            <!-- Educator Image with Neon Ring -->
+                            <div class="relative w-40 h-40 mx-auto">
+                                <div class="absolute -inset-1.5 bg-gradient-to-tr from-cyan-400 via-indigo-500 to-rose-500 rounded-3xl blur opacity-70 group-hover:opacity-100 transition"></div>
+                                <div class="relative w-full h-full rounded-3xl overflow-hidden border-2 border-white/20 bg-slate-900">
+                                    <img src="sonusir.jpg" alt="Sonu Chhetri" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=400&q=80';">
+                                </div>
                             </div>
+
                             <div>
-                                <h3 class="text-2xl font-bold text-white group-hover:text-brand-400 transition-colors">Sonu Chhetri</h3>
-                                <p class="text-brand-400 font-medium text-sm">Maths & PCB Specialist</p>
+                                <h3 class="text-2xl font-extrabold text-white">Sonu Chhetri</h3>
+                                <p class="text-cyan-400 font-semibold text-sm mt-0.5">Maths & Science (PCB) Educator</p>
                             </div>
-                            <p class="text-slate-300 text-sm leading-relaxed px-2">
-                                "Focusing on clear fundamentals, structured practice, and individual attention for every student in Classes 5 to 10."
+
+                            <p class="text-slate-300 text-sm leading-relaxed">
+                                "Strong basics in Classes 5 to 10 shape a student's entire future. We focus on step-by-step clarity, regular board-level practice, and personal attention."
                             </p>
-                            <div class="pt-2 border-t border-slate-700/60 flex items-center justify-between text-xs text-slate-400 px-2 font-medium">
-                                <span class="flex items-center space-x-1"><i class="fa-solid fa-chalkboard-user text-brand-400"></i><span>Offline Classes</span></span>
-                                <span class="flex items-center space-x-1"><i class="fa-solid fa-check-circle text-emerald-400"></i><span>Proven Results</span></span>
+
+                            <!-- Graphic Skill Pills -->
+                            <div class="flex flex-wrap justify-center gap-2 pt-1">
+                                <span class="text-xs font-bold bg-slate-900/90 border border-slate-700 px-3 py-1 rounded-lg text-slate-300">📐 Mathematics</span>
+                                <span class="text-xs font-bold bg-slate-900/90 border border-slate-700 px-3 py-1 rounded-lg text-slate-300">⚡ Physics</span>
+                                <span class="text-xs font-bold bg-slate-900/90 border border-slate-700 px-3 py-1 rounded-lg text-slate-300">🧪 Chemistry</span>
+                                <span class="text-xs font-bold bg-slate-900/90 border border-slate-700 px-3 py-1 rounded-lg text-slate-300">🧬 Biology</span>
+                            </div>
+
+                            <div class="pt-3 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400 font-semibold">
+                                <span class="flex items-center space-x-1.5"><i class="fa-solid fa-location-dot text-rose-400"></i><span>Ethelbari, Alipurduar</span></span>
+                                <a href="#appointment" class="text-cyan-400 hover:underline flex items-center space-x-1 sfx-click"><span>Meet Sir</span><i class="fa-solid fa-arrow-right"></i></a>
                             </div>
                         </div>
                     </div>
@@ -240,112 +476,203 @@
         </div>
     </header>
 
-    <!-- Meet Sonu Sir Section -->
-    <section id="about" class="py-20 bg-dark-800/60 relative z-10 border-t border-slate-800">
+    <!-- Core Teaching Pillars Section -->
+    <section id="about" class="py-20 relative z-10 border-t border-slate-800/80">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="max-w-3xl mx-auto text-center space-y-4 mb-16">
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-white">Meet Your Educator</h2>
-                <p class="text-slate-400 text-lg">Dedicated mentoring tailored to each student's pace and school curriculum.</p>
+            <div class="max-w-3xl mx-auto text-center space-y-3 mb-14">
+                <span class="text-xs font-extrabold uppercase tracking-widest text-cyan-400">Why Parents Trust Us</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white">Focused Offline Classroom Methodology</h2>
+                <p class="text-slate-400 text-base sm:text-lg">No distractions—just disciplined classroom teaching tailored to your child's school syllabus.</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="bg-dark-800 border border-slate-700/85 rounded-2xl p-8 interactive-hover-card group">
-                    <div class="w-14 h-14 bg-indigo-950 text-indigo-400 rounded-xl flex items-center justify-center text-2xl font-bold mb-6 border border-indigo-500/30 group-hover:scale-110 transition-transform">
-                        <i class="fa-solid fa-bullseye"></i>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Card 1 -->
+                <div class="spotlight-card tilt-card rounded-3xl p-8 group sfx-hover">
+                    <div class="w-12 h-12 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-bolt"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-white mb-3 group-hover:text-indigo-400 transition-colors">Concept Clarity</h3>
-                    <p class="text-slate-400 leading-relaxed">
-                        Complex mathematical formulas and scientific principles broken down into simple, easy-to-understand concepts for lasting memory.
+                    <h3 class="text-xl font-extrabold text-white mb-2">Step-by-Step Concept Clarity</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-6">
+                        Every theorem, numerical problem, and scientific process is explained from the ground up so students understand the "why" instead of rote memorizing.
                     </p>
+                    <a href="#appointment" class="text-xs font-extrabold uppercase tracking-wider text-cyan-400 flex items-center space-x-1.5 group-hover:translate-x-1 transition-transform sfx-click">
+                        <span>ENQUIRE NOW</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
                 </div>
-                <div class="bg-dark-800 border border-slate-700/85 rounded-2xl p-8 interactive-hover-card group">
-                    <div class="w-14 h-14 bg-purple-950 text-purple-400 rounded-xl flex items-center justify-center text-2xl font-bold mb-6 border border-purple-500/30 group-hover:scale-110 transition-transform">
-                        <i class="fa-solid fa-users-rectangle"></i>
+
+                <!-- Card 2 -->
+                <div class="spotlight-card tilt-card rounded-3xl p-8 group sfx-hover">
+                    <div class="w-12 h-12 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-400 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-fire"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-white mb-3 group-hover:text-purple-400 transition-colors">Small Batch Attention</h3>
-                    <p class="text-slate-400 leading-relaxed">
-                        Controlled batch sizes ensuring personalized doubt clearing, direct interaction, and complete focus on every single student.
+                    <h3 class="text-xl font-extrabold text-white mb-2">Personal Doubt Clearing</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-6">
+                        Offline face-to-face batches allow Sonu Sir to check every student's notebook personally, spot mistakes early, and clear doubts on the spot.
                     </p>
+                    <a href="#appointment" class="text-xs font-extrabold uppercase tracking-wider text-rose-400 flex items-center space-x-1.5 group-hover:translate-x-1 transition-transform sfx-click">
+                        <span>BOOK MEETING</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
                 </div>
-                <div class="bg-dark-800 border border-slate-700/85 rounded-2xl p-8 interactive-hover-card group">
-                    <div class="w-14 h-14 bg-emerald-950 text-emerald-400 rounded-xl flex items-center justify-center text-2xl font-bold mb-6 border border-emerald-500/30 group-hover:scale-110 transition-transform">
+
+                <!-- Card 3 -->
+                <div class="spotlight-card tilt-card rounded-3xl p-8 group sfx-hover">
+                    <div class="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
                         <i class="fa-solid fa-clipboard-check"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-white mb-3 group-hover:text-emerald-400 transition-colors">Regular Assessments</h3>
-                    <p class="text-slate-400 leading-relaxed">
-                        Weekly chapter tests and board-pattern practice sessions to build student confidence and eliminate exam fear.
+                    <h3 class="text-xl font-extrabold text-white mb-2">Regular Chapter Tests</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-6">
+                        Frequent written assessments and school-exam pattern question papers build writing speed, accuracy, and complete exam confidence.
                     </p>
+                    <a href="#schedule" class="text-xs font-extrabold uppercase tracking-wider text-amber-400 flex items-center space-x-1.5 group-hover:translate-x-1 transition-transform sfx-click">
+                        <span>VIEW SCHEDULE</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Subjects Offered (With Tech-Style Interactive Hover Cards matching the reference) -->
-    <section id="subjects" class="py-20 bg-dark-900 relative z-10 border-t border-slate-800">
+    <!-- Subjects & Graphic Cards Section -->
+    <section id="subjects" class="py-20 relative z-10 border-t border-slate-800/80 bg-slate-950/50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="max-w-3xl mx-auto text-center space-y-4 mb-16">
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-white">Subjects & Curriculum</h2>
-                <p class="text-slate-400 text-lg">Specialized offline coaching for middle and high school students.</p>
+            <div class="max-w-3xl mx-auto text-center space-y-3 mb-14">
+                <span class="text-xs font-extrabold uppercase tracking-widest text-indigo-400">Complete Subject Mastery</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white">Subjects Taught (Classes 5–10)</h2>
+                <p class="text-slate-400 text-base sm:text-lg">Comprehensive syllabus coverage for ICSE, CBSE, and WBBSE board students.</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <!-- Mathematics Card -->
-                <div class="bg-dark-800 border border-slate-700/90 rounded-2xl p-6 interactive-hover-card group flex flex-col justify-between">
+                <!-- Mathematics -->
+                <div class="spotlight-card tilt-card rounded-3xl p-6 group flex flex-col justify-between sfx-hover">
                     <div>
-                        <div class="w-12 h-12 bg-blue-950 text-blue-400 rounded-xl flex items-center justify-center text-xl font-bold mb-4 border border-blue-500/30 group-hover:scale-110 transition-transform">
-                            <i class="fa-solid fa-calculator"></i>
+                        <div class="flex items-center justify-between mb-5">
+                            <div class="w-12 h-12 rounded-2xl bg-cyan-500/15 border border-cyan-500/30 text-cyan-400 flex items-center justify-center text-xl font-bold group-hover:scale-110 transition-transform">
+                                <i class="fa-solid fa-calculator"></i>
+                            </div>
+                            <span class="text-[11px] font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-full bg-cyan-950 text-cyan-300 border border-cyan-500/30">Class 5–10</span>
                         </div>
-                        <h3 class="text-lg font-bold text-white mb-2 group-hover:text-blue-400 transition-colors">Mathematics</h3>
-                        <p class="text-slate-400 text-sm mb-4">Algebra, Geometry, Trigonometry, Arithmetic & Problem Solving.</p>
+                        <h3 class="text-xl font-extrabold text-white mb-2 group-hover:text-cyan-400 transition-colors">Mathematics</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-4">
+                            Arithmetic, Algebra, Geometry, Mensuration, Trigonometry & Statistics with intensive problem-solving practice.
+                        </p>
                     </div>
-                    <div class="pt-4 border-t border-slate-700/60 flex items-center justify-between">
-                        <span class="inline-block text-xs font-semibold text-brand-400 bg-brand-950/80 border border-brand-500/30 px-2.5 py-1 rounded-full">Classes 5 – 10</span>
-                        <span class="text-xs font-bold text-blue-400 group-hover:translate-x-1 transition-transform flex items-center space-x-1"><span>Explore</span> <i class="fa-solid fa-arrow-right"></i></span>
-                    </div>
+                    <a href="#appointment" class="pt-4 border-t border-slate-800 flex items-center justify-between text-xs font-extrabold text-cyan-400 sfx-click">
+                        <span>ENQUIRE BATCH</span>
+                        <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                    </a>
                 </div>
 
-                <!-- Physics Card -->
-                <div class="bg-dark-800 border border-slate-700/90 rounded-2xl p-6 interactive-hover-card group flex flex-col justify-between">
+                <!-- Physics -->
+                <div class="spotlight-card tilt-card rounded-3xl p-6 group flex flex-col justify-between sfx-hover">
                     <div>
-                        <div class="w-12 h-12 bg-purple-950 text-purple-400 rounded-xl flex items-center justify-center text-xl font-bold mb-4 border border-purple-500/30 group-hover:scale-110 transition-transform">
-                            <i class="fa-solid fa-atom"></i>
+                        <div class="flex items-center justify-between mb-5">
+                            <div class="w-12 h-12 rounded-2xl bg-purple-500/15 border border-purple-500/30 text-purple-400 flex items-center justify-center text-xl font-bold group-hover:scale-110 transition-transform">
+                                <i class="fa-solid fa-atom"></i>
+                            </div>
+                            <span class="text-[11px] font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-full bg-purple-950 text-purple-300 border border-purple-500/30">Class 5–10</span>
                         </div>
-                        <h3 class="text-lg font-bold text-white mb-2 group-hover:text-purple-400 transition-colors">Physics</h3>
-                        <p class="text-slate-400 text-sm mb-4">Motion, Force, Light, Electricity, Magnetism & Numericals.</p>
+                        <h3 class="text-xl font-extrabold text-white mb-2 group-hover:text-purple-400 transition-colors">Physics</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-4">
+                            Laws of Motion, Force, Work & Energy, Light Ray Diagrams, Current Electricity & Numerical Derivations.
+                        </p>
                     </div>
-                    <div class="pt-4 border-t border-slate-700/60 flex items-center justify-between">
-                        <span class="inline-block text-xs font-semibold text-brand-400 bg-brand-950/80 border border-brand-500/30 px-2.5 py-1 rounded-full">Classes 5 – 10</span>
-                        <span class="text-xs font-bold text-purple-400 group-hover:translate-x-1 transition-transform flex items-center space-x-1"><span>Explore</span> <i class="fa-solid fa-arrow-right"></i></span>
-                    </div>
+                    <a href="#appointment" class="pt-4 border-t border-slate-800 flex items-center justify-between text-xs font-extrabold text-purple-400 sfx-click">
+                        <span>ENQUIRE BATCH</span>
+                        <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                    </a>
                 </div>
 
-                <!-- Chemistry Card -->
-                <div class="bg-dark-800 border border-slate-700/90 rounded-2xl p-6 interactive-hover-card group flex flex-col justify-between">
+                <!-- Chemistry -->
+                <div class="spotlight-card tilt-card rounded-3xl p-6 group flex flex-col justify-between sfx-hover">
                     <div>
-                        <div class="w-12 h-12 bg-emerald-950 text-emerald-400 rounded-xl flex items-center justify-center text-xl font-bold mb-4 border border-emerald-500/30 group-hover:scale-110 transition-transform">
-                            <i class="fa-solid fa-flask"></i>
+                        <div class="flex items-center justify-between mb-5">
+                            <div class="w-12 h-12 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 flex items-center justify-center text-xl font-bold group-hover:scale-110 transition-transform">
+                                <i class="fa-solid fa-flask"></i>
+                            </div>
+                            <span class="text-[11px] font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-500/30">Class 5–10</span>
                         </div>
-                        <h3 class="text-lg font-bold text-white mb-2 group-hover:text-emerald-400 transition-colors">Chemistry</h3>
-                        <p class="text-slate-400 text-sm mb-4">Matter, Atoms, Molecules, Chemical Reactions & Equations.</p>
+                        <h3 class="text-xl font-extrabold text-white mb-2 group-hover:text-emerald-400 transition-colors">Chemistry</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-4">
+                            Atomic Structure, Periodic Table, Chemical Bonding, Balancing Equations, Acids, Bases & Organic Basics.
+                        </p>
                     </div>
-                    <div class="pt-4 border-t border-slate-700/60 flex items-center justify-between">
-                        <span class="inline-block text-xs font-semibold text-brand-400 bg-brand-950/80 border border-brand-500/30 px-2.5 py-1 rounded-full">Classes 5 – 10</span>
-                        <span class="text-xs font-bold text-emerald-400 group-hover:translate-x-1 transition-transform flex items-center space-x-1"><span>Explore</span> <i class="fa-solid fa-arrow-right"></i></span>
-                    </div>
+                    <a href="#appointment" class="pt-4 border-t border-slate-800 flex items-center justify-between text-xs font-extrabold text-emerald-400 sfx-click">
+                        <span>ENQUIRE BATCH</span>
+                        <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                    </a>
                 </div>
 
-                <!-- Biology Card -->
-                <div class="bg-dark-800 border border-slate-700/90 rounded-2xl p-6 interactive-hover-card group flex flex-col justify-between">
+                <!-- Biology -->
+                <div class="spotlight-card tilt-card rounded-3xl p-6 group flex flex-col justify-between sfx-hover">
                     <div>
-                        <div class="w-12 h-12 bg-amber-950 text-amber-400 rounded-xl flex items-center justify-center text-xl font-bold mb-4 border border-amber-500/30 group-hover:scale-110 transition-transform">
-                            <i class="fa-solid fa-dna"></i>
+                        <div class="flex items-center justify-between mb-5">
+                            <div class="w-12 h-12 rounded-2xl bg-amber-500/15 border border-amber-500/30 text-amber-400 flex items-center justify-center text-xl font-bold group-hover:scale-110 transition-transform">
+                                <i class="fa-solid fa-dna"></i>
+                            </div>
+                            <span class="text-[11px] font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-full bg-amber-950 text-amber-300 border border-amber-500/30">Class 5–10</span>
                         </div>
-                        <h3 class="text-lg font-bold text-white mb-2 group-hover:text-amber-400 transition-colors">Biology</h3>
-                        <p class="text-slate-400 text-sm mb-4">Cell Structure, Plant & Human Physiology, Life Processes.</p>
+                        <h3 class="text-xl font-extrabold text-white mb-2 group-hover:text-amber-400 transition-colors">Biology</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-4">
+                            Cell Division, Life Processes, Human Anatomy, Plant Physiology, Genetics & Neat Diagram Practice.
+                        </p>
                     </div>
-                    <div class="pt-4 border-t border-slate-700/60 flex items-center justify-between">
-                        <span class="inline-block text-xs font-semibold text-brand-400 bg-brand-950/80 border border-brand-500/30 px-2.5 py-1 rounded-full">Classes 5 – 10</span>
-                        <span class="text-xs font-bold text-amber-400 group-hover:translate-x-1 transition-transform flex items-center space-x-1"><span>Explore</span> <i class="fa-solid fa-arrow-right"></i></span>
+                    <a href="#appointment" class="pt-4 border-t border-slate-800 flex items-center justify-between text-xs font-extrabold text-amber-400 sfx-click">
+                        <span>ENQUIRE BATCH</span>
+                        <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Grade-Wise Learning Roadmap (Classes 5-10 Switcher) -->
+    <section id="curriculum" class="py-20 relative z-10 border-t border-slate-800/80">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center space-y-3 mb-10">
+                <span class="text-xs font-extrabold uppercase tracking-widest text-cyan-400">Interactive Syllabus Roadmap</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white">Select Student Grade Level</h2>
+                <p class="text-slate-400 text-sm sm:text-base">Click a grade group below to see how Sonu Sir structures classroom learning.</p>
+            </div>
+
+            <!-- Interactive Grade Tabs -->
+            <div class="flex justify-center space-x-2 sm:space-x-4 mb-8">
+                <button onclick="switchGrade('junior')" id="tab-junior" class="grade-tab bg-gradient-to-r from-cyan-500 to-indigo-600 text-white font-extrabold px-5 py-3 rounded-xl text-xs sm:text-sm shadow-lg transition-all sfx-hover">
+                    Classes 5 & 6 (Foundation)
+                </button>
+                <button onclick="switchGrade('middle')" id="tab-middle" class="grade-tab bg-slate-900 text-slate-300 border border-slate-700 hover:border-cyan-400 font-bold px-5 py-3 rounded-xl text-xs sm:text-sm transition-all sfx-hover">
+                    Classes 7 & 8 (Core Builder)
+                </button>
+                <button onclick="switchGrade('senior')" id="tab-senior" class="grade-tab bg-slate-900 text-slate-300 border border-slate-700 hover:border-cyan-400 font-bold px-5 py-3 rounded-xl text-xs sm:text-sm transition-all sfx-hover">
+                    Classes 9 & 10 (Board Prep)
+                </button>
+            </div>
+
+            <!-- Dynamic Content Display Card -->
+            <div id="grade-content" class="spotlight-card rounded-3xl p-8 border border-indigo-500/30 shadow-2xl sfx-hover">
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+                    <div class="md:col-span-8 space-y-3">
+                        <span id="grade-badge" class="inline-block bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-xs font-extrabold px-3 py-1 rounded-full">CLASSES 5 & 6 • STRONG BASICS</span>
+                        <h3 id="grade-title" class="text-2xl font-extrabold text-white">Building Speed in Arithmetic & Curiosity in Science</h3>
+                        <p id="grade-desc" class="text-slate-300 text-sm leading-relaxed">
+                            Transitioning from primary to middle school requires crystal-clear fundamentals in fractions, decimals, basic algebra, geometry, and general science concepts.
+                        </p>
+                        <ul id="grade-list" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-2 text-sm text-slate-200 font-medium">
+                            <li class="flex items-center space-x-2"><i class="fa-solid fa-circle-check text-emerald-400"></i><span>Mental Maths & Calculation Speed</span></li>
+                            <li class="flex items-center space-x-2"><i class="fa-solid fa-circle-check text-emerald-400"></i><span>Introduction to Algebra & Geometry</span></li>
+                            <li class="flex items-center space-x-2"><i class="fa-solid fa-circle-check text-emerald-400"></i><span>Core Physics, Chemistry & Bio Basics</span></li>
+                            <li class="flex items-center space-x-2"><i class="fa-solid fa-circle-check text-emerald-400"></i><span>Homework & School Exam Support</span></li>
+                        </ul>
+                    </div>
+                    <div class="md:col-span-4 text-center md:border-l border-slate-800 md:pl-6 space-y-3">
+                        <div class="w-16 h-16 rounded-2xl bg-indigo-500/15 border border-indigo-500/30 text-indigo-400 flex items-center justify-center text-3xl mx-auto">
+                            <i class="fa-solid fa-book-open-reader"></i>
+                        </div>
+                        <p class="text-xs text-slate-400">Want to discuss your child's current marks?</p>
+                        <a href="#appointment" class="inline-block w-full bg-white text-slate-950 hover:bg-cyan-50 font-extrabold py-3 px-4 rounded-xl text-xs shadow transition-all sfx-click">
+                            Schedule Parent Meeting →
+                        </a>
                     </div>
                 </div>
             </div>
@@ -353,95 +680,92 @@
     </section>
 
     <!-- Schedule Section -->
-    <section id="schedule" class="py-20 bg-dark-800/60 relative z-10 border-t border-slate-800">
+    <section id="schedule" class="py-20 relative z-10 border-t border-slate-800/80 bg-slate-950/50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="max-w-3xl mx-auto text-center space-y-4 mb-16">
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-white">Class Schedule & Timings</h2>
-                <p class="text-slate-400 text-lg">Structured weekly batches designed for consistent learning.</p>
+            <div class="max-w-3xl mx-auto text-center space-y-3 mb-14">
+                <span class="text-xs font-extrabold uppercase tracking-widest text-emerald-400">Offline Batch Timings</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white">Weekly Class Schedule</h2>
+                <p class="text-slate-400 text-base sm:text-lg">Consistent offline sessions for disciplined study habits.</p>
             </div>
 
-            <div class="max-w-xl mx-auto bg-gradient-to-br from-indigo-950 via-dark-800 to-indigo-950 text-white rounded-3xl p-8 shadow-2xl relative overflow-hidden border border-indigo-500/30 interactive-hover-card">
-                <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-indigo-500/10 rounded-full blur-3xl"></div>
-                <div class="relative z-10 space-y-6">
-                    <div class="flex items-center justify-between border-b border-indigo-500/20 pb-4">
+            <div class="max-w-2xl mx-auto spotlight-card tilt-card rounded-3xl p-8 border border-indigo-500/40 shadow-2xl sfx-hover">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-slate-800 pb-5 mb-6 gap-4">
+                    <div>
+                        <span class="text-xs uppercase tracking-wider text-cyan-400 font-extrabold block">Classroom Mode</span>
+                        <span class="text-xl font-extrabold text-white">In-Person Offline Coaching</span>
+                    </div>
+                    <span class="bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-extrabold px-3.5 py-1.5 rounded-full">
+                        <i class="fa-solid fa-check-circle mr-1"></i> Active Batch
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+                    <div class="bg-slate-900/90 p-5 rounded-2xl border border-slate-800 flex items-center space-x-4">
+                        <div class="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 text-xl">
+                            <i class="fa-regular fa-clock"></i>
+                        </div>
                         <div>
-                            <span class="text-xs uppercase tracking-wider text-indigo-300 font-semibold block">Mode</span>
-                            <span class="text-lg font-bold text-white">Offline Classroom Coaching</span>
-                        </div>
-                        <div class="w-12 h-12 rounded-2xl bg-indigo-900/50 flex items-center justify-center border border-indigo-500/30">
-                            <i class="fa-solid fa-school text-xl text-indigo-300"></i>
+                            <p class="text-xs text-slate-400 font-semibold">Class Timing</p>
+                            <p class="text-lg font-extrabold text-white">4:00 PM – 5:30 PM</p>
                         </div>
                     </div>
 
-                    <div class="space-y-4">
-                        <div class="flex items-center space-x-4 bg-dark-900/60 p-4 rounded-2xl border border-slate-700/60">
-                            <div class="w-10 h-10 rounded-xl bg-indigo-950 flex items-center justify-center font-bold border border-indigo-500/30 text-indigo-300">
-                                <i class="fa-regular fa-clock"></i>
-                            </div>
-                            <div>
-                                <p class="text-xs text-indigo-300 font-medium">Timing</p>
-                                <p class="text-lg font-extrabold text-white">4:00 PM – 5:30 PM</p>
-                            </div>
+                    <div class="bg-slate-900/90 p-5 rounded-2xl border border-slate-800 flex items-center space-x-4">
+                        <div class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400 text-xl">
+                            <i class="fa-regular fa-calendar-days"></i>
                         </div>
-
-                        <div class="flex items-center space-x-4 bg-dark-900/60 p-4 rounded-2xl border border-slate-700/60">
-                            <div class="w-10 h-10 rounded-xl bg-indigo-950 flex items-center justify-center font-bold border border-indigo-500/30 text-indigo-300">
-                                <i class="fa-regular fa-calendar-days"></i>
-                            </div>
-                            <div>
-                                <p class="text-xs text-indigo-300 font-medium">Class Days</p>
-                                <p class="text-lg font-extrabold text-white">Monday, Wednesday & Saturday</p>
-                            </div>
+                        <div>
+                            <p class="text-xs text-slate-400 font-semibold">Weekly Days</p>
+                            <p class="text-lg font-extrabold text-white">Mon, Wed & Sat</p>
                         </div>
-                    </div>
-
-                    <div class="pt-2">
-                        <a href="#appointment" class="block w-full text-center bg-brand-600 hover:bg-brand-500 text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-brand-500/30 border border-indigo-400/30 hover:scale-[1.02]">
-                            Book Consultation
-                        </a>
                     </div>
                 </div>
+
+                <a href="#appointment" class="block w-full text-center bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white font-extrabold py-4 rounded-xl transition-all shadow-lg shadow-indigo-500/25 sfx-hover sfx-click">
+                    Book an Appointment with Sonu Sir →
+                </a>
             </div>
         </div>
     </section>
 
     <!-- Location & Map Section -->
-    <section id="location" class="py-20 bg-dark-900 relative z-10 border-t border-slate-800">
+    <section id="location" class="py-20 relative z-10 border-t border-slate-800/80">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="max-w-3xl mx-auto text-center space-y-4 mb-16">
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-white">Our Tuition Location</h2>
-                <p class="text-slate-400 text-lg">Easily accessible offline center in Alipurduar, West Bengal.</p>
+            <div class="max-w-3xl mx-auto text-center space-y-3 mb-14">
+                <span class="text-xs font-extrabold uppercase tracking-widest text-rose-400">Easy Navigation</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white">Our Tuition Center Location</h2>
+                <p class="text-slate-400 text-base sm:text-lg">Located near Blossom English School, Ethelbari Checkpost, Alipurduar.</p>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-                <div class="lg:col-span-5 bg-dark-800 border border-slate-700 rounded-3xl p-8 shadow-xl space-y-6 interactive-hover-card">
+                <div class="lg:col-span-5 spotlight-card tilt-card rounded-3xl p-8 space-y-6 sfx-hover">
                     <div class="flex items-start space-x-4">
-                        <div class="w-12 h-12 bg-red-950 text-red-400 rounded-2xl flex items-center justify-center text-xl flex-shrink-0 mt-1 border border-red-500/30">
-                            <i class="fa-solid fa-map-pin"></i>
+                        <div class="w-12 h-12 bg-rose-500/15 text-rose-400 rounded-2xl flex items-center justify-center text-xl flex-shrink-0 mt-1 border border-rose-500/30">
+                            <i class="fa-solid fa-map-location-dot"></i>
                         </div>
                         <div>
-                            <h3 class="text-lg font-bold text-white mb-1">Center Address</h3>
+                            <h3 class="text-xl font-extrabold text-white mb-1">Center Address</h3>
                             <p class="text-slate-300 text-sm leading-relaxed">
                                 Near Blossom English School, Ethelbari Checkpost, Alipurduar - 735204, West Bengal, India.
                             </p>
                         </div>
                     </div>
 
-                    <div class="border-t border-slate-700/80 pt-6 space-y-3">
-                        <a href="https://maps.app.goo.gl/WjfkUE8oEpRzGkLS6" target="_blank" class="w-full flex items-center justify-center space-x-2 bg-slate-700 hover:bg-slate-600 text-white font-semibold py-3.5 rounded-xl transition-all shadow-md border border-slate-600">
+                    <div class="border-t border-slate-800 pt-6 space-y-3">
+                        <a href="https://share.google/VNcF2TF5WQJQnlJAo" target="_blank" class="w-full flex items-center justify-center space-x-2 bg-gradient-to-r from-rose-500 to-amber-500 hover:from-rose-400 hover:to-amber-400 text-white font-extrabold py-3.5 rounded-xl transition-all shadow-lg shadow-rose-500/20 sfx-hover sfx-click">
                             <i class="fa-solid fa-location-arrow"></i>
-                            <span>Open in Google Maps</span>
+                            <span>Open Exact Location in Google Maps</span>
                         </a>
-                        <a href="tel:+918918929014" class="w-full flex items-center justify-center space-x-2 bg-brand-950/80 hover:bg-brand-900 text-brand-300 font-semibold py-3.5 rounded-xl transition-all border border-brand-500/30">
+                        <a href="tel:+918918929014" class="w-full flex items-center justify-center space-x-2 bg-slate-900 hover:bg-slate-800 text-cyan-300 font-bold py-3.5 rounded-xl transition-all border border-slate-700 sfx-hover sfx-click">
                             <i class="fa-solid fa-phone"></i>
                             <span>Call +91 891 892 9014</span>
                         </a>
                     </div>
                 </div>
 
-                <div class="lg:col-span-7 h-[400px] rounded-3xl overflow-hidden border border-slate-700 shadow-xl relative bg-slate-800">
+                <div class="lg:col-span-7 h-[400px] rounded-3xl overflow-hidden border border-slate-700 shadow-2xl relative bg-slate-900 group">
                     <iframe 
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3568.0!2d89.3!3d26.6!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zSGVhciBCbG9zc29tIEVuZ2xpc2ggU2Nob29sLCBFdGhlbGJhcmkgQ2hlY2twb3N0!5e0!3m2!1sen!2sin!4v1650000000000!5m2!1sen!2sin" 
+                        src="https://www.google.com/maps?q=Blossom+English+School+Ethelbari+Alipurduar+735204&output=embed" 
                         width="100%" 
                         height="100%" 
                         style="border:0;" 
@@ -450,35 +774,40 @@
                         referrerpolicy="no-referrer-when-downgrade"
                         class="w-full h-full filter invert hue-rotate-180 contrast-125">
                     </iframe>
+                    <a href="https://share.google/VNcF2TF5WQJQnlJAo" target="_blank" class="absolute bottom-4 right-4 bg-slate-950/90 hover:bg-cyan-500 hover:text-slate-950 text-white text-xs font-extrabold px-4 py-2.5 rounded-xl border border-white/20 shadow-xl backdrop-blur-md transition-all flex items-center space-x-2 sfx-hover sfx-click">
+                        <i class="fa-solid fa-up-right-from-square"></i>
+                        <span>Get Directions</span>
+                    </a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Book Appointment Section -->
-    <section id="appointment" class="py-20 bg-dark-800/60 relative z-10 border-t border-slate-800">
+    <!-- Book Parent Appointment Section -->
+    <section id="appointment" class="py-20 relative z-10 border-t border-slate-800/80 bg-slate-950/60">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="max-w-3xl mx-auto text-center space-y-4 mb-16">
+            <div class="max-w-3xl mx-auto text-center space-y-3 mb-14">
+                <span class="text-xs font-extrabold uppercase tracking-widest text-cyan-400">Direct Parent-Teacher Meeting</span>
                 <h2 class="text-3xl sm:text-4xl font-extrabold text-white">Book an Appointment with Sonu Sir</h2>
-                <p class="text-slate-400 text-lg">Parents can schedule a direct meeting/consultation to discuss student progress and admissions.</p>
+                <p class="text-slate-400 text-base sm:text-lg">Schedule a personal meeting to discuss your child's syllabus, learning needs, and admission.</p>
             </div>
 
-            <div class="max-w-xl mx-auto bg-dark-800 border border-slate-700 rounded-3xl p-8 shadow-2xl interactive-hover-card">
+            <div class="max-w-xl mx-auto spotlight-card rounded-3xl p-8 shadow-2xl border border-indigo-500/40">
                 <form id="appointment-form" class="space-y-4" onsubmit="bookAppointment(event)">
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-semibold text-slate-300 mb-1">Parent's Name</label>
-                            <input type="text" id="parent-name" required placeholder="e.g. Mr. Sharma" class="w-full px-4 py-3 rounded-xl border border-slate-700 bg-dark-900 text-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">Parent's Name</label>
+                            <input type="text" id="parent-name" required placeholder="e.g. Mr. Sharma" class="w-full px-4 py-3 rounded-xl border border-slate-700 bg-slate-900/90 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500">
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold text-slate-300 mb-1">Student's Full Name</label>
-                            <input type="text" id="student-name" required placeholder="e.g. Rahul Sharma" class="w-full px-4 py-3 rounded-xl border border-slate-700 bg-dark-900 text-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">Student's Full Name</label>
+                            <input type="text" id="student-name" required placeholder="e.g. Rahul Sharma" class="w-full px-4 py-3 rounded-xl border border-slate-700 bg-slate-900/90 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500">
                         </div>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-semibold text-slate-300 mb-1">Student Class / Grade</label>
-                            <select id="student-class" class="w-full px-4 py-3 rounded-xl border border-slate-700 bg-dark-900 text-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">Student Class / Grade</label>
+                            <select id="student-class" class="w-full px-4 py-3 rounded-xl border border-slate-700 bg-slate-900/90 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500">
                                 <option value="Class 5">Class 5</option>
                                 <option value="Class 6">Class 6</option>
                                 <option value="Class 7">Class 7</option>
@@ -488,37 +817,38 @@
                             </select>
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold text-slate-300 mb-1">Contact Number</label>
-                            <input type="tel" id="parent-phone" required placeholder="10-digit mobile no." class="w-full px-4 py-3 rounded-xl border border-slate-700 bg-dark-900 text-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">Contact Number</label>
+                            <input type="tel" id="parent-phone" required placeholder="10-digit mobile no." class="w-full px-4 py-3 rounded-xl border border-slate-700 bg-slate-900/90 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500">
                         </div>
                     </div>
                     <div>
-                        <label class="block text-sm font-semibold text-slate-300 mb-1">Preferred Meeting Date</label>
-                        <input type="date" id="appointment-date" required class="w-full px-4 py-3 rounded-xl border border-slate-700 bg-dark-900 text-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">Preferred Meeting Date</label>
+                        <input type="date" id="appointment-date" required class="w-full px-4 py-3 rounded-xl border border-slate-700 bg-slate-900/90 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500">
                     </div>
-                    <button type="submit" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-bold py-4 rounded-xl shadow-lg shadow-brand-500/30 transition-all flex items-center justify-center space-x-2 border border-indigo-400/30 hover:scale-[1.02]">
+                    <button type="submit" class="w-full bg-gradient-to-r from-cyan-500 via-indigo-600 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white font-extrabold py-4 rounded-xl shadow-lg shadow-indigo-500/30 transition-all flex items-center justify-center space-x-2 hover:scale-[1.01] sfx-hover">
                         <i class="fa-solid fa-calendar-check"></i>
                         <span>Confirm Appointment & Send to Sonu Sir</span>
                     </button>
                 </form>
 
-                <div id="appointment-card" class="hidden mt-6 bg-dark-900 border-2 border-brand-500 rounded-2xl p-6 shadow-2xl space-y-4">
+                <!-- Appointment Confirmation Card -->
+                <div id="appointment-card" class="hidden mt-6 bg-slate-950 border-2 border-cyan-500 rounded-2xl p-6 shadow-2xl space-y-4">
                     <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-                        <div class="flex items-center space-x-2">
-                            <div class="w-8 h-8 rounded-lg bg-brand-600 text-white flex items-center justify-center font-bold text-xs">SC</div>
-                            <span class="font-bold text-white text-sm">Meeting Appointment Booked</span>
+                        <div class="flex items-center space-x-2.5">
+                            <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-cyan-500 to-indigo-600 text-white flex items-center justify-center font-extrabold text-xs">SC</div>
+                            <span class="font-extrabold text-white text-sm">Parent Appointment Slip</span>
                         </div>
-                        <span class="bg-emerald-950 text-emerald-400 border border-emerald-500/30 text-xs font-bold px-2.5 py-1 rounded-full">Confirmed</span>
+                        <span class="bg-emerald-950 text-emerald-400 border border-emerald-500/30 text-xs font-extrabold px-2.5 py-1 rounded-full">Ready to Send</span>
                     </div>
-                    <div class="space-y-2 text-sm text-slate-300">
-                        <p><strong class="text-slate-500">Parent:</strong> <span id="conf-parent" class="font-semibold text-white"></span></p>
-                        <p><strong class="text-slate-500">Student:</strong> <span id="conf-student" class="font-semibold text-white"></span></p>
-                        <p><strong class="text-slate-500">Grade:</strong> <span id="conf-grade" class="font-semibold text-white"></span></p>
-                        <p><strong class="text-slate-500">Contact:</strong> <span id="conf-phone" class="font-semibold text-white"></span></p>
-                        <p><strong class="text-slate-500">Preferred Date:</strong> <span id="conf-date" class="font-semibold text-white"></span></p>
+                    <div class="space-y-1.5 text-sm text-slate-300">
+                        <p><strong class="text-slate-500">Parent:</strong> <span id="conf-parent" class="font-bold text-white"></span></p>
+                        <p><strong class="text-slate-500">Student:</strong> <span id="conf-student" class="font-bold text-white"></span></p>
+                        <p><strong class="text-slate-500">Grade:</strong> <span id="conf-grade" class="font-bold text-cyan-400"></span></p>
+                        <p><strong class="text-slate-500">Phone:</strong> <span id="conf-phone" class="font-bold text-white"></span></p>
+                        <p><strong class="text-slate-500">Preferred Date:</strong> <span id="conf-date" class="font-bold text-amber-400"></span></p>
                     </div>
-                    <a id="whatsapp-link" href="#" target="_blank" class="block w-full text-center bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-3 rounded-xl transition-all shadow-lg shadow-emerald-500/30 border border-emerald-400/30">
-                        <i class="fa-brands fa-whatsapp"></i> Send Appointment Request to Sonu Sir (+91 891 892 9014)
+                    <a id="whatsapp-link" href="#" target="_blank" class="block w-full text-center bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold py-3.5 rounded-xl transition-all shadow-lg shadow-emerald-500/30 sfx-hover sfx-click">
+                        <i class="fa-brands fa-whatsapp mr-1"></i> Send Appointment on WhatsApp (+91 891 892 9014)
                     </a>
                 </div>
             </div>
@@ -526,52 +856,347 @@
     </section>
 
     <!-- Footer -->
-    <footer class="bg-dark-900 text-white py-12 border-t border-slate-800 relative z-10">
+    <footer class="bg-slate-950 text-white py-12 border-t border-slate-800/80 relative z-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
             <div class="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
                 <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 rounded-xl bg-brand-600 text-white flex items-center justify-center font-bold text-lg border border-indigo-400/30">SC</div>
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-indigo-600 text-white flex items-center justify-center font-extrabold text-lg">SC</div>
                     <div>
-                        <span class="text-lg font-bold text-white">Sonu Chhetri Tuition Classes</span>
-                        <p class="text-xs text-slate-400">Maths & PCB • Classes 5 to 10</p>
+                        <span class="text-lg font-extrabold text-white">Sonu Chhetri Tuition Classes</span>
+                        <p class="text-xs text-slate-400">Maths & PCB • Classes 5 to 10 • Ethelbari Checkpost, Alipurduar</p>
                     </div>
                 </div>
-                <div class="flex items-center space-x-6 text-sm text-slate-400">
-                    <a href="#about" class="hover:text-white transition-colors">About</a>
-                    <a href="#subjects" class="hover:text-white transition-colors">Subjects</a>
-                    <a href="#schedule" class="hover:text-white transition-colors">Schedule</a>
-                    <a href="#location" class="hover:text-white transition-colors">Location</a>
+                <div class="flex items-center space-x-6 text-sm text-slate-400 font-medium">
+                    <a href="#about" class="hover:text-cyan-400 transition-colors sfx-click">About</a>
+                    <a href="#subjects" class="hover:text-cyan-400 transition-colors sfx-click">Subjects</a>
+                    <a href="#schedule" class="hover:text-cyan-400 transition-colors sfx-click">Schedule</a>
+                    <a href="https://share.google/VNcF2TF5WQJQnlJAo" target="_blank" class="hover:text-cyan-400 transition-colors sfx-click">Google Map</a>
                 </div>
             </div>
 
-            <div class="border-t border-slate-800 pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 space-y-4 sm:space-y-0">
+            <div class="border-t border-slate-800/80 pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-400 space-y-4 sm:space-y-0">
                 <p>&copy; 2026 Sonu Chhetri Tuition. All rights reserved.</p>
-                <p class="font-medium text-slate-400">Built by Sagnik. Assited by Gemini 4 argon</p>
+                <div class="bg-slate-900/90 border border-slate-800 px-4 py-2 rounded-full">
+                    Built by <strong class="text-white">Sagnik Dey</strong> (Developer of <a href="https://techiesagnik.me" target="_blank" class="text-cyan-400 font-bold hover:underline sfx-click">techiesagnik.me</a>) • Assisted by <span class="text-indigo-400 font-semibold">Gemini 4 argon</span>
+                </div>
             </div>
         </div>
     </footer>
 
     <!-- Floating Quick WhatsApp Button -->
-    <a href="https://wa.me/918918929014" target="_blank" class="fixed bottom-6 right-6 z-50 bg-emerald-600 hover:bg-emerald-500 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-2xl hover:scale-110 transition-all text-2xl border border-emerald-400/40" aria-label="WhatsApp Contact">
+    <a href="https://wa.me/918918929014" target="_blank" class="fixed bottom-6 right-6 z-50 bg-emerald-600 hover:bg-emerald-500 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-2xl hover:scale-110 transition-all text-2xl border border-emerald-400/40 sfx-hover sfx-click" aria-label="WhatsApp Contact">
         <i class="fa-brands fa-whatsapp"></i>
     </a>
 
-    <!-- JavaScript -->
+    <!-- Interactive Scripts + Web Audio SFX Engine -->
     <script>
-        const menuBtn = document.getElementById('menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
+        // ==========================================
+        // 1. WEB AUDIO SYNTHESIZER SFX ENGINE (ON BY DEFAULT)
+        // ==========================================
+        let sfxEnabled = true; // Enabled by default!
+        let audioCtx = null;
+        let lastHoverTime = 0;
 
-        menuBtn.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
+        function getAudioContext() {
+            if (!audioCtx) {
+                const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                if (AudioContextClass) {
+                    audioCtx = new AudioContextClass();
+                }
+            }
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            return audioCtx;
+        }
+
+        // Auto-unlock audio context on first user gesture anywhere on page
+        ['click', 'touchstart', 'keydown', 'pointerdown'].forEach(evt => {
+            window.addEventListener(evt, () => {
+                if (sfxEnabled) getAudioContext();
+            }, { once: true, passive: true });
         });
 
+        // Subtle futuristic UI hover tick
+        function playHoverSFX() {
+            if (!sfxEnabled) return;
+            const nowMs = performance.now();
+            if (nowMs - lastHoverTime < 55) return; // Prevent rapid overlap
+            lastHoverTime = nowMs;
+
+            const ctx = getAudioContext();
+            if (!ctx) return;
+
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(680, ctx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(980, ctx.currentTime + 0.035);
+
+            gain.gain.setValueAtTime(0.025, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.035);
+
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start();
+            osc.stop(ctx.currentTime + 0.04);
+        }
+
+        // Crisp digital click sound
+        function playClickSFX() {
+            if (!sfxEnabled) return;
+            const ctx = getAudioContext();
+            if (!ctx) return;
+
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(520, ctx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(1180, ctx.currentTime + 0.065);
+
+            gain.gain.setValueAtTime(0.06, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.065);
+
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start();
+            osc.stop(ctx.currentTime + 0.07);
+        }
+
+        // Celebration chime for booking appointment
+        function playSuccessSFX() {
+            if (!sfxEnabled) return;
+            const ctx = getAudioContext();
+            if (!ctx) return;
+
+            const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+            notes.forEach((freq, idx) => {
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'triangle';
+                const startTime = ctx.currentTime + idx * 0.075;
+                osc.frequency.setValueAtTime(freq, startTime);
+
+                gain.gain.setValueAtTime(0.08, startTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.28);
+
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start(startTime);
+                osc.stop(startTime + 0.3);
+            });
+        }
+
+        // Toggle SFX ON/OFF Button Handler
+        function toggleSFX() {
+            sfxEnabled = !sfxEnabled;
+            const desktopBtn = document.getElementById('sfx-toggle-desktop');
+            const desktopIcon = document.getElementById('sfx-icon-desktop');
+            const desktopText = document.getElementById('sfx-text-desktop');
+            const mobileBtn = document.getElementById('sfx-toggle-mobile');
+            const mobileText = document.getElementById('sfx-text-mobile');
+
+            if (sfxEnabled) {
+                desktopText.innerText = 'SFX: ON';
+                mobileText.innerText = 'SFX: ON';
+                desktopIcon.className = 'fa-solid fa-volume-high text-cyan-400';
+                desktopBtn.className = 'px-3.5 py-2 rounded-xl border border-cyan-500/50 bg-cyan-950/50 text-cyan-300 hover:bg-cyan-900/60 font-extrabold text-xs tracking-wider transition-all flex items-center space-x-1.5 shadow-sm shadow-cyan-500/10';
+                mobileBtn.className = 'px-3 py-2 rounded-xl border border-cyan-500/50 bg-cyan-950/50 text-cyan-300 font-extrabold text-xs';
+                playClickSFX();
+            } else {
+                desktopText.innerText = 'SFX: OFF';
+                mobileText.innerText = 'SFX: OFF';
+                desktopIcon.className = 'fa-solid fa-volume-xmark text-slate-500';
+                desktopBtn.className = 'px-3.5 py-2 rounded-xl border border-slate-700 bg-slate-900/60 text-slate-400 hover:bg-slate-800 font-extrabold text-xs tracking-wider transition-all flex items-center space-x-1.5';
+                mobileBtn.className = 'px-3 py-2 rounded-xl border border-slate-700 bg-slate-900/60 text-slate-400 font-extrabold text-xs';
+            }
+        }
+
+        // Attach SFX listeners to interactive elements
+        document.querySelectorAll('.sfx-hover').forEach(el => {
+            el.addEventListener('mouseenter', playHoverSFX);
+        });
+        document.querySelectorAll('.sfx-click').forEach(el => {
+            el.addEventListener('click', playClickSFX);
+        });
+
+        // ==========================================
+        // 2. MOBILE MENU & SCROLL PROGRESS BAR
+        // ==========================================
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
         mobileMenu.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                mobileMenu.classList.add('hidden');
+            link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+        });
+
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('scroll-progress').style.width = scrolled + '%';
+        });
+
+        // ==========================================
+        // 3. INTERACTIVE PARTICLE STARFIELD CANVAS
+        // ==========================================
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let mouse = { x: null, y: null };
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.8;
+                this.speedX = (Math.random() - 0.5) * 0.4;
+                this.speedY = (Math.random() - 0.5) * 0.4;
+                this.color = Math.random() > 0.5 ? 'rgba(34, 211, 238, 0.55)' : 'rgba(99, 102, 241, 0.55)';
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x > canvas.width || this.x < 0) this.speedX *= -1;
+                if (this.y > canvas.height || this.y < 0) this.speedY *= -1;
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            const count = window.innerWidth < 768 ? 35 : 70;
+            for (let i = 0; i < count; i++) particles.push(new Particle());
+        }
+        initParticles();
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+                if (mouse.x && mouse.y) {
+                    const dx = particles[i].x - mouse.x;
+                    const dy = particles[i].y - mouse.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 140) {
+                        ctx.strokeStyle = `rgba(34, 211, 238, ${1 - dist / 140})`;
+                        ctx.lineWidth = 0.6;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(mouse.x, mouse.y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        // ==========================================
+        // 4. MOUSE SPOTLIGHT & 3D TILT CARDS
+        // ==========================================
+        document.querySelectorAll('.spotlight-card').forEach(card => {
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+
+                if (card.classList.contains('tilt-card') && window.innerWidth > 768) {
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    const rotateX = ((y - centerY) / centerY) * -4;
+                    const rotateY = ((x - centerX) / centerX) * 4;
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
+                }
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = '';
             });
         });
 
-        // Countdown Timer
+        // ==========================================
+        // 5. INTERACTIVE GRADE SWITCHER (CLASSES 5-10)
+        // ==========================================
+        const gradeData = {
+            junior: {
+                badge: 'CLASSES 5 & 6 • FOUNDATION STAGE',
+                title: 'Building Speed in Arithmetic & Curiosity in Science',
+                desc: 'Transitioning from primary to middle school requires crystal-clear fundamentals in fractions, decimals, basic algebra, geometry, and general science concepts.',
+                items: [
+                    'Mental Maths & Calculation Speed',
+                    'Introduction to Algebra & Geometry',
+                    'Core Physics, Chemistry & Bio Basics',
+                    'Regular Homework & Unit Test Prep'
+                ]
+            },
+            middle: {
+                badge: 'CLASSES 7 & 8 • CORE CONCEPT BUILDER',
+                title: 'Mastering Equations, Mensuration & Scientific Laws',
+                desc: 'Classes 7 and 8 form the direct bridge to high school. We focus on linear equations, geometry proofs, force, light, chemical formulas, and cell biology.',
+                items: [
+                    'Algebraic Identities & Mensuration',
+                    'Physics Numericals & Ray Diagrams',
+                    'Valency, Atoms & Chemical Equations',
+                    'Weekly Chapter-Wise Written Tests'
+                ]
+            },
+            senior: {
+                badge: 'CLASSES 9 & 10 • BOARD EXAM EXCELLENCE',
+                title: 'Intensive Board Syllabus Mastery & Answer Writing',
+                desc: 'Dedicated preparation for Class 9 & 10 school and board examinations with past-paper practice, trigonometry, laws of motion, organic chemistry, and human physiology.',
+                items: [
+                    'Trigonometry, Quadratic & Coordinate Maths',
+                    'Electricity, Light & Motion Numericals',
+                    'Chemical Reactions, Periodic Table & Bio Diagrams',
+                    'Mock Tests & Time-Management Strategy'
+                ]
+            }
+        };
+
+        function switchGrade(level) {
+            playClickSFX();
+            const data = gradeData[level];
+            document.getElementById('grade-badge').innerText = data.badge;
+            document.getElementById('grade-title').innerText = data.title;
+            document.getElementById('grade-desc').innerText = data.desc;
+            const listEl = document.getElementById('grade-list');
+            listEl.innerHTML = data.items.map(item => `
+                <li class="flex items-center space-x-2"><i class="fa-solid fa-circle-check text-emerald-400"></i><span>${item}</span></li>
+            `).join('');
+
+            ['junior', 'middle', 'senior'].forEach(tab => {
+                const btn = document.getElementById('tab-' + tab);
+                if (tab === level) {
+                    btn.className = 'grade-tab bg-gradient-to-r from-cyan-500 to-indigo-600 text-white font-extrabold px-5 py-3 rounded-xl text-xs sm:text-sm shadow-lg transition-all sfx-hover';
+                } else {
+                    btn.className = 'grade-tab bg-slate-900 text-slate-300 border border-slate-700 hover:border-cyan-400 font-bold px-5 py-3 rounded-xl text-xs sm:text-sm transition-all sfx-hover';
+                }
+            });
+        }
+
+        // ==========================================
+        // 6. LIVE NEXT CLASS COUNTDOWN TIMER
+        // ==========================================
         function updateCountdown() {
             const now = new Date();
             const classDays = [1, 3, 6]; 
@@ -588,25 +1213,29 @@
 
             const diff = target - now;
             if (diff > 0) {
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
                 const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
                 const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
 
                 let timeStr = '';
                 if (days > 0) timeStr += `${days}d `;
                 timeStr += `${hours}h ${minutes}m ${seconds}s`;
                 document.getElementById('countdown-clock').innerText = timeStr;
             } else {
-                document.getElementById('countdown-clock').innerText = "Class is starting / Live now!";
+                document.getElementById('countdown-clock').innerText = "Batch Live Now!";
             }
         }
         setInterval(updateCountdown, 1000);
         updateCountdown();
 
-        // Appointment Booking Function with Confetti
+        // ==========================================
+        // 7. PARENT APPOINTMENT BOOKING + CONFETTI + CHIME
+        // ==========================================
         function bookAppointment(event) {
             event.preventDefault();
+            playSuccessSFX();
+
             const parentName = document.getElementById('parent-name').value;
             const studentName = document.getElementById('student-name').value;
             const grade = document.getElementById('student-class').value;
@@ -629,9 +1258,9 @@
 
             if (typeof confetti === 'function') {
                 confetti({
-                    particleCount: 100,
-                    spread: 70,
-                    origin: { y: 0.6 }
+                    particleCount: 110,
+                    spread: 75,
+                    origin: { y: 0.65 }
                 });
             }
         }
