@@ -241,6 +241,9 @@
 </head>
 <body class="text-slate-100 font-sans antialiased selection:bg-cyan-500 selection:text-slate-950 relative">
 
+    <!-- Windows XP Startup Audio Element (with Web Audio Synth Fallback) -->
+    <audio id="winxp-startup-audio" preload="auto" src="https://www.myinstants.com/media/sounds/windows-xp-startup.mp3"></audio>
+
     <!-- Scroll Progress Bar -->
     <div id="scroll-progress"></div>
 
@@ -422,7 +425,7 @@
                         Move your mouse over the underlined words above for interactive cards! Build strong school fundamentals, eliminate exam fear, and achieve top marks through disciplined offline classroom coaching.
                     </p>
 
-                    <!-- Interactive Mini Metric Cards (Updated with New Timings) -->
+                    <!-- Interactive Mini Metric Cards -->
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 pt-2">
                         <div class="spotlight-card p-4 rounded-2xl text-left sfx-card">
                             <div class="w-9 h-9 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 flex items-center justify-center font-bold mb-2">
@@ -722,7 +725,7 @@
         </div>
     </section>
 
-    <!-- Schedule Section (Updated with Sonu Sir's New 2 Batch Timings) -->
+    <!-- Schedule Section -->
     <section id="schedule" class="py-20 relative z-10 border-t border-slate-800/80 bg-slate-950/50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="max-w-3xl mx-auto text-center space-y-3 mb-14">
@@ -948,12 +951,13 @@
         <i class="fa-brands fa-whatsapp"></i>
     </a>
 
-    <!-- Interactive Scripts + Multi-Layered Smooth Web Audio SFX Engine -->
+    <!-- Interactive Scripts + Windows XP Startup Sound & Multi-Profile Smooth SFX Engine -->
     <script>
         // ====================================================
-        // 1. MULTI-PROFILE SMOOTH WEB AUDIO SFX ENGINE
+        // 1. WINDOWS XP STARTUP SOUND + SMOOTH WEB AUDIO SFX ENGINE
         // ====================================================
         let sfxEnabled = true; // Enabled by default
+        let xpStartupPlayed = false;
         let audioCtx = null;
         let lastHoverTime = 0;
         let lastPopupTime = 0;
@@ -971,11 +975,129 @@
             return audioCtx;
         }
 
-        // Unlock Web Audio on first user interaction anywhere on the page
-        ['pointerdown', 'keydown', 'touchstart', 'mousemove'].forEach(evt => {
-            window.addEventListener(evt, () => {
-                if (sfxEnabled) getAudioContext();
-            }, { once: true, passive: true });
+        // Polyphonic Web Audio Synthesizer recreating the iconic Windows XP Startup Melody
+        function playWinXPSynthFallback() {
+            if (!sfxEnabled) return;
+            const ctx = getAudioContext();
+            if (!ctx) return;
+
+            const now = ctx.currentTime;
+
+            // Iconic Windows XP Startup Melody (Brian Eno): Eb5 -> Eb4 -> Bb4 -> Ab4 -> Eb5 -> Bb4
+            const melodyNotes = [
+                { freq: 622.25, start: 0.0,  dur: 0.45, vol: 0.09 }, // Eb5
+                { freq: 311.13, start: 0.26, dur: 0.50, vol: 0.08 }, // Eb4
+                { freq: 466.16, start: 0.52, dur: 0.55, vol: 0.09 }, // Bb4
+                { freq: 415.30, start: 0.85, dur: 0.85, vol: 0.08 }, // Ab4
+                { freq: 622.25, start: 1.45, dur: 0.65, vol: 0.09 }, // Eb5
+                { freq: 466.16, start: 1.85, dur: 1.60, vol: 0.10 }  // Bb4
+            ];
+
+            // Warm Ambient Pad Chords Underneath (Fm11 -> Ebmaj9)
+            const padNotes = [
+                { freq: 174.61, start: 0.0,  dur: 1.5, vol: 0.035 }, // F3
+                { freq: 207.65, start: 0.0,  dur: 1.5, vol: 0.035 }, // Ab3
+                { freq: 261.63, start: 0.0,  dur: 1.5, vol: 0.035 }, // C4
+                { freq: 155.56, start: 1.45, dur: 2.2, vol: 0.04  }, // Eb3
+                { freq: 196.00, start: 1.45, dur: 2.2, vol: 0.04  }, // G3
+                { freq: 233.08, start: 1.45, dur: 2.2, vol: 0.04  }, // Bb3
+                { freq: 293.66, start: 1.45, dur: 2.2, vol: 0.03  }  // D4
+            ];
+
+            melodyNotes.forEach(note => {
+                const osc = ctx.createOscillator();
+                const sub = ctx.createOscillator();
+                const gain = ctx.createGain();
+
+                osc.type = 'sine';
+                sub.type = 'triangle';
+                osc.frequency.setValueAtTime(note.freq, now + note.start);
+                sub.frequency.setValueAtTime(note.freq, now + note.start);
+
+                gain.gain.setValueAtTime(0.0001, now + note.start);
+                gain.gain.linearRampToValueAtTime(note.vol, now + note.start + 0.04);
+                gain.gain.exponentialRampToValueAtTime(0.0005, now + note.start + note.dur);
+
+                osc.connect(gain);
+                sub.connect(gain);
+                gain.connect(ctx.destination);
+
+                osc.start(now + note.start);
+                sub.start(now + note.start);
+                osc.stop(now + note.start + note.dur + 0.05);
+                sub.stop(now + note.start + note.dur + 0.05);
+            });
+
+            padNotes.forEach(pad => {
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(pad.freq, now + pad.start);
+
+                gain.gain.setValueAtTime(0.0001, now + pad.start);
+                gain.gain.linearRampToValueAtTime(pad.vol, now + pad.start + 0.25);
+                gain.gain.exponentialRampToValueAtTime(0.0005, now + pad.start + pad.dur);
+
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+
+                osc.start(now + pad.start);
+                osc.stop(now + pad.start + pad.dur + 0.05);
+            });
+        }
+
+        // Trigger Windows XP Startup Sound on Page Load OR First User Click
+        function triggerWindowsXPStartup() {
+            if (xpStartupPlayed || !sfxEnabled) return;
+            const xpAudio = document.getElementById('winxp-startup-audio');
+
+            if (xpAudio) {
+                xpAudio.volume = 0.65;
+                const playPromise = xpAudio.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        xpStartupPlayed = true;
+                        removeFirstInteractionListeners();
+                    }).catch(() => {
+                        // If external MP3 fails due to network/CORS, but user already interacted, play synth
+                        const ctx = getAudioContext();
+                        if (ctx && ctx.state === 'running') {
+                            xpStartupPlayed = true;
+                            playWinXPSynthFallback();
+                            removeFirstInteractionListeners();
+                        }
+                    });
+                }
+            } else {
+                const ctx = getAudioContext();
+                if (ctx && ctx.state === 'running') {
+                    xpStartupPlayed = true;
+                    playWinXPSynthFallback();
+                    removeFirstInteractionListeners();
+                }
+            }
+        }
+
+        function onFirstUserInteraction() {
+            getAudioContext();
+            triggerWindowsXPStartup();
+        }
+
+        function removeFirstInteractionListeners() {
+            ['click', 'pointerdown', 'touchstart', 'keydown'].forEach(evt => {
+                window.removeEventListener(evt, onFirstUserInteraction);
+            });
+        }
+
+        // 1. Attempt to play Windows XP sound immediately when website loads
+        window.addEventListener('DOMContentLoaded', () => {
+            triggerWindowsXPStartup();
+        });
+
+        // 2. Guaranteed fallback on user's first click/tap/keypress if browser blocked load autoplay
+        ['click', 'pointerdown', 'touchstart', 'keydown'].forEach(evt => {
+            window.addEventListener(evt, onFirstUserInteraction, { passive: true });
         });
 
         // A. Smooth, Airy Harmonic Swell for Underlined Hover Popup Cards
@@ -989,7 +1111,6 @@
             if (!ctx) return;
 
             const now = ctx.currentTime;
-            // Dual sine oscillators creating a silky futuristic fifth interval swell
             const osc1 = ctx.createOscillator();
             const osc2 = ctx.createOscillator();
             const gain = ctx.createGain();
