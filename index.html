@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth dark">
+<html lang="en" class="scroll-smooth dark" style="background-color: #04070d; color-scheme: dark;">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -46,12 +46,68 @@
     }
     </script>
 
+    <!-- Critical Zero-Flash Dark Boot Styles (Prevents any white screen before CSS/JS loads) -->
+    <style>
+        html, body {
+            background-color: #04070d !important;
+            color: #f1f5f9;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        #boot-screen {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at 50% 35%, #0f172a 0%, #04070d 75%);
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1.25rem;
+            transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1), transform 0.65s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.65s;
+            user-select: none;
+        }
+        #boot-screen.boot-hidden {
+            opacity: 0;
+            transform: scale(1.06);
+            visibility: hidden;
+            pointer-events: none;
+        }
+        /* XP Indeterminate / Smooth Progress Bar blocks */
+        @keyframes xpBarGlow {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
+        }
+        .xp-progress-fill {
+            background: linear-gradient(90deg, #06b6d4, #6366f1, #ec4899, #06b6d4);
+            background-size: 200% 100%;
+            animation: xpBarGlow 2s linear infinite;
+            transition: width 0.15s ease-out;
+        }
+        /* Click Ripple Effect for Global Smooth Clicks */
+        .click-ripple {
+            position: fixed;
+            border-radius: 9999px;
+            pointer-events: none;
+            z-index: 9998;
+            border: 1.5px solid rgba(34, 211, 238, 0.65);
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.25) 0%, transparent 70%);
+            transform: translate(-50%, -50%) scale(0.2);
+            animation: rippleExpand 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes rippleExpand {
+            0% { transform: translate(-50%, -50%) scale(0.2); opacity: 0.9; }
+            100% { transform: translate(-50%, -50%) scale(2.4); opacity: 0; }
+        }
+    </style>
+
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
     <!-- Canvas Confetti -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
@@ -62,6 +118,7 @@
                 extend: {
                     fontFamily: {
                         sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
                     },
                     colors: {
                         brand: {
@@ -85,11 +142,6 @@
         }
     </script>
     <style>
-        body {
-            background-color: #04070d;
-            overflow-x: hidden;
-        }
-
         /* Top Scroll Progress Bar */
         #scroll-progress {
             position: fixed;
@@ -141,9 +193,9 @@
         /* Mouse-Tracking Spotlight & 3D Tilt Cards */
         .spotlight-card {
             position: relative;
-            background: rgba(15, 23, 42, 0.75);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(15, 23, 42, 0.78);
+            backdrop-filter: blur(18px);
+            border: 1px solid rgba(255, 255, 255, 0.09);
             overflow: hidden;
             transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.3s ease, box-shadow 0.3s ease;
             transform-style: preserve-3d;
@@ -171,7 +223,23 @@
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
         }
-        .orbit-ring-1 { animation: spinSlow 22s linear infinite; }
+        @keyframes spinReverse {
+            from { transform: rotate(360deg); }
+            to { transform: rotate(0deg); }
+        }
+        .orbit-ring-1 { animation: spinSlow 24s linear infinite; }
+        .orbit-ring-2 { animation: spinReverse 18s linear infinite; }
+
+        /* Holographic Shimmer Border for Sonu Sir Masterpiece Card */
+        @keyframes holoBorder {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        .holo-gradient-ring {
+            background: linear-gradient(135deg, #22d3ee, #6366f1, #ec4899, #f59e0b, #22d3ee);
+            background-size: 300% 300%;
+            animation: holoBorder 6s ease infinite;
+        }
 
         /* Tech-Style Underlined Hover Trigger & Gradient Popup Card */
         .hover-trigger {
@@ -242,7 +310,85 @@
 </head>
 <body class="text-slate-100 font-sans antialiased selection:bg-cyan-500 selection:text-slate-950 relative">
 
-    <!-- Nostalgic Windows XP Audio Elements (with Built-in Web Audio Synth Fallbacks) -->
+    <!-- =================================================================== -->
+    <!-- PRE-LOAD BOOT ANIMATION & CLICK-TO-ENTER WELCOME PORTAL             -->
+    <!-- =================================================================== -->
+    <div id="boot-screen" role="dialog" aria-label="Welcome to Sonu Sir's Tuition Classes">
+        <!-- Decorative Ambient Glows -->
+        <div class="aurora-blob w-80 h-80 bg-cyan-500 rounded-full top-1/4 left-1/4"></div>
+        <div class="aurora-blob w-80 h-80 bg-indigo-600 rounded-full bottom-1/4 right-1/4"></div>
+
+        <div class="relative z-10 w-full max-w-md mx-auto">
+            <!-- PHASE 1: Pre-loader Progress Screen -->
+            <div id="boot-phase-loading" class="bg-slate-900/90 border border-slate-700/80 rounded-3xl p-8 text-center shadow-2xl backdrop-blur-xl space-y-6 transition-all duration-500">
+                <div class="relative w-20 h-20 mx-auto">
+                    <div class="absolute inset-0 rounded-2xl holo-gradient-ring blur-md opacity-70"></div>
+                    <div class="relative w-full h-full rounded-2xl bg-slate-950 border border-cyan-500/40 flex items-center justify-center text-3xl text-cyan-400 font-extrabold shadow-inner">
+                        <i class="fa-solid fa-graduation-cap animate-bounce"></i>
+                    </div>
+                </div>
+
+                <div class="space-y-1.5">
+                    <span class="inline-block text-[10px] font-mono font-bold uppercase tracking-widest text-cyan-400 bg-cyan-950/80 border border-cyan-500/30 px-3 py-0.5 rounded-full">
+                        ADMISSIONS PORTAL • SESSION 2027–28
+                    </span>
+                    <h2 class="text-xl sm:text-2xl font-extrabold text-white tracking-tight">Sonu Sir's Tuition Classes</h2>
+                    <p id="boot-status-text" class="text-xs font-mono text-slate-400">Initializing ICSE & CBSE Academic Modules...</p>
+                </div>
+
+                <!-- Smooth Animated Progress Bar -->
+                <div class="space-y-2">
+                    <div class="w-full h-3 bg-slate-950 rounded-full overflow-hidden border border-slate-800 p-0.5">
+                        <div id="boot-progress-bar" class="h-full xp-progress-fill rounded-full" style="width: 8%;"></div>
+                    </div>
+                    <div class="flex justify-between text-[11px] font-mono text-slate-400">
+                        <span>Maths • Phy • Chem • Bio</span>
+                        <span id="boot-percent" class="text-cyan-400 font-bold">8%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PHASE 2: Interactive Click-to-Enter Welcome Card -->
+            <div id="boot-phase-ready" class="hidden bg-slate-900/95 border-2 border-cyan-500/50 rounded-3xl p-7 sm:p-8 text-center shadow-[0_0_60px_rgba(6,182,212,0.25)] backdrop-blur-2xl space-y-6 cursor-pointer transform transition-all duration-500 hover:border-cyan-400">
+                <!-- Top Status Pill -->
+                <div class="inline-flex items-center space-x-2 bg-emerald-950/90 border border-emerald-500/40 text-emerald-300 px-3.5 py-1 rounded-full text-xs font-extrabold">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                    <span>ADMISSIONS OPEN • SESSION 2027–28</span>
+                </div>
+
+                <!-- Sonu Sir Avatar & Welcome Profile -->
+                <div class="relative w-28 h-28 mx-auto">
+                    <div class="absolute -inset-1.5 rounded-full holo-gradient-ring blur-sm"></div>
+                    <img src="https://sonusirtution.github.io/sonusir.jpg" alt="Sonu Chhetri" class="relative w-full h-full object-cover rounded-full border-2 border-white/40 bg-slate-950" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=400&q=80';">
+                    <div class="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-cyan-500 text-slate-950 flex items-center justify-center text-sm font-black border-2 border-slate-950 shadow-lg" title="Verified Educator">
+                        <i class="fa-solid fa-check"></i>
+                    </div>
+                </div>
+
+                <div class="space-y-1">
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Sonu Sir's Tuition Classes</h2>
+                    <p class="text-cyan-400 text-xs sm:text-sm font-bold">Sonu Chhetri • Class 5 to 10th (ICSE & CBSE)</p>
+                    <p class="text-slate-400 text-xs max-w-xs mx-auto pt-1">
+                        Maths, Physics, Chemistry & Biology • Ethelbari Checkpost, Alipurduar
+                    </p>
+                </div>
+
+                <!-- Launch Button -->
+                <button id="launch-site-btn" type="button" class="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-cyan-500 via-indigo-600 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white font-extrabold text-sm sm:text-base shadow-xl shadow-cyan-500/25 flex items-center justify-center space-x-3 transition-all transform hover:scale-[1.02] active:scale-95 ring-2 ring-white/20">
+                    <i class="fa-solid fa-door-open text-amber-300 text-lg"></i>
+                    <span>Enter Classroom Portal</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+
+                <p class="text-[11px] font-mono text-slate-400 flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-hand-pointer text-cyan-400"></i>
+                    <span>Click anywhere or press <kbd class="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-slate-200">Enter</kbd> to continue</span>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Background Audio Elements -->
     <audio id="winxp-startup-audio" preload="auto" src="https://www.myinstants.com/media/sounds/windows-xp-startup.mp3"></audio>
     <audio id="winxp-ding-audio" preload="auto" src="https://www.myinstants.com/media/sounds/windows-xp-ding.mp3"></audio>
     <audio id="winxp-tada-audio" preload="auto" src="https://www.myinstants.com/media/sounds/tada.mp3"></audio>
@@ -285,7 +431,7 @@
         <nav class="glass-pill rounded-2xl px-4 sm:px-6 h-20 flex items-center justify-between transition-all duration-300">
             <a href="#" class="flex items-center space-x-3.5 group sfx-btn">
                 <div class="relative w-12 h-12 rounded-full bg-gradient-to-tr from-cyan-500 to-indigo-600 p-0.5 shadow-lg shadow-cyan-500/25 group-hover:scale-105 transition-transform">
-                    <img src="sonusir.jpg" alt="Sonu Sir - Sonu Chhetri" class="w-full h-full object-cover rounded-full bg-slate-900" onerror="this.onerror=null; this.src='https://api.iconify.design/lucide:graduation-cap.svg?color=white';">
+                    <img src="https://sonusirtution.github.io/sonusir.jpg" alt="Sonu Sir - Sonu Chhetri" class="w-full h-full object-cover rounded-full bg-slate-900" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=400&q=80';">
                 </div>
                 <div>
                     <span class="text-lg font-extrabold tracking-tight text-white block leading-tight group-hover:text-cyan-400 transition-colors">Sonu Chhetri</span>
@@ -299,29 +445,26 @@
                 <a href="#subjects" class="px-3 py-2 rounded-xl hover:bg-white/5 hover:text-cyan-400 transition-all sfx-btn">Subjects</a>
                 <a href="#curriculum" class="px-3 py-2 rounded-xl hover:bg-white/5 hover:text-cyan-400 transition-all sfx-btn">Classes 5–10</a>
                 <a href="#schedule" class="px-3 py-2 rounded-xl hover:bg-white/5 hover:text-cyan-400 transition-all sfx-btn">Timings</a>
+                <a href="#readme" class="px-3 py-2 rounded-xl hover:bg-white/5 text-amber-300 hover:text-amber-200 transition-all sfx-btn flex items-center space-x-1">
+                    <i class="fa-regular fa-file-lines text-xs"></i>
+                    <span>Terms & Rules</span>
+                </a>
                 <a href="#location" class="px-3 py-2 rounded-xl hover:bg-white/5 hover:text-cyan-400 transition-all sfx-btn">Map</a>
             </div>
 
-            <!-- Action Buttons + SFX Toggle (Enabled by default) -->
+            <!-- Action Buttons -->
             <div class="hidden sm:flex items-center space-x-2.5">
-                <button id="sfx-toggle-desktop" onclick="toggleSFX()" class="px-3.5 py-2 rounded-xl border border-cyan-500/50 bg-cyan-950/50 text-cyan-300 hover:bg-cyan-900/60 font-extrabold text-xs tracking-wider transition-all flex items-center space-x-1.5 shadow-sm shadow-cyan-500/10" title="Windows XP Nostalgia SFX">
-                    <i id="sfx-icon-desktop" class="fa-solid fa-volume-high text-cyan-400"></i>
-                    <span id="sfx-text-desktop">XP SFX: ON</span>
-                </button>
                 <a href="tel:+918918929014" class="px-3.5 py-2 rounded-xl border border-slate-700 bg-slate-900/80 text-slate-200 hover:border-cyan-400 hover:text-cyan-300 font-bold text-xs transition-all sfx-btn">
                     <i class="fa-solid fa-phone mr-1"></i> Call
                 </a>
-                <a href="#appointment" class="inline-flex items-center space-x-2 bg-gradient-to-r from-cyan-500 via-indigo-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-lg shadow-indigo-500/30 transition-all transform hover:-translate-y-0.5 sfx-btn">
-                    <span>2027–28 Admission</span>
+                <a href="#readme" class="inline-flex items-center space-x-2 bg-gradient-to-r from-cyan-500 via-indigo-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-lg shadow-indigo-500/30 transition-all transform hover:-translate-y-0.5 sfx-btn">
+                    <span>Check Eligibility</span>
                     <i class="fa-solid fa-arrow-right text-xs"></i>
                 </a>
             </div>
 
-            <!-- Mobile Hamburger + Mobile SFX Button -->
+            <!-- Mobile Hamburger Button -->
             <div class="flex sm:hidden items-center space-x-2">
-                <button id="sfx-toggle-mobile" onclick="toggleSFX()" class="px-3 py-2 rounded-xl border border-cyan-500/50 bg-cyan-950/50 text-cyan-300 font-extrabold text-xs">
-                    <span id="sfx-text-mobile">XP SFX: ON</span>
-                </button>
                 <button id="menu-btn" class="text-slate-300 focus:outline-none p-2.5 rounded-xl hover:bg-slate-800 border border-slate-700 sfx-btn">
                     <i class="fa-solid fa-bars text-lg"></i>
                 </button>
@@ -335,7 +478,7 @@
             <a href="#curriculum" class="block font-semibold text-slate-200 hover:text-cyan-400 py-1.5 sfx-btn">Class 5–10th (ICSE & CBSE)</a>
             <a href="#schedule" class="block font-semibold text-slate-200 hover:text-cyan-400 py-1.5 sfx-btn">Batch Timings</a>
             <a href="#location" class="block font-semibold text-slate-200 hover:text-cyan-400 py-1.5 sfx-btn">Location & Map</a>
-            <a href="#appointment" class="block font-semibold text-cyan-400 py-1.5 sfx-btn">2027–28 Admission Appointment →</a>
+            <a href="#readme" class="block font-extrabold text-amber-300 hover:text-amber-200 py-1.5 sfx-btn">Check Eligibility & Terms →</a>
             <div class="pt-3 border-t border-slate-800 flex flex-col space-y-2">
                 <a href="tel:+918918929014" class="flex items-center justify-center space-x-2 bg-gradient-to-r from-cyan-500 to-indigo-600 text-white py-3 rounded-xl font-bold shadow-lg sfx-btn">
                     <i class="fa-solid fa-phone"></i>
@@ -354,9 +497,9 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <!-- Quick Feature Bar -->
             <div class="max-w-4xl mx-auto mb-12 glass-pill rounded-2xl p-3 px-6 hidden sm:flex items-center justify-around text-xs md:text-sm font-bold text-slate-200">
-                <a href="#appointment" class="flex items-center space-x-2 hover:text-emerald-400 transition-colors py-1 sfx-btn">
-                    <i class="fa-solid fa-bullhorn text-emerald-400"></i>
-                    <span class="underline decoration-slate-600 underline-offset-4">New Session 2027–28 Open</span>
+                <a href="#readme" class="flex items-center space-x-2 hover:text-emerald-400 transition-colors py-1 sfx-btn">
+                    <i class="fa-solid fa-clipboard-check text-emerald-400"></i>
+                    <span class="underline decoration-slate-600 underline-offset-4">Check 2027–28 Eligibility</span>
                 </a>
                 <span class="text-slate-700">|</span>
                 <a href="#subjects" class="flex items-center space-x-2 hover:text-cyan-400 transition-colors py-1 sfx-btn">
@@ -364,9 +507,9 @@
                     <span class="underline decoration-slate-600 underline-offset-4">Maths, Phy, Chem & Bio</span>
                 </a>
                 <span class="text-slate-700">|</span>
-                <a href="#curriculum" class="flex items-center space-x-2 hover:text-pink-400 transition-colors py-1 sfx-btn">
-                    <i class="fa-solid fa-award text-rose-500"></i>
-                    <span class="underline decoration-slate-600 underline-offset-4">Exclusively ICSE & CBSE</span>
+                <a href="#readme" class="flex items-center space-x-2 hover:text-amber-300 transition-colors py-1 sfx-btn">
+                    <i class="fa-solid fa-file-shield text-cyan-400"></i>
+                    <span class="underline decoration-slate-600 underline-offset-4">Eligibility & Terms (ICSE & CBSE)</span>
                 </a>
             </div>
 
@@ -403,8 +546,8 @@
                                 <span class="inline-block bg-slate-950/70 text-rose-300 text-[10px] font-extrabold px-2.5 py-1 rounded-md uppercase tracking-wider mb-2">Lead Educator</span>
                                 <span class="block text-base font-extrabold text-white mb-1">ICSE & CBSE Mentorship</span>
                                 <span class="block text-xs text-indigo-100 mb-3">Personal offline classroom attention, notebook checking, and direct doubt-clearing by Sonu Sir.</span>
-                                <a href="#appointment" class="inline-flex items-center space-x-1 bg-white text-slate-950 font-extrabold text-xs px-3.5 py-1.5 rounded-full shadow hover:bg-cyan-50 transition-colors sfx-btn">
-                                    <span>Book Meeting</span>
+                                <a href="#readme" class="inline-flex items-center space-x-1 bg-white text-slate-950 font-extrabold text-xs px-3.5 py-1.5 rounded-full shadow hover:bg-cyan-50 transition-colors sfx-btn">
+                                    <span>Check Eligibility</span>
                                     <i class="fa-solid fa-arrow-right text-[10px]"></i>
                                 </a>
                             </span>
@@ -463,9 +606,9 @@
 
                     <!-- Hero CTA Buttons -->
                     <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start space-y-3 sm:space-y-0 sm:space-x-4 pt-4">
-                        <a href="#appointment" class="w-full sm:w-auto bg-gradient-to-r from-cyan-500 via-indigo-600 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white font-extrabold px-8 py-4 rounded-2xl shadow-xl shadow-indigo-500/25 transition-all text-center flex items-center justify-center space-x-2.5 hover:scale-105 sfx-btn">
-                            <i class="fa-solid fa-calendar-check"></i>
-                            <span>Book 2027–28 Parent Appointment</span>
+                        <a href="#readme" class="w-full sm:w-auto bg-gradient-to-r from-cyan-500 via-indigo-600 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white font-extrabold px-8 py-4 rounded-2xl shadow-xl shadow-indigo-500/25 transition-all text-center flex items-center justify-center space-x-2.5 hover:scale-105 sfx-btn">
+                            <i class="fa-solid fa-file-shield"></i>
+                            <span>Check Eligibility for 2027–28 Admission</span>
                         </a>
                         <a href="https://wa.me/918918929014" target="_blank" class="w-full sm:w-auto bg-slate-900/90 hover:bg-emerald-600 text-white font-bold px-7 py-4 rounded-2xl border border-emerald-500/40 shadow-lg transition-all text-center flex items-center justify-center space-x-2 hover:scale-105 sfx-btn">
                             <i class="fa-brands fa-whatsapp text-emerald-400 text-xl"></i>
@@ -474,57 +617,130 @@
                     </div>
                 </div>
 
-                <!-- Right Hero 3D Graphic Portrait Card -->
+                <!-- =============================================================== -->
+                <!-- UPGRADED 3D HOLOGRAPHIC SONU SIR (SONU CHHETRI) MASTERPIECE CARD -->
+                <!-- =============================================================== -->
                 <div class="lg:col-span-5 flex justify-center">
-                    <div class="relative w-full max-w-sm">
-                        <!-- Animated SVG Orbital Rings Behind Card -->
-                        <svg class="absolute -inset-8 w-[calc(100%+4rem)] h-[calc(100%+4rem)] pointer-events-none opacity-40 orbit-ring-1" viewBox="0 0 400 400" fill="none">
-                            <circle cx="200" cy="200" r="185" stroke="url(#grad1)" stroke-width="1.5" stroke-dasharray="12 12"/>
-                            <circle cx="200" cy="15" r="5" fill="#22d3ee"/>
-                            <circle cx="385" cy="200" r="4" fill="#ec4899"/>
+                    <div class="relative w-full max-w-md">
+                        <!-- Dual Counter-Rotating Orbital SVG Rings Behind Card -->
+                        <svg class="absolute -inset-6 w-[calc(100%+3rem)] h-[calc(100%+3rem)] pointer-events-none opacity-45 orbit-ring-1" viewBox="0 0 400 400" fill="none">
+                            <circle cx="200" cy="200" r="190" stroke="url(#gradOuter)" stroke-width="1.5" stroke-dasharray="14 10"/>
+                            <circle cx="200" cy="10" r="5" fill="#22d3ee"/>
+                            <circle cx="390" cy="200" r="4" fill="#ec4899"/>
                             <defs>
-                                <linearGradient id="grad1" x1="0" y1="0" x2="400" y2="400">
+                                <linearGradient id="gradOuter" x1="0" y1="0" x2="400" y2="400">
                                     <stop offset="0%" stop-color="#06b6d4"/>
                                     <stop offset="50%" stop-color="#6366f1"/>
                                     <stop offset="100%" stop-color="#ec4899"/>
                                 </linearGradient>
                             </defs>
                         </svg>
+                        <svg class="absolute -inset-2 w-[calc(100%+1rem)] h-[calc(100%+1rem)] pointer-events-none opacity-30 orbit-ring-2" viewBox="0 0 400 400" fill="none">
+                            <circle cx="200" cy="200" r="172" stroke="#f59e0b" stroke-width="1" stroke-dasharray="6 14"/>
+                            <circle cx="28" cy="200" r="4" fill="#f59e0b"/>
+                        </svg>
 
-                        <div class="spotlight-card tilt-card rounded-3xl p-7 shadow-2xl text-center space-y-5 relative z-10 border border-indigo-500/30 sfx-card">
-                            <div class="inline-flex items-center space-x-1.5 bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 border border-emerald-400/40 text-emerald-300 text-xs font-extrabold px-3.5 py-1 rounded-full uppercase tracking-wider">
-                                <i class="fa-solid fa-certificate text-amber-400"></i>
-                                <span>Session 2027–28 Admissions</span>
-                            </div>
-
-                            <!-- Educator Image with Neon Ring -->
-                            <div class="relative w-40 h-40 mx-auto">
-                                <div class="absolute -inset-1.5 bg-gradient-to-tr from-cyan-400 via-indigo-500 to-rose-500 rounded-3xl blur opacity-70 group-hover:opacity-100 transition"></div>
-                                <div class="relative w-full h-full rounded-3xl overflow-hidden border-2 border-white/20 bg-slate-900">
-                                    <img src="sonusir.jpg" alt="Sonu Chhetri - Sonu Sir Tution" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=400&q=80';">
+                        <!-- Main Masterpiece Educator Card -->
+                        <div class="spotlight-card tilt-card rounded-[2rem] p-1 holo-gradient-ring shadow-[0_25px_70px_-15px_rgba(6,182,212,0.35)] relative z-10 sfx-card">
+                            <div class="bg-slate-950/95 backdrop-blur-2xl rounded-[1.85rem] p-6 sm:p-7 space-y-5">
+                                
+                                <!-- Top Status Bar Inside Card -->
+                                <div class="flex items-center justify-between gap-2">
+                                    <span class="inline-flex items-center space-x-1.5 bg-emerald-500/15 border border-emerald-500/40 text-emerald-300 text-[11px] font-extrabold px-3 py-1 rounded-full">
+                                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                                        <span>2027–28 BATCHES OPEN</span>
+                                    </span>
+                                    <span class="inline-flex items-center space-x-1 bg-amber-500/15 border border-amber-500/40 text-amber-300 text-[11px] font-extrabold px-2.5 py-1 rounded-full">
+                                        <i class="fa-solid fa-star text-amber-400"></i>
+                                        <span>5.0 Rated</span>
+                                    </span>
                                 </div>
-                            </div>
 
-                            <div>
-                                <h3 class="text-2xl font-extrabold text-white">Sonu Chhetri</h3>
-                                <p class="text-cyan-400 font-semibold text-sm mt-0.5">ICSE & CBSE Educator (Class 5–10th)</p>
-                            </div>
+                                <!-- Educator Portrait + Floating Verified Badge -->
+                                <div class="relative flex flex-col items-center">
+                                    <div class="relative w-36 h-36 sm:w-40 sm:h-40 group">
+                                        <div class="absolute -inset-1.5 holo-gradient-ring rounded-3xl blur opacity-75 group-hover:opacity-100 transition duration-500"></div>
+                                        <div class="relative w-full h-full rounded-3xl overflow-hidden border-2 border-white/30 bg-slate-900 shadow-2xl">
+                                            <img src="https://sonusirtution.github.io/sonusir.jpg" alt="Sonu Chhetri - Sonu Sir Tution" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=400&q=80';">
+                                        </div>
+                                        <!-- Verified Check Badge -->
+                                        <div class="absolute -bottom-2 -right-2 bg-gradient-to-r from-cyan-400 to-indigo-500 text-slate-950 font-black text-[10px] px-2.5 py-1 rounded-xl border-2 border-slate-950 shadow-lg flex items-center space-x-1">
+                                            <i class="fa-solid fa-circle-check"></i>
+                                            <span>VERIFIED MENTOR</span>
+                                        </div>
+                                    </div>
 
-                            <p class="text-slate-300 text-sm leading-relaxed">
-                                "Strong basics in Classes 5 to 10 shape a student's entire future. We focus on step-by-step clarity, regular ICSE & CBSE board-level practice, and personal attention."
-                            </p>
+                                    <div class="text-center mt-4">
+                                        <h3 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Sonu Chhetri</h3>
+                                        <p class="text-cyan-400 font-bold text-xs sm:text-sm mt-0.5">Founder & Lead Educator • Sonu Sir's Tuition</p>
+                                        <p class="text-slate-400 text-[11px] font-medium mt-0.5">
+                                            <i class="fa-solid fa-location-dot text-rose-400 mr-1"></i>Near Blossom English School, Ethelbari
+                                        </p>
+                                    </div>
+                                </div>
 
-                            <!-- Graphic Skill Pills -->
-                            <div class="flex flex-wrap justify-center gap-2 pt-1">
-                                <span class="text-xs font-bold bg-slate-900/90 border border-slate-700 px-3 py-1 rounded-lg text-slate-300">📐 Maths</span>
-                                <span class="text-xs font-bold bg-slate-900/90 border border-slate-700 px-3 py-1 rounded-lg text-slate-300">⚡ Physics</span>
-                                <span class="text-xs font-bold bg-slate-900/90 border border-slate-700 px-3 py-1 rounded-lg text-slate-300">🧪 Chemistry</span>
-                                <span class="text-xs font-bold bg-slate-900/90 border border-slate-700 px-3 py-1 rounded-lg text-slate-300">🧬 Biology</span>
-                            </div>
+                                <!-- 4-Column Stat Strip -->
+                                <div class="grid grid-cols-4 gap-1.5 bg-slate-900/90 border border-slate-800 rounded-2xl p-2.5 text-center">
+                                    <div class="p-1">
+                                        <p class="text-xs sm:text-sm font-extrabold text-white">5–10th</p>
+                                        <p class="text-[10px] text-slate-400 font-semibold">Classes</p>
+                                    </div>
+                                    <div class="p-1 border-l border-slate-800">
+                                        <p class="text-xs sm:text-sm font-extrabold text-amber-300">ICSE/CBSE</p>
+                                        <p class="text-[10px] text-slate-400 font-semibold">Boards</p>
+                                    </div>
+                                    <div class="p-1 border-l border-slate-800">
+                                        <p class="text-xs sm:text-sm font-extrabold text-cyan-400">Maths+PCB</p>
+                                        <p class="text-[10px] text-slate-400 font-semibold">4 Subjects</p>
+                                    </div>
+                                    <div class="p-1 border-l border-slate-800">
+                                        <p class="text-xs sm:text-sm font-extrabold text-emerald-400">Offline</p>
+                                        <p class="text-[10px] text-slate-400 font-semibold">1-on-1 Care</p>
+                                    </div>
+                                </div>
 
-                            <div class="pt-3 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400 font-semibold">
-                                <span class="flex items-center space-x-1.5"><i class="fa-solid fa-graduation-cap text-amber-400"></i><span>ICSE & CBSE Only</span></span>
-                                <a href="#appointment" class="text-cyan-400 hover:underline flex items-center space-x-1 sfx-btn"><span>Book Slot</span><i class="fa-solid fa-arrow-right"></i></a>
+                                <!-- Interactive Subject Mastery Pills (Click or Hover to preview inside card) -->
+                                <div class="space-y-2">
+                                    <div class="flex items-center justify-between text-[11px] font-bold text-slate-400 px-1">
+                                        <span>CORE SPECIALIZATIONS</span>
+                                        <span id="sonu-card-subject-hint" class="text-cyan-400">Tap a subject</span>
+                                    </div>
+                                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                                        <button type="button" onclick="previewCardSubject('maths')" class="sfx-btn bg-cyan-950/60 hover:bg-cyan-500/20 border border-cyan-500/40 text-cyan-300 rounded-xl py-2 px-2 text-xs font-extrabold flex items-center justify-center space-x-1 transition-all">
+                                            <span>📐</span><span>Maths</span>
+                                        </button>
+                                        <button type="button" onclick="previewCardSubject('physics')" class="sfx-btn bg-purple-950/60 hover:bg-purple-500/20 border border-purple-500/40 text-purple-300 rounded-xl py-2 px-2 text-xs font-extrabold flex items-center justify-center space-x-1 transition-all">
+                                            <span>⚡</span><span>Physics</span>
+                                        </button>
+                                        <button type="button" onclick="previewCardSubject('chemistry')" class="sfx-btn bg-emerald-950/60 hover:bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 rounded-xl py-2 px-2 text-xs font-extrabold flex items-center justify-center space-x-1 transition-all">
+                                            <span>🧪</span><span>Chem</span>
+                                        </button>
+                                        <button type="button" onclick="previewCardSubject('biology')" class="sfx-btn bg-amber-950/60 hover:bg-amber-500/20 border border-amber-500/40 text-amber-300 rounded-xl py-2 px-2 text-xs font-extrabold flex items-center justify-center space-x-1 transition-all">
+                                            <span>🧬</span><span>Biology</span>
+                                        </button>
+                                    </div>
+                                    <!-- Dynamic Quote / Subject Preview Box -->
+                                    <div id="sonu-card-preview-box" class="bg-slate-900/80 border border-slate-800/90 rounded-xl p-3 text-xs text-slate-300 leading-relaxed italic">
+                                        "Strong basics in Classes 5 to 10 shape a student's entire future. We focus on step-by-step clarity, regular ICSE & CBSE board-level practice, and personal copy-checking."
+                                    </div>
+                                </div>
+
+                                <!-- Quick Action Dock Inside Card -->
+                                <div class="grid grid-cols-3 gap-2 pt-1">
+                                    <a href="https://wa.me/918918929014" target="_blank" class="sfx-btn bg-emerald-600/20 hover:bg-emerald-600 border border-emerald-500/40 text-emerald-300 hover:text-white font-extrabold py-2.5 px-2 rounded-xl text-xs flex items-center justify-center space-x-1.5 transition-all">
+                                        <i class="fa-brands fa-whatsapp text-sm"></i>
+                                        <span>WhatsApp</span>
+                                    </a>
+                                    <a href="tel:+918918929014" class="sfx-btn bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 font-extrabold py-2.5 px-2 rounded-xl text-xs flex items-center justify-center space-x-1.5 transition-all">
+                                        <i class="fa-solid fa-phone text-cyan-400 text-xs"></i>
+                                        <span>Call Sir</span>
+                                    </a>
+                                    <a href="#readme" class="sfx-btn bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white font-extrabold py-2.5 px-2 rounded-xl text-xs flex items-center justify-center space-x-1 transition-all shadow-md">
+                                        <span>Eligibility</span>
+                                        <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                                    </a>
+                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -552,8 +768,8 @@
                     <p class="text-slate-400 text-sm leading-relaxed mb-6">
                         Every theorem, numerical problem, and scientific process in Maths, Physics, Chemistry, and Biology is explained from the ground up.
                     </p>
-                    <a href="#appointment" class="text-xs font-extrabold uppercase tracking-wider text-cyan-400 flex items-center space-x-1.5 group-hover:translate-x-1 transition-transform sfx-btn">
-                        <span>ENQUIRE FOR 2027–28</span>
+                    <a href="#readme" class="text-xs font-extrabold uppercase tracking-wider text-cyan-400 flex items-center space-x-1.5 group-hover:translate-x-1 transition-transform sfx-btn">
+                        <span>CHECK ELIGIBILITY</span>
                         <i class="fa-solid fa-arrow-right"></i>
                     </a>
                 </div>
@@ -567,8 +783,8 @@
                     <p class="text-slate-400 text-sm leading-relaxed mb-6">
                         Offline face-to-face batches allow Sonu Sir to check every student's notebook personally, spot mistakes early, and clear doubts on the spot.
                     </p>
-                    <a href="#appointment" class="text-xs font-extrabold uppercase tracking-wider text-rose-400 flex items-center space-x-1.5 group-hover:translate-x-1 transition-transform sfx-btn">
-                        <span>BOOK MEETING</span>
+                    <a href="#readme" class="text-xs font-extrabold uppercase tracking-wider text-rose-400 flex items-center space-x-1.5 group-hover:translate-x-1 transition-transform sfx-btn">
+                        <span>CHECK ELIGIBILITY & TERMS</span>
                         <i class="fa-solid fa-arrow-right"></i>
                     </a>
                 </div>
@@ -615,8 +831,8 @@
                             Arithmetic, Algebra, Geometry, Mensuration, Trigonometry & Statistics with intensive problem-solving practice for Class 5 to 10th.
                         </p>
                     </div>
-                    <a href="#appointment" class="pt-4 border-t border-slate-800 flex items-center justify-between text-xs font-extrabold text-cyan-400 sfx-btn">
-                        <span>2027–28 ADMISSION</span>
+                    <a href="#readme" class="pt-4 border-t border-slate-800 flex items-center justify-between text-xs font-extrabold text-cyan-400 sfx-btn">
+                        <span>CHECK ELIGIBILITY</span>
                         <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
                     </a>
                 </div>
@@ -635,8 +851,8 @@
                             Laws of Motion, Force, Work & Energy, Light Ray Diagrams, Current Electricity & Numerical Derivations for Class 5 to 10th.
                         </p>
                     </div>
-                    <a href="#appointment" class="pt-4 border-t border-slate-800 flex items-center justify-between text-xs font-extrabold text-purple-400 sfx-btn">
-                        <span>2027–28 ADMISSION</span>
+                    <a href="#readme" class="pt-4 border-t border-slate-800 flex items-center justify-between text-xs font-extrabold text-purple-400 sfx-btn">
+                        <span>CHECK ELIGIBILITY</span>
                         <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
                     </a>
                 </div>
@@ -655,8 +871,8 @@
                             Atomic Structure, Periodic Table, Chemical Bonding, Balancing Equations, Acids, Bases & Organic Basics for Class 5 to 10th.
                         </p>
                     </div>
-                    <a href="#appointment" class="pt-4 border-t border-slate-800 flex items-center justify-between text-xs font-extrabold text-emerald-400 sfx-btn">
-                        <span>2027–28 ADMISSION</span>
+                    <a href="#readme" class="pt-4 border-t border-slate-800 flex items-center justify-between text-xs font-extrabold text-emerald-400 sfx-btn">
+                        <span>CHECK ELIGIBILITY</span>
                         <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
                     </a>
                 </div>
@@ -675,8 +891,8 @@
                             Cell Division, Life Processes, Human Anatomy, Plant Physiology, Genetics & Neat Diagram Practice for Class 5 to 10th.
                         </p>
                     </div>
-                    <a href="#appointment" class="pt-4 border-t border-slate-800 flex items-center justify-between text-xs font-extrabold text-amber-400 sfx-btn">
-                        <span>2027–28 ADMISSION</span>
+                    <a href="#readme" class="pt-4 border-t border-slate-800 flex items-center justify-between text-xs font-extrabold text-amber-400 sfx-btn">
+                        <span>CHECK ELIGIBILITY</span>
                         <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
                     </a>
                 </div>
@@ -727,8 +943,8 @@
                             <i class="fa-solid fa-book-open-reader"></i>
                         </div>
                         <p class="text-xs text-slate-400">Enrolling for the 2027–28 Session?</p>
-                        <a href="#appointment" class="inline-block w-full bg-white text-slate-950 hover:bg-cyan-50 font-extrabold py-3 px-4 rounded-xl text-xs shadow transition-all sfx-btn">
-                            Schedule Parent Meeting →
+                        <a href="#readme" class="inline-block w-full bg-white text-slate-950 hover:bg-cyan-50 font-extrabold py-3 px-4 rounded-xl text-xs shadow transition-all sfx-btn">
+                            Check Eligibility & Rules →
                         </a>
                     </div>
                 </div>
@@ -812,9 +1028,180 @@
                     </div>
                 </div>
 
-                <a href="#appointment" class="block w-full text-center bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white font-extrabold py-4 rounded-xl transition-all shadow-lg shadow-indigo-500/25 sfx-btn">
-                    Book 2027–28 Admission Appointment with Sonu Sir →
+                <a href="#readme" class="block w-full text-center bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white font-extrabold py-4 rounded-xl transition-all shadow-lg shadow-indigo-500/25 sfx-btn">
+                    Check Eligibility Before Booking Appointment →
                 </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- NEW SECTION: README.md — TERMS, ELIGIBILITY & CLASSROOM GUIDELINES     -->
+    <!-- ===================================================================== -->
+    <section id="readme" class="py-20 relative z-10 border-t border-slate-800/80 scroll-sfx-section">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="max-w-3xl mx-auto text-center space-y-3 mb-12">
+                <span class="inline-flex items-center space-x-2 text-xs font-mono font-bold uppercase tracking-widest text-amber-300 bg-amber-950/60 border border-amber-500/30 px-3.5 py-1 rounded-full">
+                    <i class="fa-solid fa-book-bookmark"></i>
+                    <span>OFFICIAL DOCUMENTATION • SESSION 2027–28</span>
+                </span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white">README.md — Eligibility & Classroom Terms</h2>
+                <p class="text-slate-400 text-sm sm:text-base">Please read the student eligibility criteria, prior absence notification policy, and admission rules first before booking a 2027–28 appointment.</p>
+            </div>
+
+            <!-- Developer-Style README Window -->
+            <div class="spotlight-card rounded-3xl border border-slate-700/90 shadow-2xl overflow-hidden sfx-card">
+                <!-- Window Top Bar -->
+                <div class="bg-slate-900/95 border-b border-slate-800 px-5 py-3.5 flex flex-wrap items-center justify-between gap-3">
+                    <div class="flex items-center space-x-2">
+                        <span class="w-3 h-3 rounded-full bg-rose-500"></span>
+                        <span class="w-3 h-3 rounded-full bg-amber-400"></span>
+                        <span class="w-3 h-3 rounded-full bg-emerald-400"></span>
+                        <span class="ml-2 font-mono text-xs sm:text-sm font-bold text-slate-200 flex items-center space-x-1.5">
+                            <i class="fa-brands fa-markdown text-cyan-400"></i>
+                            <span>sonu-sir-tuition / README_ELIGIBILITY_2027_28.md</span>
+                        </span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <span class="text-[11px] font-mono bg-emerald-950 text-emerald-300 border border-emerald-500/30 px-2.5 py-0.5 rounded-md">Mandatory Read</span>
+                        <span class="text-[11px] font-mono bg-slate-800 text-slate-300 px-2.5 py-0.5 rounded-md">ICSE & CBSE</span>
+                    </div>
+                </div>
+
+                <!-- Interactive Filter Tabs Inside README -->
+                <div class="bg-slate-950/80 border-b border-slate-800/80 px-5 py-3 flex flex-wrap gap-2">
+                    <button type="button" onclick="filterReadme('all')" id="readme-tab-all" class="sfx-btn px-3.5 py-1.5 rounded-lg text-xs font-mono font-bold bg-cyan-500 text-slate-950 transition-all">
+                        All Rules (4)
+                    </button>
+                    <button type="button" onclick="filterReadme('eligibility')" id="readme-tab-eligibility" class="sfx-btn px-3.5 py-1.5 rounded-lg text-xs font-mono font-bold bg-slate-900 text-slate-300 border border-slate-800 hover:border-cyan-500/40 transition-all">
+                        01. Eligibility Criteria
+                    </button>
+                    <button type="button" onclick="filterReadme('attendance')" id="readme-tab-attendance" class="sfx-btn px-3.5 py-1.5 rounded-lg text-xs font-mono font-bold bg-slate-900 text-slate-300 border border-slate-800 hover:border-cyan-500/40 transition-all">
+                        02. Attendance & Prior Notice
+                    </button>
+                    <button type="button" onclick="filterReadme('tests')" id="readme-tab-tests" class="sfx-btn px-3.5 py-1.5 rounded-lg text-xs font-mono font-bold bg-slate-900 text-slate-300 border border-slate-800 hover:border-cyan-500/40 transition-all">
+                        03. Homework & Tests
+                    </button>
+                    <button type="button" onclick="filterReadme('admission')" id="readme-tab-admission" class="sfx-btn px-3.5 py-1.5 rounded-lg text-xs font-mono font-bold bg-slate-900 text-slate-300 border border-slate-800 hover:border-cyan-500/40 transition-all">
+                        04. Admission Protocol
+                    </button>
+                </div>
+
+                <!-- README Content Grid -->
+                <div class="p-6 sm:p-8 space-y-6 bg-slate-950/60">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        
+                        <!-- Block 1: Eligibility -->
+                        <div data-readme-cat="eligibility" class="readme-item bg-slate-900/90 border border-cyan-500/30 rounded-2xl p-6 space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span class="font-mono text-xs font-bold text-cyan-400 bg-cyan-950/80 px-2.5 py-1 rounded border border-cyan-500/30">#01 ELIGIBILITY</span>
+                                <i class="fa-solid fa-user-check text-cyan-400 text-lg"></i>
+                            </div>
+                            <h3 class="text-lg font-extrabold text-white">Who Can Apply (Session 2027–28)</h3>
+                            <ul class="space-y-2 text-xs sm:text-sm text-slate-300">
+                                <li class="flex items-start space-x-2">
+                                    <i class="fa-solid fa-angle-right text-cyan-400 mt-1"></i>
+                                    <span><strong>Eligible Classes:</strong> Students entering <strong>Class 5, 6, 7, 8, 9, or 10th</strong> for the 2027–28 academic session.</span>
+                                </li>
+                                <li class="flex items-start space-x-2">
+                                    <i class="fa-solid fa-angle-right text-cyan-400 mt-1"></i>
+                                    <span><strong>Supported Boards:</strong> Exclusively for <strong>ICSE</strong> and <strong>CBSE</strong> board curriculums (English Medium).</span>
+                                </li>
+                                <li class="flex items-start space-x-2">
+                                    <i class="fa-solid fa-angle-right text-cyan-400 mt-1"></i>
+                                    <span><strong>Subject Package:</strong> Focused coaching in <strong>Mathematics, Physics, Chemistry, and Biology</strong>.</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Block 2: Attendance & Prior Information Policy -->
+                        <div data-readme-cat="attendance" class="readme-item bg-slate-900/90 border border-purple-500/30 rounded-2xl p-6 space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span class="font-mono text-xs font-bold text-purple-400 bg-purple-950/80 px-2.5 py-1 rounded border border-purple-500/30">#02 PRIOR NOTICE & DISCIPLINE</span>
+                                <i class="fa-solid fa-user-clock text-purple-400 text-lg"></i>
+                            </div>
+                            <h3 class="text-lg font-extrabold text-white">Attendance & Prior Information Policy</h3>
+                            <ul class="space-y-2 text-xs sm:text-sm text-slate-300">
+                                <li class="flex items-start space-x-2">
+                                    <i class="fa-solid fa-angle-right text-purple-400 mt-1"></i>
+                                    <span><strong>Prior Information Required for Absence:</strong> Regular classroom attendance is essential. If a student has to miss a class due to illness or an urgent family reason, prior information from a parent/guardian via phone call or WhatsApp to Sonu Sir is mandatory.</span>
+                                </li>
+                                <li class="flex items-start space-x-2">
+                                    <i class="fa-solid fa-angle-right text-purple-400 mt-1"></i>
+                                    <span><strong>Punctuality:</strong> Students must report 5 minutes before their allotted slot (<strong>2:45 PM</strong> or <strong>4:15 PM</strong>).</span>
+                                </li>
+                                <li class="flex items-start space-x-2">
+                                    <i class="fa-solid fa-angle-right text-purple-400 mt-1"></i>
+                                    <span><strong>Separate Notebooks:</strong> Dedicated classwork & homework notebooks for Maths, Physics, Chemistry & Biology are compulsory.</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Block 3: Homework & Tests -->
+                        <div data-readme-cat="tests" class="readme-item bg-slate-900/90 border border-emerald-500/30 rounded-2xl p-6 space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span class="font-mono text-xs font-bold text-emerald-400 bg-emerald-950/80 px-2.5 py-1 rounded border border-emerald-500/30">#03 EVALUATION</span>
+                                <i class="fa-solid fa-file-signature text-emerald-400 text-lg"></i>
+                            </div>
+                            <h3 class="text-lg font-extrabold text-white">Homework & Chapter-Test Terms</h3>
+                            <ul class="space-y-2 text-xs sm:text-sm text-slate-300">
+                                <li class="flex items-start space-x-2">
+                                    <i class="fa-solid fa-angle-right text-emerald-400 mt-1"></i>
+                                    <span><strong>Daily Practice:</strong> Assigned numerical problems, derivations, and diagrams must be completed before the next class.</span>
+                                </li>
+                                <li class="flex items-start space-x-2">
+                                    <i class="fa-solid fa-angle-right text-emerald-400 mt-1"></i>
+                                    <span><strong>Mandatory Chapter Tests:</strong> No student is exempted from weekly/bi-weekly ICSE & CBSE pattern written assessments.</span>
+                                </li>
+                                <li class="flex items-start space-x-2">
+                                    <i class="fa-solid fa-angle-right text-emerald-400 mt-1"></i>
+                                    <span><strong>Parent Feedback:</strong> Test marks and notebook remarks are shared directly with parents/guardians.</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Block 4: Admission & Parent Meeting Protocol -->
+                        <div data-readme-cat="admission" class="readme-item bg-slate-900/90 border border-amber-500/30 rounded-2xl p-6 space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span class="font-mono text-xs font-bold text-amber-400 bg-amber-950/80 px-2.5 py-1 rounded border border-amber-500/30">#04 ADMISSION</span>
+                                <i class="fa-solid fa-handshake-simple text-amber-400 text-lg"></i>
+                            </div>
+                            <h3 class="text-lg font-extrabold text-white">Parent Meeting & Batch Allocation</h3>
+                            <ul class="space-y-2 text-xs sm:text-sm text-slate-300">
+                                <li class="flex items-start space-x-2">
+                                    <i class="fa-solid fa-angle-right text-amber-400 mt-1"></i>
+                                    <span><strong>Compulsory Parent Meeting:</strong> Admission is finalized only after an in-person discussion between the parent, student, and Sonu Sir.</span>
+                                </li>
+                                <li class="flex items-start space-x-2">
+                                    <i class="fa-solid fa-angle-right text-amber-400 mt-1"></i>
+                                    <span><strong>Limited Batch Seats:</strong> To preserve 1-on-1 attention, each afternoon batch has a strict seat cap.</span>
+                                </li>
+                                <li class="flex items-start space-x-2">
+                                    <i class="fa-solid fa-angle-right text-amber-400 mt-1"></i>
+                                    <span><strong>Fee & Schedule Discipline:</strong> Monthly tuition fees are payable within the first 10 days of each month.</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+
+                    <!-- Interactive README Acknowledgment Action Bar -->
+                    <div class="bg-gradient-to-r from-slate-900 via-indigo-950/60 to-slate-900 border border-indigo-500/40 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div class="flex items-center space-x-3 text-center sm:text-left">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 flex items-center justify-center text-lg flex-shrink-0 hidden sm:flex">
+                                <i class="fa-solid fa-shield-halved"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-extrabold text-white">Have you read the Eligibility & Prior Information rules?</p>
+                                <p class="text-xs text-slate-400">Click below to confirm eligibility and unlock the 2027–28 Parent Appointment Form.</p>
+                            </div>
+                        </div>
+                        <button type="button" onclick="acknowledgeTermsAndScroll()" class="w-full sm:w-auto bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 font-extrabold text-xs sm:text-sm px-6 py-3.5 rounded-xl shadow-lg transition-all flex items-center justify-center space-x-2 sfx-btn flex-shrink-0">
+                            <i class="fa-solid fa-circle-check"></i>
+                            <span>I Have Read & Accept Eligibility — Proceed to Book Appointment ↓</span>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -944,6 +1331,15 @@
                             <input type="date" id="appointment-date" required class="w-full px-4 py-3 rounded-xl border border-slate-700 bg-slate-900/90 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500">
                         </div>
                     </div>
+
+                    <!-- Eligibility & Terms Checkbox -->
+                    <label class="flex items-start space-x-3 bg-slate-900/80 border border-slate-800 p-3.5 rounded-xl cursor-pointer hover:border-cyan-500/40 transition-colors">
+                        <input type="checkbox" id="terms-checkbox" required class="mt-1 w-4 h-4 rounded accent-cyan-500">
+                        <span class="text-xs text-slate-300 leading-relaxed">
+                            I confirm the student is entering <strong>Class 5–10 (ICSE/CBSE)</strong> and agree to the <a href="#readme" class="text-cyan-400 underline font-semibold">README Eligibility & Mandatory Prior Information for Absence Terms</a>.
+                        </span>
+                    </label>
+
                     <button type="submit" class="w-full bg-gradient-to-r from-cyan-500 via-indigo-600 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white font-extrabold py-4 rounded-xl shadow-lg shadow-indigo-500/30 transition-all flex items-center justify-center space-x-2 hover:scale-[1.01] sfx-btn">
                         <i class="fa-solid fa-calendar-check"></i>
                         <span>Confirm 2027–28 Appointment & Send to Sonu Sir</span>
@@ -987,10 +1383,11 @@
                         <p class="text-xs text-slate-400">Sonu Chhetri • Class 5–10th (ICSE & CBSE) • Maths, Phy, Chem, Bio</p>
                     </div>
                 </div>
-                <div class="flex items-center space-x-6 text-sm text-slate-400 font-medium">
+                <div class="flex flex-wrap items-center justify-center gap-6 text-sm text-slate-400 font-medium">
                     <a href="#about" class="hover:text-cyan-400 transition-colors sfx-btn">About</a>
                     <a href="#subjects" class="hover:text-cyan-400 transition-colors sfx-btn">Subjects</a>
                     <a href="#schedule" class="hover:text-cyan-400 transition-colors sfx-btn">Timings</a>
+                    <a href="#readme" class="hover:text-amber-300 transition-colors sfx-btn">Terms & Eligibility</a>
                     <a href="https://share.google/VNcF2TF5WQJQnlJAo" target="_blank" class="hover:text-cyan-400 transition-colors sfx-btn">Google Map</a>
                 </div>
             </div>
@@ -1009,30 +1406,73 @@
         <i class="fa-brands fa-whatsapp"></i>
     </a>
 
-    <!-- Nostalgic Windows XP Audio Engine (Startup, Balloon Pop, Explorer Click, Ding & Tada) -->
+    <!-- =================================================================== -->
+    <!-- PORTAL BOOT ENGINE & INTERACTIVE LOGIC                              -->
+    <!-- =================================================================== -->
     <script>
-        // =========================================================================
-        // 1. WINDOWS XP NOSTALGIA SFX ENGINE (ON BY DEFAULT)
-        // =========================================================================
-        let sfxEnabled = true; // Enabled by default
+        let bootCompleted = false;
         let xpStartupPlayed = false;
+        const sfxEnabled = true;
         let audioCtx = null;
         let masterCompressor = null;
+        let warmMasterFilter = null;
         let lastHoverTime = 0;
         let lastPopupTime = 0;
         let lastScrollChimeTime = 0;
+        let lastGlobalClickTime = 0;
+
+        // Run smooth loading bar from 8% -> 100%, then reveal the Welcome Portal Card
+        (function runPreloaderAnimation() {
+            const progressBar = document.getElementById('boot-progress-bar');
+            const percentText = document.getElementById('boot-percent');
+            const statusText = document.getElementById('boot-status-text');
+            const loadingPhase = document.getElementById('boot-phase-loading');
+            const readyPhase = document.getElementById('boot-phase-ready');
+
+            const steps = [
+                { pct: 28, msg: 'Loading ICSE & CBSE Mathematics & PCB Modules...', delay: 220 },
+                { pct: 58, msg: 'Syncing 2027–28 Batch Timings & Ethelbari Map...', delay: 480 },
+                { pct: 86, msg: 'Preparing Interactive 2027–28 Classroom Portal...', delay: 740 },
+                { pct: 100, msg: 'Portal Ready! Welcome to Session 2027–28...', delay: 1000 }
+            ];
+
+            steps.forEach(step => {
+                setTimeout(() => {
+                    if (progressBar) progressBar.style.width = step.pct + '%';
+                    if (percentText) percentText.innerText = step.pct + '%';
+                    if (statusText) statusText.innerText = step.msg;
+                }, step.delay);
+            });
+
+            setTimeout(() => {
+                if (loadingPhase && readyPhase) {
+                    loadingPhase.classList.add('hidden');
+                    readyPhase.classList.remove('hidden');
+                }
+            }, 1150);
+        })();
 
         function getAudioContext() {
             if (!audioCtx) {
                 const AudioContextClass = window.AudioContext || window.webkitAudioContext;
                 if (AudioContextClass) {
                     audioCtx = new AudioContextClass();
+
+                    // Master dynamics compressor for silky, balanced output
                     masterCompressor = audioCtx.createDynamicsCompressor();
-                    masterCompressor.threshold.setValueAtTime(-16, audioCtx.currentTime);
-                    masterCompressor.knee.setValueAtTime(20, audioCtx.currentTime);
-                    masterCompressor.ratio.setValueAtTime(4, audioCtx.currentTime);
-                    masterCompressor.attack.setValueAtTime(0.003, audioCtx.currentTime);
-                    masterCompressor.release.setValueAtTime(0.15, audioCtx.currentTime);
+                    masterCompressor.threshold.setValueAtTime(-18, audioCtx.currentTime);
+                    masterCompressor.knee.setValueAtTime(24, audioCtx.currentTime);
+                    masterCompressor.ratio.setValueAtTime(3.5, audioCtx.currentTime);
+                    masterCompressor.attack.setValueAtTime(0.005, audioCtx.currentTime);
+                    masterCompressor.release.setValueAtTime(0.20, audioCtx.currentTime);
+
+                    // Global warm low-pass filter so NO sound is ever harsh or piercing
+                    warmMasterFilter = audioCtx.createBiquadFilter();
+                    warmMasterFilter.type = 'lowpass';
+                    warmMasterFilter.frequency.setValueAtTime(2600, audioCtx.currentTime);
+                    warmMasterFilter.Q.setValueAtTime(0.7, audioCtx.currentTime);
+
+                    warmMasterFilter.connect(masterCompressor);
                     masterCompressor.connect(audioCtx.destination);
                 }
             }
@@ -1042,35 +1482,30 @@
             return audioCtx;
         }
 
-        // 1A. Windows XP Startup Melody Synth Fallback (Brian Eno Eb5 -> Eb4 -> Bb4 -> Ab4 -> Eb5 -> Bb4)
-        function playWinXPSynthFallback() {
+        // Lush, Smooth Polyphonic Windows XP Startup Melody Synth (Brian Eno Eb-Major Logon Chord)
+        function playWinXPSynthStartup() {
             if (!sfxEnabled) return false;
             const ctx = getAudioContext();
-            if (!ctx || ctx.state !== 'running') return false;
+            if (!ctx) return false;
 
             const now = ctx.currentTime;
-            const filter = ctx.createBiquadFilter();
-            filter.type = 'lowpass';
-            filter.frequency.setValueAtTime(2400, now);
-            filter.connect(masterCompressor);
-
             const melodyNotes = [
-                { freq: 622.25, start: 0.0,  dur: 0.45, vol: 0.09 }, // Eb5
-                { freq: 311.13, start: 0.26, dur: 0.50, vol: 0.08 }, // Eb4
-                { freq: 466.16, start: 0.52, dur: 0.55, vol: 0.09 }, // Bb4
-                { freq: 415.30, start: 0.85, dur: 0.85, vol: 0.08 }, // Ab4
-                { freq: 622.25, start: 1.45, dur: 0.65, vol: 0.09 }, // Eb5
-                { freq: 466.16, start: 1.85, dur: 1.60, vol: 0.10 }  // Bb4
+                { freq: 622.25, start: 0.00, dur: 0.55, vol: 0.095 }, // Eb5
+                { freq: 311.13, start: 0.25, dur: 0.60, vol: 0.085 }, // Eb4
+                { freq: 466.16, start: 0.50, dur: 0.65, vol: 0.095 }, // Bb4
+                { freq: 415.30, start: 0.82, dur: 0.95, vol: 0.085 }, // Ab4
+                { freq: 622.25, start: 1.42, dur: 0.75, vol: 0.095 }, // Eb5
+                { freq: 466.16, start: 1.82, dur: 1.75, vol: 0.105 }  // Bb4
             ];
 
-            const padNotes = [
-                { freq: 174.61, start: 0.0,  dur: 1.5, vol: 0.035 }, // F3
-                { freq: 207.65, start: 0.0,  dur: 1.5, vol: 0.035 }, // Ab3
-                { freq: 261.63, start: 0.0,  dur: 1.5, vol: 0.035 }, // C4
-                { freq: 155.56, start: 1.45, dur: 2.2, vol: 0.04  }, // Eb3
-                { freq: 196.00, start: 1.45, dur: 2.2, vol: 0.04  }, // G3
-                { freq: 233.08, start: 1.45, dur: 2.2, vol: 0.04  }, // Bb3
-                { freq: 293.66, start: 1.45, dur: 2.2, vol: 0.03  }  // D4
+            const warmPads = [
+                { freq: 174.61, start: 0.00, dur: 1.5, vol: 0.04 }, // F3
+                { freq: 207.65, start: 0.00, dur: 1.5, vol: 0.04 }, // Ab3
+                { freq: 261.63, start: 0.00, dur: 1.5, vol: 0.04 }, // C4
+                { freq: 155.56, start: 1.42, dur: 2.3, vol: 0.045 }, // Eb3
+                { freq: 196.00, start: 1.42, dur: 2.3, vol: 0.045 }, // G3
+                { freq: 233.08, start: 1.42, dur: 2.3, vol: 0.045 }, // Bb3
+                { freq: 293.66, start: 1.42, dur: 2.3, vol: 0.035 }  // D4
             ];
 
             melodyNotes.forEach(note => {
@@ -1080,86 +1515,190 @@
                 osc.frequency.setValueAtTime(note.freq, now + note.start);
 
                 gain.gain.setValueAtTime(0.0001, now + note.start);
-                gain.gain.linearRampToValueAtTime(note.vol, now + note.start + 0.03);
-                gain.gain.exponentialRampToValueAtTime(0.0005, now + note.start + note.dur);
+                gain.gain.linearRampToValueAtTime(note.vol, now + note.start + 0.04);
+                gain.gain.exponentialRampToValueAtTime(0.0004, now + note.start + note.dur);
 
                 osc.connect(gain);
-                gain.connect(filter);
+                gain.connect(warmMasterFilter);
                 osc.start(now + note.start);
-                osc.stop(now + note.start + note.dur + 0.05);
+                osc.stop(now + note.start + note.dur + 0.06);
             });
 
-            padNotes.forEach(pad => {
+            warmPads.forEach(pad => {
                 const osc = ctx.createOscillator();
                 const gain = ctx.createGain();
                 osc.type = 'triangle';
                 osc.frequency.setValueAtTime(pad.freq, now + pad.start);
 
                 gain.gain.setValueAtTime(0.0001, now + pad.start);
-                gain.gain.linearRampToValueAtTime(pad.vol, now + pad.start + 0.2);
-                gain.gain.exponentialRampToValueAtTime(0.0005, now + pad.start + pad.dur);
+                gain.gain.linearRampToValueAtTime(pad.vol, now + pad.start + 0.22);
+                gain.gain.exponentialRampToValueAtTime(0.0004, now + pad.start + pad.dur);
 
                 osc.connect(gain);
-                gain.connect(filter);
+                gain.connect(warmMasterFilter);
                 osc.start(now + pad.start);
-                osc.stop(now + pad.start + pad.dur + 0.05);
+                osc.stop(now + pad.start + pad.dur + 0.06);
             });
+
             return true;
         }
 
-        function triggerWindowsXPStartup() {
-            if (xpStartupPlayed || !sfxEnabled) return;
-            const ctx = getAudioContext();
-            const xpAudio = document.getElementById('winxp-startup-audio');
+        // Launch Website Handler: Guaranteed user gesture unlocks audio and plays XP Startup Sound
+        function launchWebsiteWithXPSound(e) {
+            if (bootCompleted) return;
+            bootCompleted = true;
 
-            if (xpAudio) {
-                xpAudio.volume = 0.65;
-                const playPromise = xpAudio.play();
-                if (playPromise !== undefined) {
-                    playPromise.then(() => {
-                        xpStartupPlayed = true;
-                        removeStartupListeners();
-                    }).catch(() => {
-                        if (ctx && ctx.state === 'running') {
-                            if (playWinXPSynthFallback()) {
-                                xpStartupPlayed = true;
-                                removeStartupListeners();
-                            }
-                        }
-                    });
+            if (e && e.clientX && e.clientY) {
+                spawnClickRipple(e.clientX, e.clientY);
+            }
+
+            // Unlock Web Audio Context immediately inside this click/key gesture
+            getAudioContext();
+
+            // Play the nostalgic Windows XP Startup Sound (HTML5 Audio + Lush Synth Harmony)
+            if (sfxEnabled && !xpStartupPlayed) {
+                xpStartupPlayed = true;
+                const xpAudio = document.getElementById('winxp-startup-audio');
+                let htmlAudioStarted = false;
+
+                if (xpAudio) {
+                    xpAudio.volume = 0.70;
+                    const playPromise = xpAudio.play();
+                    if (playPromise !== undefined) {
+                        playPromise.then(() => {
+                            htmlAudioStarted = true;
+                        }).catch(() => {
+                            if (!htmlAudioStarted) playWinXPSynthStartup();
+                        });
+                    }
                 }
-            } else if (ctx && ctx.state === 'running') {
-                if (playWinXPSynthFallback()) {
-                    xpStartupPlayed = true;
-                    removeStartupListeners();
-                }
+                // Also layer the warm Web Audio Eb-major synth so even if external MP3 lags or is offline, the user hears the XP startup immediately!
+                playWinXPSynthStartup();
+            }
+
+            // Smoothly fade & scale out the Boot Screen
+            const bootScreen = document.getElementById('boot-screen');
+            if (bootScreen) {
+                bootScreen.classList.add('boot-hidden');
+                setTimeout(() => {
+                    bootScreen.style.display = 'none';
+                }, 700);
             }
         }
 
-        function handleAmbientInteraction() {
-            getAudioContext();
-            triggerWindowsXPStartup();
+        // Attach click & keyboard listeners to the Boot Screen so clicking ANYWHERE on the welcome screen launches the site & XP sound
+        const bootScreenEl = document.getElementById('boot-screen');
+        if (bootScreenEl) {
+            bootScreenEl.addEventListener('click', launchWebsiteWithXPSound);
+        }
+        window.addEventListener('keydown', (e) => {
+            if (!bootCompleted && (e.key === 'Enter' || e.key === ' ')) {
+                e.preventDefault();
+                launchWebsiteWithXPSound(e);
+            }
+        });
+
+        // =========================================================================
+        // 2. ULTRA-SMOOTH GLOBAL SFX ENGINE (CLICK ANYWHERE = SMOOTH SOUND + RIPPLE)
+        // =========================================================================
+        function spawnClickRipple(x, y) {
+            if (!x || !y) return;
+            const ripple = document.createElement('div');
+            ripple.className = 'click-ripple';
+            ripple.style.left = x + 'px';
+            ripple.style.top = y + 'px';
+            ripple.style.width = '36px';
+            ripple.style.height = '36px';
+            document.body.appendChild(ripple);
+            setTimeout(() => ripple.remove(), 560);
         }
 
-        const startupEvents = ['touchstart', 'touchmove', 'touchend', 'scroll', 'wheel', 'pointermove', 'pointerdown', 'keydown', 'click'];
+        // A. Global Ambient Tactile Water-Drop / Soft XP Resonance Tap (when clicking empty space / text / background)
+        function playSmoothAmbientTapSFX() {
+            if (!sfxEnabled) return;
+            const ctx = getAudioContext();
+            if (!ctx) return;
 
-        function removeStartupListeners() {
-            startupEvents.forEach(evt => {
-                window.removeEventListener(evt, handleAmbientInteraction);
+            const now = ctx.currentTime;
+            const osc = ctx.createOscillator();
+            const subOsc = ctx.createOscillator();
+            const gain = ctx.createGain();
+
+            // Silky sine wave pitch-drop + soft harmonic overtone (zero harshness)
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(523.25, now); // C5
+            osc.frequency.exponentialRampToValueAtTime(311.13, now + 0.085); // Eb4 warm drop
+
+            subOsc.type = 'triangle';
+            subOsc.frequency.setValueAtTime(783.99, now); // G5 soft shimmer
+            subOsc.frequency.exponentialRampToValueAtTime(466.16, now + 0.085); // Bb4
+
+            gain.gain.setValueAtTime(0.0001, now);
+            gain.gain.linearRampToValueAtTime(0.042, now + 0.008);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.095);
+
+            osc.connect(gain);
+            subOsc.connect(gain);
+            gain.connect(warmMasterFilter);
+
+            osc.start(now);
+            subOsc.start(now);
+            osc.stop(now + 0.10);
+            subOsc.stop(now + 0.10);
+        }
+
+        // B. Smooth Interactive Button / Link Chime Click (Warm Two-Note Harmonic Pluck)
+        function playSmoothInteractiveClickSFX() {
+            if (!sfxEnabled) return;
+            const ctx = getAudioContext();
+            if (!ctx) return;
+
+            const now = ctx.currentTime;
+            const notes = [
+                { freq: 587.33, offset: 0.00, dur: 0.09, vol: 0.055 }, // D5
+                { freq: 880.00, offset: 0.025, dur: 0.13, vol: 0.060 } // A5 fifth interval
+            ];
+
+            notes.forEach(n => {
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(n.freq, now + n.offset);
+
+                gain.gain.setValueAtTime(0.0001, now + n.offset);
+                gain.gain.linearRampToValueAtTime(n.vol, now + n.offset + 0.008);
+                gain.gain.exponentialRampToValueAtTime(0.0001, now + n.offset + n.dur);
+
+                osc.connect(gain);
+                gain.connect(warmMasterFilter);
+
+                osc.start(now + n.offset);
+                osc.stop(now + n.offset + n.dur + 0.01);
             });
         }
 
-        window.addEventListener('DOMContentLoaded', triggerWindowsXPStartup);
-        window.addEventListener('load', triggerWindowsXPStartup);
-        startupEvents.forEach(evt => {
-            window.addEventListener(evt, handleAmbientInteraction, { passive: true });
-        });
+        // Global Pointerdown Listener: Clicking ANYWHERE on the page gives a smooth sound + visual ripple!
+        window.addEventListener('pointerdown', (e) => {
+            if (!bootCompleted) return; // Handled by boot screen first
 
-        // A. Windows XP "Balloon Tooltip Pop" Sound (`Windows XP Balloon.wav`) for Underlined Popup Cards
+            const nowMs = performance.now();
+            if (nowMs - lastGlobalClickTime < 45) return;
+            lastGlobalClickTime = nowMs;
+
+            spawnClickRipple(e.clientX, e.clientY);
+
+            // Check if the user clicked an interactive element or general page area
+            const isInteractive = e.target.closest('a, button, input, select, textarea, label, .sfx-btn, .hover-trigger');
+            if (isInteractive) {
+                playSmoothInteractiveClickSFX();
+            } else {
+                playSmoothAmbientTapSFX();
+            }
+        }, { passive: true });
+
+        // C. Smooth Windows XP "Balloon Tooltip Pop" Sound for Underlined Popup Cards
         function playPopupSFX() {
-            if (!sfxEnabled) return;
-            triggerWindowsXPStartup();
-
+            if (!sfxEnabled || !bootCompleted) return;
             const nowMs = performance.now();
             if (nowMs - lastPopupTime < 180) return;
             lastPopupTime = nowMs;
@@ -1168,7 +1707,6 @@
             if (!ctx) return;
 
             const now = ctx.currentTime;
-            // Classic Windows XP Balloon Pop: quick upward pitch pop + warm wooden resonance
             const osc = ctx.createOscillator();
             const popHarmonic = ctx.createOscillator();
             const gain = ctx.createGain();
@@ -1176,32 +1714,32 @@
             osc.type = 'sine';
             popHarmonic.type = 'triangle';
 
-            osc.frequency.setValueAtTime(360, now);
-            osc.frequency.exponentialRampToValueAtTime(1046.50, now + 0.055); // Crisp XP balloon pop up to C6
-            osc.frequency.exponentialRampToValueAtTime(783.99, now + 0.11);
+            osc.frequency.setValueAtTime(392.00, now); // G4
+            osc.frequency.exponentialRampToValueAtTime(932.33, now + 0.065); // Bb5 warm balloon pop
+            osc.frequency.exponentialRampToValueAtTime(783.99, now + 0.13);
 
-            popHarmonic.frequency.setValueAtTime(523.25, now);
-            popHarmonic.frequency.exponentialRampToValueAtTime(1567.98, now + 0.055);
+            popHarmonic.frequency.setValueAtTime(587.33, now);
+            popHarmonic.frequency.exponentialRampToValueAtTime(1174.66, now + 0.065);
 
-            gain.gain.setValueAtTime(0.001, now);
-            gain.gain.linearRampToValueAtTime(0.075, now + 0.012);
-            gain.gain.exponentialRampToValueAtTime(0.0005, now + 0.12);
+            gain.gain.setValueAtTime(0.0001, now);
+            gain.gain.linearRampToValueAtTime(0.065, now + 0.014);
+            gain.gain.exponentialRampToValueAtTime(0.0003, now + 0.14);
 
             osc.connect(gain);
             popHarmonic.connect(gain);
-            gain.connect(masterCompressor);
+            gain.connect(warmMasterFilter);
 
             osc.start(now);
             popHarmonic.start(now);
-            osc.stop(now + 0.13);
-            popHarmonic.stop(now + 0.13);
+            osc.stop(now + 0.15);
+            popHarmonic.stop(now + 0.15);
         }
 
-        // B. Windows XP "Soft Menu Highlight / Information Bar Chime" for 3D Spotlight Cards
+        // D. Smooth Card Hover Shimmer (Eb Major Bell Tone)
         function playCardHoverSFX() {
-            if (!sfxEnabled) return;
+            if (!sfxEnabled || !bootCompleted) return;
             const nowMs = performance.now();
-            if (nowMs - lastHoverTime < 90) return;
+            if (nowMs - lastHoverTime < 110) return;
             lastHoverTime = nowMs;
 
             const ctx = getAudioContext();
@@ -1211,26 +1749,25 @@
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
 
-            // Nostalgic Eb major bell tone (matches XP logon key)
             osc.type = 'sine';
             osc.frequency.setValueAtTime(622.25, now); // Eb5
-            osc.frequency.exponentialRampToValueAtTime(783.99, now + 0.06); // G5
+            osc.frequency.exponentialRampToValueAtTime(783.99, now + 0.075); // G5
 
             gain.gain.setValueAtTime(0.0001, now);
-            gain.gain.linearRampToValueAtTime(0.025, now + 0.01);
-            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.075);
+            gain.gain.linearRampToValueAtTime(0.022, now + 0.012);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.09);
 
             osc.connect(gain);
-            gain.connect(masterCompressor);
+            gain.connect(warmMasterFilter);
             osc.start(now);
-            osc.stop(now + 0.08);
+            osc.stop(now + 0.095);
         }
 
-        // C. Windows XP "Start Menu Hover Tick" for Buttons & Links
+        // E. Smooth Button Hover Micro-Air Chime
         function playButtonHoverSFX() {
-            if (!sfxEnabled) return;
+            if (!sfxEnabled || !bootCompleted) return;
             const nowMs = performance.now();
-            if (nowMs - lastHoverTime < 55) return;
+            if (nowMs - lastHoverTime < 65) return;
             lastHoverTime = nowMs;
 
             const ctx = getAudioContext();
@@ -1240,61 +1777,27 @@
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
 
-            osc.type = 'triangle';
-            osc.frequency.setValueAtTime(987.77, now); // B5 crisp micro-tick
-            osc.frequency.exponentialRampToValueAtTime(1318.51, now + 0.02);
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(880.00, now); // A5 soft silk tick
+            osc.frequency.exponentialRampToValueAtTime(1046.50, now + 0.035); // C6
 
             gain.gain.setValueAtTime(0.0001, now);
-            gain.gain.linearRampToValueAtTime(0.02, now + 0.003);
-            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.025);
+            gain.gain.linearRampToValueAtTime(0.016, now + 0.006);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.04);
 
             osc.connect(gain);
-            gain.connect(masterCompressor);
+            gain.connect(warmMasterFilter);
             osc.start(now);
-            osc.stop(now + 0.028);
+            osc.stop(now + 0.045);
         }
 
-        // D. Authentic Windows XP Explorer Navigation Click (`Windows XP Start.wav`) for Button Clicks
-        function playClickSFX() {
-            if (!sfxEnabled) return;
-            const ctx = getAudioContext();
-            if (!ctx) return;
-
-            const now = ctx.currentTime;
-            // Classic Windows XP double-transient mechanical folder click ("tuk-tik")
-            [0, 0.018].forEach((offset, idx) => {
-                const osc = ctx.createOscillator();
-                const filter = ctx.createBiquadFilter();
-                const gain = ctx.createGain();
-
-                osc.type = 'square';
-                osc.frequency.setValueAtTime(idx === 0 ? 1100 : 1650, now + offset);
-                osc.frequency.exponentialRampToValueAtTime(280, now + offset + 0.014);
-
-                filter.type = 'bandpass';
-                filter.frequency.setValueAtTime(idx === 0 ? 1200 : 1800, now + offset);
-                filter.Q.setValueAtTime(2.0, now + offset);
-
-                gain.gain.setValueAtTime(0.001, now + offset);
-                gain.gain.linearRampToValueAtTime(idx === 0 ? 0.06 : 0.045, now + offset + 0.002);
-                gain.gain.exponentialRampToValueAtTime(0.0001, now + offset + 0.015);
-
-                osc.connect(filter);
-                filter.connect(gain);
-                gain.connect(masterCompressor);
-
-                osc.start(now + offset);
-                osc.stop(now + offset + 0.017);
-            });
-        }
-
-        // E. Classic Windows XP "Ding.wav" Chime for Grade Tab Switching
+        // F. Classic Windows XP "Ding" Glass Bell Chime for Tab Switching
         function playTabSwitchSFX() {
             if (!sfxEnabled) return;
             const dingAudio = document.getElementById('winxp-ding-audio');
             if (dingAudio) {
                 dingAudio.currentTime = 0;
-                dingAudio.volume = 0.5;
+                dingAudio.volume = 0.45;
                 dingAudio.play().catch(() => {});
             }
 
@@ -1302,8 +1805,7 @@
             if (!ctx) return;
 
             const now = ctx.currentTime;
-            // Classic XP Ding bell harmonic (A5 + E6 glass bell)
-            const notes = [880, 1318.51];
+            const notes = [783.99, 1174.66]; // G5 + D6 warm glass bell
             notes.forEach((freq, idx) => {
                 const osc = ctx.createOscillator();
                 const gain = ctx.createGain();
@@ -1311,23 +1813,23 @@
                 osc.frequency.setValueAtTime(freq, now);
 
                 gain.gain.setValueAtTime(0.0001, now);
-                gain.gain.linearRampToValueAtTime(idx === 0 ? 0.065 : 0.03, now + 0.008);
+                gain.gain.linearRampToValueAtTime(idx === 0 ? 0.055 : 0.028, now + 0.01);
                 gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.35);
 
                 osc.connect(gain);
-                gain.connect(masterCompressor);
+                gain.connect(warmMasterFilter);
                 osc.start(now);
                 osc.stop(now + 0.37);
             });
         }
 
-        // F. Classic Windows XP "Tada / Notify" Fanfare for Booking 2027-28 Parent Appointment
+        // G. Classic Windows XP "Tada" Fanfare for Booking 2027-28 Parent Appointment
         function playSuccessSFX() {
             if (!sfxEnabled) return;
             const tadaAudio = document.getElementById('winxp-tada-audio');
             if (tadaAudio) {
                 tadaAudio.currentTime = 0;
-                tadaAudio.volume = 0.6;
+                tadaAudio.volume = 0.55;
                 tadaAudio.play().catch(() => {});
             }
 
@@ -1335,13 +1837,12 @@
             if (!ctx) return;
 
             const now = ctx.currentTime;
-            // Classic Windows "Tada" brass-bell chord fanfare (G4 -> C5 -> E5 -> G5)
             const chord = [
-                { freq: 392.00, start: 0.0,  dur: 0.14 }, // G4 pickup
+                { freq: 392.00, start: 0.00, dur: 0.15 }, // G4
                 { freq: 523.25, start: 0.12, dur: 0.65 }, // C5
                 { freq: 659.25, start: 0.12, dur: 0.65 }, // E5
                 { freq: 783.99, start: 0.12, dur: 0.65 }, // G5
-                { freq: 1046.50, start: 0.12, dur: 0.70 } // C6
+                { freq: 1046.50, start: 0.12, dur: 0.72 } // C6
             ];
 
             chord.forEach(note => {
@@ -1351,21 +1852,20 @@
                 osc.frequency.setValueAtTime(note.freq, now + note.start);
 
                 gain.gain.setValueAtTime(0.0001, now + note.start);
-                gain.gain.linearRampToValueAtTime(0.06, now + note.start + 0.015);
-                gain.gain.exponentialRampToValueAtTime(0.0005, now + note.start + note.dur);
+                gain.gain.linearRampToValueAtTime(0.055, now + note.start + 0.02);
+                gain.gain.exponentialRampToValueAtTime(0.0004, now + note.start + note.dur);
 
                 osc.connect(gain);
-                gain.connect(masterCompressor);
+                gain.connect(warmMasterFilter);
                 osc.start(now + note.start);
                 osc.stop(now + note.start + note.dur + 0.05);
             });
         }
 
-        // G. Subtle Ambient Section-Entry Shimmer on Scroll (IntersectionObserver)
+        // H. Subtle Ambient Section-Entry Shimmer on Scroll
         const sectionObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting && sfxEnabled) {
-                    triggerWindowsXPStartup();
+                if (entry.isIntersecting && sfxEnabled && bootCompleted) {
                     const nowMs = performance.now();
                     if (nowMs - lastScrollChimeTime > 1200) {
                         lastScrollChimeTime = nowMs;
@@ -1379,32 +1879,7 @@
             sectionObserver.observe(sec);
         });
 
-        // Toggle SFX ON/OFF Button Handler
-        function toggleSFX() {
-            sfxEnabled = !sfxEnabled;
-            const desktopBtn = document.getElementById('sfx-toggle-desktop');
-            const desktopIcon = document.getElementById('sfx-icon-desktop');
-            const desktopText = document.getElementById('sfx-text-desktop');
-            const mobileBtn = document.getElementById('sfx-toggle-mobile');
-            const mobileText = document.getElementById('sfx-text-mobile');
-
-            if (sfxEnabled) {
-                desktopText.innerText = 'XP SFX: ON';
-                mobileText.innerText = 'XP SFX: ON';
-                desktopIcon.className = 'fa-solid fa-volume-high text-cyan-400';
-                desktopBtn.className = 'px-3.5 py-2 rounded-xl border border-cyan-500/50 bg-cyan-950/50 text-cyan-300 hover:bg-cyan-900/60 font-extrabold text-xs tracking-wider transition-all flex items-center space-x-1.5 shadow-sm shadow-cyan-500/10';
-                mobileBtn.className = 'px-3 py-2 rounded-xl border border-cyan-500/50 bg-cyan-950/50 text-cyan-300 font-extrabold text-xs';
-                playTabSwitchSFX();
-            } else {
-                desktopText.innerText = 'XP SFX: OFF';
-                mobileText.innerText = 'XP SFX: OFF';
-                desktopIcon.className = 'fa-solid fa-volume-xmark text-slate-500';
-                desktopBtn.className = 'px-3.5 py-2 rounded-xl border border-slate-700 bg-slate-900/60 text-slate-400 hover:bg-slate-800 font-extrabold text-xs tracking-wider transition-all flex items-center space-x-1.5';
-                mobileBtn.className = 'px-3 py-2 rounded-xl border border-slate-700 bg-slate-900/60 text-slate-400 font-extrabold text-xs';
-            }
-        }
-
-        // Attach Windows XP Nostalgia SFX profiles to UI elements
+        // Attach hover profiles to UI elements
         document.querySelectorAll('.sfx-popup').forEach(el => {
             el.addEventListener('mouseenter', playPopupSFX);
             el.addEventListener('pointerenter', playPopupSFX);
@@ -1419,11 +1894,80 @@
         });
         document.querySelectorAll('.sfx-btn').forEach(el => {
             el.addEventListener('mouseenter', playButtonHoverSFX);
-            el.addEventListener('click', playClickSFX);
         });
 
+        // =========================================================================
+        // 3. INTERACTIVE SONU SIR HERO CARD SUBJECT PREVIEWER
+        // =========================================================================
+        const cardSubjectDetails = {
+            maths: {
+                hint: '📐 Mathematics (5–10)',
+                text: '📐 Mathematics Mastery: Step-by-step Algebra, Geometry Proofs, Trigonometry, Mensuration & Arithmetic speed drills for ICSE & CBSE exams.'
+            },
+            physics: {
+                hint: '⚡ Physics (5–10)',
+                text: '⚡ Physics Clarity: Force, Laws of Motion, Light Ray Diagrams, Electricity numericals & conceptual derivations taught from first principles.'
+            },
+            chemistry: {
+                hint: '🧪 Chemistry (5–10)',
+                text: '🧪 Chemistry Precision: Atomic Structure, Periodic Table trends, Valency, Chemical Equation Balancing, Acids/Bases & Organic Chemistry.'
+            },
+            biology: {
+                hint: '🧬 Biology (5–10)',
+                text: '🧬 Biology Excellence: Cell Division, Human Anatomy, Plant Physiology, Genetics & high-scoring neat labeled diagram practice.'
+            }
+        };
+
+        function previewCardSubject(subjectKey) {
+            playTabSwitchSFX();
+            const info = cardSubjectDetails[subjectKey];
+            if (!info) return;
+            const hintEl = document.getElementById('sonu-card-subject-hint');
+            const boxEl = document.getElementById('sonu-card-preview-box');
+            if (hintEl) hintEl.innerText = info.hint;
+            if (boxEl) {
+                boxEl.classList.remove('italic');
+                boxEl.innerText = info.text;
+            }
+        }
+
+        // =========================================================================
+        // 4. INTERACTIVE README.md FILTER & TERMS ACKNOWLEDGMENT
+        // =========================================================================
+        function filterReadme(category) {
+            playTabSwitchSFX();
+            const allTabs = ['all', 'eligibility', 'attendance', 'tests', 'admission'];
+            allTabs.forEach(tab => {
+                const btn = document.getElementById('readme-tab-' + tab);
+                if (!btn) return;
+                if (tab === category) {
+                    btn.className = 'sfx-btn px-3.5 py-1.5 rounded-lg text-xs font-mono font-bold bg-cyan-500 text-slate-950 transition-all';
+                } else {
+                    btn.className = 'sfx-btn px-3.5 py-1.5 rounded-lg text-xs font-mono font-bold bg-slate-900 text-slate-300 border border-slate-800 hover:border-cyan-500/40 transition-all';
+                }
+            });
+
+            document.querySelectorAll('.readme-item').forEach(item => {
+                if (category === 'all' || item.getAttribute('data-readme-cat') === category) {
+                    item.classList.remove('hidden');
+                } else {
+                    item.classList.add('hidden');
+                }
+            });
+        }
+
+        function acknowledgeTermsAndScroll() {
+            playSuccessSFX();
+            const checkbox = document.getElementById('terms-checkbox');
+            if (checkbox) checkbox.checked = true;
+            const appointmentSection = document.getElementById('appointment');
+            if (appointmentSection) {
+                appointmentSection.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
         // ====================================================
-        // 2. MOBILE MENU & SCROLL PROGRESS BAR
+        // 5. MOBILE MENU & SCROLL PROGRESS BAR
         // ====================================================
         const menuBtn = document.getElementById('menu-btn');
         const mobileMenu = document.getElementById('mobile-menu');
@@ -1440,7 +1984,7 @@
         }, { passive: true });
 
         // ====================================================
-        // 3. INTERACTIVE PARTICLE STARFIELD CANVAS
+        // 6. INTERACTIVE PARTICLE STARFIELD CANVAS
         // ====================================================
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
@@ -1513,7 +2057,7 @@
         animateParticles();
 
         // ====================================================
-        // 4. MOUSE SPOTLIGHT & 3D TILT CARDS
+        // 7. MOUSE SPOTLIGHT & 3D TILT CARDS
         // ====================================================
         document.querySelectorAll('.spotlight-card').forEach(card => {
             card.addEventListener('mousemove', e => {
@@ -1537,7 +2081,7 @@
         });
 
         // ====================================================
-        // 5. INTERACTIVE GRADE SWITCHER (CLASSES 5-10 ICSE & CBSE)
+        // 8. INTERACTIVE GRADE SWITCHER (CLASSES 5-10 ICSE & CBSE)
         // ====================================================
         const gradeData = {
             junior: {
@@ -1597,7 +2141,7 @@
         }
 
         // ====================================================
-        // 6. LIVE NEXT BATCH COUNTDOWN (MON-SAT: 2:45 PM & 4:15 PM)
+        // 9. LIVE NEXT BATCH COUNTDOWN (MON-SAT: 2:45 PM & 4:15 PM)
         // ====================================================
         function updateCountdown() {
             const now = new Date();
@@ -1644,7 +2188,7 @@
         updateCountdown();
 
         // ====================================================
-        // 7. 2027-28 PARENT APPOINTMENT BOOKING + CONFETTI + XP TADA
+        // 10. 2027-28 PARENT APPOINTMENT BOOKING + CONFETTI + XP TADA
         // ====================================================
         function bookAppointment(event) {
             event.preventDefault();
@@ -1669,7 +2213,7 @@
             document.getElementById('conf-phone').innerText = phone;
             document.getElementById('conf-date').innerText = date;
 
-            const msg = `Hello Sonu Sir, I would like to book a parent appointment for the *New Session 2027-28*.%0A%0A*Parent Name:* ${parentName}%0A*Student Name:* ${studentName}%0A*Class & Board:* ${combinedGradeBoard}%0A*Subjects:* Maths, Physics, Chemistry, Biology%0A*Batch Preference:* ${combinedBatch}%0A*Contact:* ${phone}%0A*Preferred Meeting Date:* ${date}%0A*Location:* Ethelbari Checkpost, Alipurduar`;
+            const msg = `Hello Sonu Sir, I have read the Eligibility & Terms and would like to book a parent appointment for the *New Session 2027-28*.%0A%0A*Parent Name:* ${parentName}%0A*Student Name:* ${studentName}%0A*Class & Board:* ${combinedGradeBoard}%0A*Subjects:* Maths, Physics, Chemistry, Biology%0A*Batch Preference:* ${combinedBatch}%0A*Contact:* ${phone}%0A*Preferred Meeting Date:* ${date}%0A*Location:* Ethelbari Checkpost, Alipurduar`;
             
             document.getElementById('whatsapp-link').href = `https://wa.me/918918929014?text=${msg}`;
             
