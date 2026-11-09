@@ -256,6 +256,25 @@ input, select { font-size: 16px; }
   </div>
 </div>
 
+<!-- Diwali wishes from Sonu Sir -->
+<section id="diwali" class="pt-10 pb-4 relative z-10">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
+    <span class="text-xs font-extrabold uppercase tracking-widest text-amber-400">🪔 Festival Greetings</span>
+    <h2 class="text-3xl sm:text-4xl font-extrabold text-white">Happy Diwali, Students & Parents!</h2>
+    <p class="text-slate-300 text-base sm:text-lg">A special Diwali message from Sonu Sir to all his students.</p>
+    <div id="diwali-frame" class="relative inline-block max-w-full">
+      <div class="absolute -inset-2 bg-gradient-to-tr from-amber-400 via-orange-500 to-red-600 rounded-3xl blur opacity-60 diya-glow"></div>
+      <img src="diwali.jpeg" alt="Diwali wishes from Sonu Sir to all students" loading="lazy"
+           class="relative rounded-2xl border-2 border-amber-300/40 max-h-[80vh] w-auto max-w-full mx-auto shadow-2xl"
+           onerror="if(!this.dataset.t){this.dataset.t=1;this.src='diwali.jpg';}else{document.getElementById('diwali-frame').classList.add('hidden');document.getElementById('diwali-fallback').classList.remove('hidden');}">
+    </div>
+    <div id="diwali-fallback" class="hidden max-w-xl mx-auto bg-stone-900/80 border border-amber-500/30 rounded-2xl p-6 text-amber-100 font-bold">
+      🪔 Wishing all students and parents a very Happy and Prosperous Diwali! 🪔<br>
+      <span class="text-xs text-slate-400 font-medium">(Upload diwali.jpeg next to index.html to show Sonu Sir's greeting image here.)</span>
+    </div>
+  </div>
+</section>
+
 <!-- Hero -->
 <header class="relative pt-12 pb-24 z-10" id="hero-section">
   <div class="aurora-blob w-96 h-96 bg-cyan-500 rounded-full top-10 left-10"></div>
@@ -433,24 +452,7 @@ input, select { font-size: 16px; }
   </div>
 </header>
 
-<!-- Diwali wishes from Sonu Sir -->
-<section id="diwali" class="py-16 relative z-10 border-t border-slate-800/80">
-  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
-    <span class="text-xs font-extrabold uppercase tracking-widest text-amber-400">🪔 Festival Greetings</span>
-    <h2 class="text-3xl sm:text-4xl font-extrabold text-white">Happy Diwali, Students & Parents!</h2>
-    <p class="text-slate-300 text-base sm:text-lg">A special Diwali message from Sonu Sir to all his students.</p>
-    <div id="diwali-frame" class="relative inline-block max-w-full">
-      <div class="absolute -inset-2 bg-gradient-to-tr from-amber-400 via-orange-500 to-red-600 rounded-3xl blur opacity-60 diya-glow"></div>
-      <img src="diwali.jpg" alt="Diwali wishes from Sonu Sir to all students" loading="lazy"
-           class="relative rounded-2xl border-2 border-amber-300/40 max-h-[75vh] w-auto max-w-full mx-auto shadow-2xl"
-           onerror="document.getElementById('diwali-frame').classList.add('hidden');document.getElementById('diwali-fallback').classList.remove('hidden');">
-    </div>
-    <div id="diwali-fallback" class="hidden max-w-xl mx-auto bg-stone-900/80 border border-amber-500/30 rounded-2xl p-6 text-amber-100 font-bold">
-      🪔 Wishing all students and parents a very Happy and Prosperous Diwali! 🪔<br>
-      <span class="text-xs text-slate-400 font-medium">(Upload diwali.jpg next to index.html to show Sonu Sir's greeting image here.)</span>
-    </div>
-  </div>
-</section>
+
 
 <!-- About -->
 <section id="about" class="py-20 relative z-10 border-t border-slate-800/80 scroll-sfx-section">
@@ -855,8 +857,8 @@ input, select { font-size: 16px; }
       <summary class="cursor-pointer text-xs font-extrabold uppercase tracking-wider text-cyan-300 sfx-btn">What's new in v2.2</summary>
       <ul class="mt-3 space-y-1.5 text-xs text-slate-300 list-disc pl-5">
         <li><strong class="text-white">Diwali theme:</strong> festive colours, string lights, diyas and fireworks across the whole site.</li>
-        <li><strong class="text-white">Diwali wishes:</strong> Sonu Sir's greeting image (diwali.jpg) as a welcome popup and a special section.</li>
-        <li><strong class="text-white">Notice Corner:</strong> a WhatsApp-style chat for temporary wishes and updates.</li>
+        <li><strong class="text-white">Diwali wishes:</strong> Sonu Sir's greeting image (diwali.jpeg) shown right at the top of the main page.</li>
+        <li><strong class="text-white">Notice Corner:</strong> a WhatsApp-style chat for temporary wishes, updates and photos.</li>
         <li><strong class="text-white">Startup sound:</strong> plays when you enter the portal, with a smooth fade into the site.</li>
         <li><strong class="text-white">Mobile optimised:</strong> cleaner layout, tap-to-open popups and a menu that works on every screen size.</li>
         <li><strong class="text-white">Secure appointment flow:</strong> read all 4 terms tabs, tick the box, pass the Cloudflare Turnstile robot check, then the booking form unlocks.</li>
@@ -866,18 +868,6 @@ input, select { font-size: 16px; }
     </details>
   </div>
 </footer>
-
-<!-- Diwali greeting popup -->
-<div id="diwali-modal" class="hidden fixed inset-0 z-[150] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-  <div class="relative max-w-lg w-full max-h-[92dvh] overflow-y-auto bg-stone-950 rounded-3xl border border-amber-400/50 shadow-2xl p-5 text-center space-y-3">
-    <button onclick="closeDiwaliModal()" aria-label="Close" class="absolute top-3 right-3 w-9 h-9 rounded-full bg-stone-800 text-slate-200 hover:bg-stone-700 sfx-btn">✕</button>
-    <p class="text-2xl">🪔✨🎆✨🪔</p>
-    <h3 class="text-xl font-extrabold text-amber-300">Happy Diwali!</h3>
-    <img id="diwali-modal-img" src="diwali.jpg" alt="Diwali wishes from Sonu Sir" class="rounded-2xl mx-auto max-h-[55dvh] w-auto max-w-full border border-amber-300/30" onerror="this.classList.add('hidden')">
-    <p class="text-sm text-slate-300">Warm Diwali wishes from Sonu Sir to all students and parents.</p>
-    <button onclick="closeDiwaliModal()" class="bg-gradient-to-r from-amber-500 to-red-600 text-white font-extrabold px-6 py-2.5 rounded-xl text-sm shadow-lg sfx-btn">Thank you, Sir 🙏</button>
-  </div>
-</div>
 
 <!-- Notice Corner (chat style) -->
 <button id="notice-btn" onclick="toggleNotices()" aria-label="Open notice corner" class="fixed bottom-6 left-6 z-50 bg-gradient-to-tr from-amber-500 to-red-600 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-2xl hover:scale-110 transition-all text-2xl border border-amber-300/40 sfx-btn">
@@ -901,7 +891,13 @@ input, select { font-size: 16px; }
       <button type="button" onclick="quickWish(this)" class="whitespace-nowrap text-[11px] font-bold bg-stone-800 text-amber-200 border border-amber-500/30 rounded-full px-3 py-1 sfx-btn">🙏 Thank you Sir</button>
     </div>
     <input id="notice-name" type="text" maxlength="24" placeholder="Your name" autocomplete="off" class="w-full px-3 py-2 rounded-xl border border-slate-700 bg-slate-950 text-white focus:outline-none focus:ring-2 focus:ring-amber-500">
+    <div id="notice-preview" class="hidden items-center gap-2">
+      <img id="notice-preview-img" alt="Selected photo" class="h-14 w-14 object-cover rounded-lg border border-amber-500/40">
+      <button type="button" onclick="clearNoticeImage()" class="text-[11px] font-bold text-rose-300 sfx-btn">Remove photo</button>
+    </div>
     <div class="flex gap-2">
+      <button type="button" id="notice-attach" onclick="document.getElementById('notice-file').click()" aria-label="Add photo" class="bg-stone-800 hover:bg-stone-700 text-amber-200 px-3 rounded-xl sfx-btn">📎</button>
+      <input id="notice-file" type="file" accept="image/*" class="hidden">
       <input id="notice-text" type="text" maxlength="200" placeholder="Type a message" autocomplete="off" class="flex-1 min-w-0 px-3 py-2 rounded-xl border border-slate-700 bg-slate-950 text-white focus:outline-none focus:ring-2 focus:ring-amber-500">
       <button id="notice-send" onclick="sendNotice()" aria-label="Send" class="bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold px-4 rounded-xl sfx-btn">➤</button>
     </div>
@@ -1536,20 +1532,8 @@ window.addEventListener('resize', buildLights);
 
 function diwaliWelcome() {
   for (let i = 0; i < 4; i++) setTimeout(launchRandomFirework, 500 + i * 400);
-  setTimeout(showDiwaliModal, 1700);
 }
-function showDiwaliModal() {
-  try {
-    if (sessionStorage.getItem('diwali_seen')) return;
-    sessionStorage.setItem('diwali_seen', '1');
-  } catch (e) {}
-  document.getElementById('diwali-modal').classList.remove('hidden');
-}
-function closeDiwaliModal() {
-  document.getElementById('diwali-modal').classList.add('hidden');
-  launchRandomFirework(); setTimeout(launchRandomFirework, 250);
-}
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDiwaliModal(); });
+
 
 // =============================================================
 // NOTICE CORNER (WhatsApp-style temporary wishes & updates)
@@ -1573,9 +1557,83 @@ function lsGet(k, d) { try { const v = localStorage.getItem(k); return v === nul
 function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
 function noticeBase() { return NOTICE_DB_URL.replace(/\/+$/, ''); }
 
+const NOTICE_ALLOW_IMAGES = true;      // set to false to turn off photo posting
+const NOTICE_IMG_MAX_CHARS = 150000;   // ~110 KB per photo after compression
+const imgCache = new Map();
+let pendingImg = null;
+
+function isSafeImg(d) {
+  return typeof d === 'string' && d.length <= 200000 && /^data:image\/jpeg;base64,[A-Za-z0-9+\/=]+$/.test(d);
+}
+
 function cleanNotice(raw, id) {
   if (!raw || typeof raw.name !== 'string' || typeof raw.text !== 'string' || typeof raw.ts !== 'number') return null;
-  return { id, name: raw.name.slice(0, 24), text: raw.text.slice(0, 200), ts: raw.ts };
+  const out = { id, name: raw.name.slice(0, 24), text: raw.text.slice(0, 200), ts: raw.ts };
+  if (NOTICE_ALLOW_IMAGES) {
+    if (typeof raw.imgId === 'string' && /^[-\w]{1,40}$/.test(raw.imgId)) out.imgId = raw.imgId;
+    if (isSafeImg(raw.img)) out.img = raw.img;
+  }
+  return out;
+}
+
+async function loadNoticeImage(id) {
+  if (imgCache.has(id)) return imgCache.get(id);
+  const r = await fetch(noticeBase() + '/images/' + encodeURIComponent(id) + '.json');
+  if (!r.ok) throw new Error('img');
+  const d = await r.json();
+  if (!isSafeImg(d)) throw new Error('bad image');
+  imgCache.set(id, d);
+  return d;
+}
+
+// Re-draws the photo onto a canvas: shrinks it and strips any hidden data (EXIF/GPS)
+function compressImage(file) {
+  return new Promise((resolve, reject) => {
+    if (!/^image\//.test(file.type)) return reject(new Error('type'));
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      let maxDim = 800, q = 0.7;
+      const make = () => {
+        const sc = Math.min(1, maxDim / Math.max(img.width, img.height));
+        const w = Math.max(1, Math.round(img.width * sc)), h = Math.max(1, Math.round(img.height * sc));
+        const c = document.createElement('canvas');
+        c.width = w; c.height = h;
+        const g = c.getContext('2d');
+        g.fillStyle = '#ffffff'; g.fillRect(0, 0, w, h);
+        g.drawImage(img, 0, 0, w, h);
+        return c.toDataURL('image/jpeg', q);
+      };
+      let out = make(), tries = 0;
+      while (out.length > NOTICE_IMG_MAX_CHARS && tries < 6) {
+        q = Math.max(0.4, q - 0.1);
+        if (q <= 0.5) maxDim = Math.round(maxDim * 0.8);
+        out = make(); tries++;
+      }
+      out.length > NOTICE_IMG_MAX_CHARS ? reject(new Error('big')) : resolve(out);
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('read')); };
+    img.src = url;
+  });
+}
+
+function clearNoticeImage() {
+  pendingImg = null;
+  document.getElementById('notice-file').value = '';
+  const p = document.getElementById('notice-preview');
+  p.classList.add('hidden'); p.classList.remove('flex');
+}
+
+function openNoticeImage(src) {
+  const o = document.createElement('div');
+  o.className = 'fixed inset-0 z-[200] bg-black/90 flex items-center justify-center p-3 cursor-pointer';
+  const im = document.createElement('img');
+  im.src = src; im.alt = 'Photo';
+  im.className = 'max-h-full max-w-full rounded-xl';
+  o.appendChild(im);
+  o.onclick = () => o.remove();
+  document.body.appendChild(o);
 }
 
 async function loadNotices() {
@@ -1640,7 +1698,20 @@ function renderNotices(forceBottom) {
     const tx = document.createElement('p');
     tx.className = 'whitespace-pre-wrap break-words';
     tx.textContent = n.text;
-    b.appendChild(tx);
+    const hasImg = !!(n.img || n.imgId);
+    if (hasImg) {
+      const im = document.createElement('img');
+      im.className = 'rounded-xl mb-1 max-h-56 w-auto max-w-full cursor-pointer bg-stone-900';
+      im.alt = 'Photo shared in the notice corner';
+      im.style.minHeight = '60px'; im.style.minWidth = '120px';
+      im.onload = () => { im.style.minHeight = ''; im.style.minWidth = ''; if (stick) box.scrollTop = box.scrollHeight; };
+      im.onclick = () => { if (im.src) openNoticeImage(im.src); };
+      if (n.img) im.src = n.img;
+      else if (imgCache.has(n.imgId)) im.src = imgCache.get(n.imgId);
+      else loadNoticeImage(n.imgId).then(src => { im.src = src; }).catch(() => { im.alt = 'Photo unavailable'; });
+      b.appendChild(im);
+    }
+    if (!(hasImg && n.text === '📷 Photo')) b.appendChild(tx);
     const tm = document.createElement('p');
     tm.className = 'text-[10px] text-slate-300/70 text-right mt-0.5';
     tm.textContent = fmtTime(n.ts);
@@ -1706,38 +1777,69 @@ async function sendNotice() {
   const textEl = document.getElementById('notice-text');
   const sendBtn = document.getElementById('notice-send');
   const name = nameEl.value.trim().replace(/\s+/g, ' ').slice(0, 24);
-  const text = textEl.value.trim().slice(0, 200);
+  let text = textEl.value.trim().slice(0, 200);
   if (!name) return setNoticeStatus('Please enter your name.', false);
-  if (!text) return setNoticeStatus('Type a message first.', false);
+  if (!text && !pendingImg) return setNoticeStatus('Type a message or add a photo first.', false);
   if (/(https?:\/\/|www\.|\.[a-z]{2,}\/)/i.test(text)) return setNoticeStatus('Links are not allowed.', false);
   const wait = NOTICE_COOLDOWN_MS - (Date.now() - lastPostAt);
   if (wait > 0) return setNoticeStatus('Please wait ' + Math.ceil(wait / 1000) + 's before posting again.', false);
+  if (!text) text = '📷 Photo';
   lsSet(NOTICE_NAME_KEY, name);
   sendBtn.disabled = true;
+  setNoticeStatus(pendingImg ? 'Sending photo...' : '', true);
   try {
     if (!NOTICE_DB_URL) {
       let arr = [];
       try { arr = JSON.parse(lsGet(NOTICE_LOCAL_KEY, '[]')); } catch (e) {}
-      arr.push({ name, text, ts: Date.now() });
-      lsSet(NOTICE_LOCAL_KEY, JSON.stringify(arr.slice(-NOTICE_MAX)));
+      const item = { name, text, ts: Date.now() };
+      if (pendingImg) item.img = pendingImg;
+      arr.push(item);
+      try { localStorage.setItem(NOTICE_LOCAL_KEY, JSON.stringify(arr.slice(-NOTICE_MAX))); }
+      catch (e) { throw new Error('space'); }
     } else {
+      const msg = { name, text, ts: { '.sv': 'timestamp' } };
+      if (pendingImg) {
+        const ri = await fetch(noticeBase() + '/images.json', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(pendingImg)
+        });
+        if (!ri.ok) throw new Error('img');
+        const di = await ri.json();
+        msg.imgId = di.name;
+        imgCache.set(di.name, pendingImg);
+      }
       const r = await fetch(noticeBase() + '/notices.json', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, text, ts: { '.sv': 'timestamp' } })
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(msg)
       });
       if (!r.ok) throw new Error('post');
     }
     lastPostAt = Date.now();
     textEl.value = '';
+    clearNoticeImage();
     setNoticeStatus('Sent ✓', true);
     await refreshNotices(true);
   } catch (e) {
-    setNoticeStatus('Could not send. Please try again.', false);
+    setNoticeStatus(e.message === 'space' ? 'Not enough space on this device for this photo.' : 'Could not send. Please try again.', false);
   }
   sendBtn.disabled = false;
 }
 
+if (!NOTICE_ALLOW_IMAGES) document.getElementById('notice-attach').classList.add('hidden');
+document.getElementById('notice-file').addEventListener('change', async e => {
+  const f = e.target.files && e.target.files[0];
+  if (!f) return;
+  setNoticeStatus('Preparing photo...', true);
+  try {
+    pendingImg = await compressImage(f);
+    document.getElementById('notice-preview-img').src = pendingImg;
+    const p = document.getElementById('notice-preview');
+    p.classList.remove('hidden'); p.classList.add('flex');
+    setNoticeStatus('', true);
+  } catch (err) {
+    pendingImg = null;
+    e.target.value = '';
+    setNoticeStatus(err.message === 'type' ? 'Please choose a photo (JPG, PNG, WebP).' : 'That photo could not be used. Try a smaller one.', false);
+  }
+});
 document.getElementById('notice-text').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); sendNotice(); } });
 document.getElementById('notice-name').value = lsGet(NOTICE_NAME_KEY, '');
 refreshNotices(false);
