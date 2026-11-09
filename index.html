@@ -925,6 +925,105 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 // Logon sound: plays xp-logon.mp3 if present, otherwise a built-in chime
+  <!-- Nostalgic Windows XP Audio Elements -->
+<audio id="winxp-startup-audio" preload="auto" src="https://www.myinstants.com/media/sounds/windows-xp-startup.mp3"></audio>
+
+<script>
+    // =========================================================================
+    // WINDOWS XP STARTUP AUDIO ENGINE (SYNTH FALLBACK + AUDIO ELEMENT)
+    // =========================================================================
+    let xpStartupPlayed = false;
+
+    // Brian Eno's Windows XP Startup Melody Synth Fallback (Eb5 -> Eb4 -> Bb4 -> Ab4 -> Eb5 -> Bb4)
+    function playWinXPSynthFallback() {
+        const ctx = getAudioContext();
+        if (!ctx || ctx.state !== 'running') return false;
+
+        const now = ctx.currentTime;
+        const filter = ctx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(2400, now);
+        filter.connect(masterCompressor);
+
+        const melodyNotes = [
+            { freq: 622.25, start: 0.0,  dur: 0.45, vol: 0.09 }, // Eb5
+            { freq: 311.13, start: 0.26, dur: 0.50, vol: 0.08 }, // Eb4
+            { freq: 466.16, start: 0.52, dur: 0.55, vol: 0.09 }, // Bb4
+            { freq: 415.30, start: 0.85, dur: 0.85, vol: 0.08 }, // Ab4
+            { freq: 622.25, start: 1.45, dur: 0.65, vol: 0.09 }, // Eb5
+            { freq: 466.16, start: 1.85, dur: 1.60, vol: 0.10 }  // Bb4
+        ];
+
+        const padNotes = [
+            { freq: 174.61, start: 0.0,  dur: 1.5, vol: 0.035 }, // F3
+            { freq: 207.65, start: 0.0,  dur: 1.5, vol: 0.035 }, // Ab3
+            { freq: 261.63, start: 0.0,  dur: 1.5, vol: 0.035 }, // C4
+            { freq: 155.56, start: 1.45, dur: 2.2, vol: 0.04  }, // Eb3
+            { freq: 196.00, start: 1.45, dur: 2.2, vol: 0.04  }, // G3
+            { freq: 233.08, start: 1.45, dur: 2.2, vol: 0.04  }, // Bb3
+            { freq: 293.66, start: 1.45, dur: 2.2, vol: 0.03  }  // D4
+        ];
+
+        melodyNotes.forEach(note => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(note.freq, now + note.start);
+
+            gain.gain.setValueAtTime(0.0001, now + note.start);
+            gain.gain.linearRampToValueAtTime(note.vol, now + note.start + 0.03);
+            gain.gain.exponentialRampToValueAtTime(0.0005, now + note.start + note.dur);
+
+            osc.connect(gain);
+            gain.connect(filter);
+            osc.start(now + note.start);
+            osc.stop(now + note.start + note.dur + 0.05);
+        });
+
+        padNotes.forEach(pad => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(pad.freq, now + pad.start);
+
+            gain.gain.setValueAtTime(0.0001, now + pad.start);
+            gain.gain.linearRampToValueAtTime(pad.vol, now + pad.start + 0.2);
+            gain.gain.exponentialRampToValueAtTime(0.0005, now + pad.start + pad.dur);
+
+            osc.connect(gain);
+            gain.connect(filter);
+            osc.start(now + pad.start);
+            osc.stop(now + pad.start + pad.dur + 0.05);
+        });
+        return true;
+    }
+
+    function triggerWindowsXPStartup() {
+        if (xpStartupPlayed) return;
+        const ctx = getAudioContext();
+        const xpAudio = document.getElementById('winxp-startup-audio');
+
+        if (xpAudio) {
+            xpAudio.volume = 0.65;
+            const playPromise = xpAudio.play();
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    xpStartupPlayed = true;
+                }).catch(() => {
+                    if (ctx && ctx.state === 'running') {
+                        if (playWinXPSynthFallback()) {
+                            xpStartupPlayed = true;
+                        }
+                    }
+                });
+            }
+        } else if (ctx && ctx.state === 'running') {
+            if (playWinXPSynthFallback()) {
+                xpStartupPlayed = true;
+            }
+        }
+    }
+</script>
 function playLogonChime() {
   // Original warm startup chime: soft pad chords + a rising bell arpeggio + echo
   const ac = getAudioContext();
